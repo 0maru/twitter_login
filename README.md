@@ -1,23 +1,58 @@
 # twitter_login
 
+![Pub Version](https://img.shields.io/pub/v/twitter_login?color=blue)
+
 Flutter Twitter Login Plugin
 
-## Getting Started
+# Example code 
 
-This project is a starting point for a Flutter
-[plug-in package](https://flutter.dev/developing-packages/),
-a specialized package that includes platform-specific implementation code for
-Android and/or iOS.
+See the example directory for a complete sample app using twitter_login.
 
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.dev/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+[example](https://github.com/0maru/twitter_login/tree/master/example)
+
+# Usage
+
+To use this plugin, add `twitter_login` as a [dependency in your pubspec.yaml file.](https://flutter.dev/platform-plugins/)
+
+### Example
 
 ```
-final twitterOauth = TwitterLogin(
-  apiKey: 'xxxxxxxxxxx',
-  apiSecretKey: 'xxxxxxxxxxxx',
-  redirectURI: 'URLScheme',
-);
-final authResult = twitterOauth.login();
+import 'package:flutter/material.dart';
+import 'package:twitter_login/twitter_login.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text('Plugin example app'),
+        ),
+        body: Center(
+          child: FlatButton(
+            child: Text('login'),
+            onPressed: () async {
+              final twitterLogin = TwitterLogin(
+                apiKey: 'xxxx',
+                apiSecretKey: 'xxxx',
+                redirectURI: 'URLScheme',
+              );
+              final authResult = twitterLogin.login();
+            },
+          ),
+        ),
+      ),
+    );
+  }
+}
 ```
+
