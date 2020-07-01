@@ -29,7 +29,6 @@ class _MyAppState extends State<MyApp> {
                 redirectURI: 'URLScheme',
               );
               final authResult = twitterLogin.login();
-              print(authResult);
             },
           ),
         ),
