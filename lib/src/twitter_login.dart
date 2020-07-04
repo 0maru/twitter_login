@@ -7,6 +7,18 @@ import 'package:twitter_login/schemes/auth_result.dart';
 import 'package:twitter_login/schemes/request_token.dart';
 import 'package:twitter_login/src/chrome_custom_tab.dart';
 
+/// The status after a Twitter login flow has completed.
+enum TwitterLoginStatus {
+  /// The login was successful and the user is now logged in.
+  loggedIn,
+
+  /// The user cancelled the login flow.
+  cancelledByUser,
+
+  /// The Twitter login completed with an error
+  error,
+}
+
 class TwitterLogin {
   // Consumer API key
   final String apiKey;
@@ -71,7 +83,7 @@ class TwitterLogin {
       if (params['denied'] != null) {
         return AuthResult(
           accessToken: null,
-          status: LoginStatus.error,
+          status: TwitterLoginStatus.error,
           errorMessage: 'The user cancelled the login flow',
         );
       }
@@ -84,13 +96,13 @@ class TwitterLogin {
       );
       return AuthResult(
         accessToken: accessToken,
-        status: LoginStatus.loggedIn,
+        status: TwitterLoginStatus.loggedIn,
         errorMessage: '',
       );
     } catch (error) {
       return AuthResult(
         accessToken: null,
-        status: LoginStatus.error,
+        status: TwitterLoginStatus.error,
         errorMessage: error,
       );
     }
