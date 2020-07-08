@@ -1,12 +1,10 @@
 package com.maru.twitter_login
 
-import androidx.annotation.NonNull;
-
-import androidx.annotation.NonNull;
 import android.content.Intent
+
 import io.flutter.embedding.engine.plugins.FlutterPlugin
-import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
+import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
@@ -19,7 +17,7 @@ import io.flutter.plugin.common.PluginRegistry.Registrar
 import io.flutter.plugin.common.PluginRegistry.NewIntentListener
 
 /** TwitterLoginPlugin */
-public class TwitterLoginPlugin: FlutterPlugin, MethodCallHandler {
+public class TwitterLoginPlugin: FlutterPlugin, MethodCallHandler, ActivityAware, NewIntentListener {
   /// The MethodChannel that will the communication between Flutter and native Android
   ///
   /// This local reference serves to register the plugin with the Flutter Engine and unregister it
@@ -47,7 +45,7 @@ public class TwitterLoginPlugin: FlutterPlugin, MethodCallHandler {
     }
   }
 
-  override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
+  override fun onMethodCall(call: MethodCall, result: Result) {
     if (call.method == "setDeepLink") {
       deepLink = call.arguments as String
       result.success(null)
@@ -73,17 +71,17 @@ public class TwitterLoginPlugin: FlutterPlugin, MethodCallHandler {
   }
 
   override fun onNewIntent(intent: Intent?): Boolean {
-    if (intent!!.data?.path == deepLink) {
-      eventSink?.success(mapOf("type" to "url", "url" to intent.data.toString()))
+    if (intent?.data?.path == deepLink) {
+      eventSink?.success(mapOf("type" to "url", "url" to intent?.data?.toString()))
     }
     return true
   }
 
-  override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
+  override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
     onAttachedToEngine(flutterPluginBinding.binaryMessenger)
   }
 
-  override fun onDetachedFromEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
+  override fun onDetachedFromEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
     methodChannel!!.setMethodCallHandler(null)
     methodChannel = null
 
