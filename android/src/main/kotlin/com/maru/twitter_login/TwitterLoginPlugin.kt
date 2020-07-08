@@ -15,6 +15,7 @@ import io.flutter.plugin.common.EventChannel.StreamHandler
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.PluginRegistry.Registrar
 import io.flutter.plugin.common.PluginRegistry.NewIntentListener
+import java.sql.DriverManager.println
 
 /** TwitterLoginPlugin */
 public class TwitterLoginPlugin: FlutterPlugin, MethodCallHandler, ActivityAware, NewIntentListener {
@@ -71,8 +72,8 @@ public class TwitterLoginPlugin: FlutterPlugin, MethodCallHandler, ActivityAware
   }
 
   override fun onNewIntent(intent: Intent?): Boolean {
-    if (intent?.data?.path == deepLink) {
-      eventSink?.success(mapOf("type" to "url", "url" to intent?.data?.toString()))
+    if (deepLink != "") {
+      eventSink?.success(mapOf("type" to "url", "url" to intent!!.data?.toString()))
     }
     return true
   }
