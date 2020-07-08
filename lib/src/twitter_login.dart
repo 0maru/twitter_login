@@ -103,7 +103,7 @@ class TwitterLogin {
       return AuthResult(
         accessToken: null,
         status: TwitterLoginStatus.error,
-        errorMessage: error,
+        errorMessage: error.message.toString(),
       );
     }
   }
