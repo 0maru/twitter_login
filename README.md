@@ -4,6 +4,12 @@
 
 Flutter Twitter Login Plugin
 
+# Requirements
+- Dart sdk: ">=2.7.0 <3.0.0"
+- Flutter: ">=1.10.0"
+- Android: minSdkVersion 17 and add support for androidx
+- iOS: --ios-language swift, Xcode version >= 11
+
 # Example code 
 
 See the example directory for a complete sample app using twitter_login.
