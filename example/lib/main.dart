@@ -24,11 +24,19 @@ class _MyAppState extends State<MyApp> {
             child: Text('login'),
             onPressed: () async {
               final twitterLogin = TwitterLogin(
-                apiKey: 'xxxx',
+                apiKey: 'xxx',
                 apiSecretKey: 'xxxx',
                 redirectURI: 'URLScheme',
               );
-              final authResult = twitterLogin.login();
+              final authResult = await twitterLogin.login();
+              switch (authResult.status) {
+                case TwitterLoginStatus.loggedIn:
+                // success
+                case TwitterLoginStatus.cancelledByUser:
+                // cancel
+                case TwitterLoginStatus.error:
+                // error
+              }
             },
           ),
         ),
