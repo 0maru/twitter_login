@@ -27,7 +27,7 @@ public class TwitterLoginPlugin: FlutterPlugin, MethodCallHandler, ActivityAware
   private var eventChannel: EventChannel? = null
   private var eventSink: EventSink? = null
   private var activityPluginBinding: ActivityPluginBinding? = null
-  private var deepLink : String? = ""
+  private var scheme : String? = ""
 
   // This static function is optional and equivalent to onAttachedToEngine. It supports the old
   // pre-Flutter-1.12 Android projects. You are encouraged to continue supporting
@@ -47,8 +47,8 @@ public class TwitterLoginPlugin: FlutterPlugin, MethodCallHandler, ActivityAware
   }
 
   override fun onMethodCall(call: MethodCall, result: Result) {
-    if (call.method == "setDeepLink") {
-      deepLink = call.arguments as String
+    if (call.method == "setScheme") {
+      scheme = call.arguments as String
       result.success(null)
     } else {
       result.notImplemented()
@@ -72,7 +72,7 @@ public class TwitterLoginPlugin: FlutterPlugin, MethodCallHandler, ActivityAware
   }
 
   override fun onNewIntent(intent: Intent?): Boolean {
-    if (deepLink != "") {
+    if (scheme == intent!!.data?.scheme) {
       eventSink?.success(mapOf("type" to "url", "url" to intent!!.data?.toString()))
     }
     return true

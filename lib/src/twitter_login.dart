@@ -31,8 +31,7 @@ class TwitterLogin {
 
   static const _channel = const MethodChannel('twitter_login');
   static final _eventChannel = EventChannel('twitter_login/event');
-  static final Stream<dynamic> _eventStream =
-      _eventChannel.receiveBroadcastStream();
+  static final Stream<dynamic> _eventStream = _eventChannel.receiveBroadcastStream();
 
   TwitterLogin({
     this.apiKey,
@@ -55,7 +54,8 @@ class TwitterLogin {
         });
       } else if (Platform.isAndroid) {
         // in_app_browser でログイン処理
-        await _channel.invokeMethod('setDeepLink', redirectURI);
+        final uri = Uri.parse(redirectURI);
+        await _channel.invokeMethod('setScheme', uri.scheme);
         final completer = Completer<String>();
         final subscribe = _eventStream.listen((data) async {
           if (data['type'] == 'url') {
@@ -108,8 +108,7 @@ class TwitterLogin {
     }
   }
 
-  Future<RequestToken> getRequestToken() async =>
-      await RequestToken.getRequestToken(
+  Future<RequestToken> getRequestToken() async => await RequestToken.getRequestToken(
         apiKey,
         apiSecretKey,
         redirectURI,
