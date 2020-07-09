@@ -11,9 +11,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  crypto: 2.1.4
+  crypto: 2.1.5
   http: 0.12.1
-  flutter_inappwebview: 3.3.0+3
+  flutter_inappwebview: 4.0.0+4
 
 dev_dependencies:
   flutter_test:
