@@ -47,9 +47,13 @@ class _MyAppState extends State<MyApp> {
           child: FlatButton(
             child: Text('login'),
             onPressed: () async {
-              final twitterLogin = TwitterLogin(
+              final twitterLogin = TwitterLogin(  
+                // Consumer API keys 
                 apiKey: 'xxxx',
                 apiSecretKey: 'xxxx',
+                // Callback URL for Twitter App
+                // Android is a deeplink
+                // iOS is a URLScheme
                 redirectURI: 'URLScheme',
               );
               final authResult = twitterLogin.login();
