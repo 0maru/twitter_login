@@ -24,9 +24,13 @@ class _MyAppState extends State<MyApp> {
             child: Text('login'),
             onPressed: () async {
               final twitterLogin = TwitterLogin(
-                apiKey: 'xxxxx',
-                apiSecretKey: 'xxxxx',
-                redirectURI: 'URLScheme://',
+                // Consumer API keys
+                apiKey: 'xxxx',
+                apiSecretKey: 'xxxx',
+                // Callback URL for Twitter App
+                // Android is a deeplink
+                // iOS is a URLScheme
+                redirectURI: 'URLScheme',
               );
               final authResult = await twitterLogin.login();
               switch (authResult.status) {
