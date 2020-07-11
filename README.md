@@ -57,6 +57,14 @@ class _MyAppState extends State<MyApp> {
                 redirectURI: 'URLScheme',
               );
               final authResult = twitterLogin.login();
+              switch (authResult.status) {
+                case TwitterLoginStatus.loggedIn:
+                // success
+                case TwitterLoginStatus.cancelledByUser:
+                // cancel
+                case TwitterLoginStatus.error:
+                // error
+              }
             },
           ),
         ),
