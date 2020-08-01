@@ -1,5 +1,3 @@
-class Utils {
-  static const requestTokenURI = 'https://api.twitter.com/oauth/request_token';
-  static const authorizeURI = 'https://api.twitter.com/oauth/authorize';
-  static const accessTokenURI = 'https://api.twitter.com/oauth/access_token';
-}
+const requestTokenURI = 'https://api.twitter.com/oauth/request_token';
+const authorizeURI = 'https://api.twitter.com/oauth/authorize';
+const accessTokenURI = 'https://api.twitter.com/oauth/access_token';

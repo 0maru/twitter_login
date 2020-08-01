@@ -11,7 +11,7 @@ class RequestToken {
   String get token => _token;
   String get tokenSecret => _tokenSecret;
   String get callbackConfirmed => _callbackConfirmed;
-  String get authorizeURI => '${Utils.authorizeURI}?oauth_token=$_token';
+  String get authorizeURI => '$authorizeURI?oauth_token=$_token';
 
   RequestToken._(Map<String, dynamic> params)
       : this._token = params['oauth_token'],
@@ -28,7 +28,7 @@ class RequestToken {
       redirectURI,
     );
     final _signature = Signature(
-      url: Utils.requestTokenURI,
+      url: requestTokenURI,
       method: 'POST',
       params: authParams,
       apiKey: apiKey,
@@ -47,7 +47,7 @@ class RequestToken {
     // create request auth header
     final http.BaseClient _httpClient = http.Client();
     final http.Response res = await _httpClient.post(
-      Utils.requestTokenURI,
+      requestTokenURI,
       headers: <String, String>{'Authorization': authHeader},
     );
 

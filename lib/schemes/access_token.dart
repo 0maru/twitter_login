@@ -26,7 +26,7 @@ class AccessToken {
       oauthVerifier,
     );
     final _signature = Signature(
-      url: Utils.accessTokenURI,
+      url: accessTokenURI,
       method: 'POST',
       params: authParams,
       apiKey: apiKey,
@@ -44,12 +44,11 @@ class AccessToken {
 
     final http.BaseClient _httpClient = http.Client();
     final http.Response res = await _httpClient.post(
-      Utils.accessTokenURI,
+      accessTokenURI,
       headers: <String, String>{'Authorization': authHeader},
     );
 
     final Map<String, String> params = Uri.splitQueryString(res.body);
-    print(params);
     final accessToken = AccessToken._(params);
     return accessToken;
   }
