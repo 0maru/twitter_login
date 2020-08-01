@@ -83,6 +83,8 @@ class TwitterLogin {
       if (params['denied'] != null) {
         return AuthResult(
           accessToken: null,
+          authToken: null,
+          authTokenSecret: null,
           status: TwitterLoginStatus.error,
           errorMessage: 'The user cancelled the login flow',
         );
@@ -96,12 +98,16 @@ class TwitterLogin {
       );
       return AuthResult(
         accessToken: accessToken,
+        authToken: accessToken.authToken,
+        authTokenSecret: accessToken.authTokenSecret,
         status: TwitterLoginStatus.loggedIn,
         errorMessage: '',
       );
     } catch (error) {
       return AuthResult(
         accessToken: null,
+        authToken: null,
+        authTokenSecret: null,
         status: TwitterLoginStatus.error,
         errorMessage: error.message.toString(),
       );
