@@ -59,11 +59,14 @@ class _MyAppState extends State<MyApp> {
               final authResult = twitterLogin.login();
               switch (authResult.status) {
                 case TwitterLoginStatus.loggedIn:
-                // success
+                  // success
+                  break;
                 case TwitterLoginStatus.cancelledByUser:
-                // cancel
+                  // cancel
+                  break;
                 case TwitterLoginStatus.error:
-                // error
+                  // error
+                  break;
               }
             },
           ),

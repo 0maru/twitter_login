@@ -13,3 +13,7 @@
 ## 0.0.4
 
 * Update packages Version
+
+## 1.0.0
+
+* Stable Release
