@@ -2,21 +2,22 @@ import 'dart:core';
 import 'package:twitter_login/schemes/access_token.dart';
 import 'package:twitter_login/src/twitter_login.dart';
 
-///
+/// The result when the Twitter login flow has completed.
+/// The login methods always return an instance of this class.
 class AuthResult {
-  // The access token for using the Twitter APIs
+  /// The access token for using the Twitter APIs
   final AccessToken _accessToken;
 
-  // The access token for using the Twitter APIs
+  /// The access token for using the Twitter APIs
   final String _authToken;
 
-  // The access token secret for using the Twitter APIs
+  //// The access token secret for using the Twitter APIs
   final String _authTokenSecret;
 
-  // The status after a Twitter login flow has completed
+  /// The status after a Twitter login flow has completed
   final TwitterLoginStatus _status;
 
-  // The error message when the log in flow completed with an error
+  /// The error message when the log in flow completed with an error
   final String _errorMessage;
 
   @deprecated
