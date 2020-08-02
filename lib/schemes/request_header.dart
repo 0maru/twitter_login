@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 
 const SIGNATURE_METHOD = 'HMAC-SHA1';
@@ -56,7 +57,7 @@ class RequestHeader {
     });
   }
 
-  /// create requser header for /authorize
+  /// create request header for /authorize
   static Map<String, dynamic> authorizeHeaderParams(
     String apiKey,
     String redirectURI,

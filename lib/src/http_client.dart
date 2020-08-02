@@ -4,7 +4,7 @@ import 'package:twitter_login/src/utils.dart';
 
 /// http client
 class HttpClient {
-  /// send mothod
+  /// send method
   static Future<Map<String, dynamic>> send(
     String url,
     Map<String, dynamic> params,
@@ -20,15 +20,12 @@ class HttpClient {
         apiSecretKey: apiSecretKey,
         tokenSecretKey: '',
       );
-      params['oauth_signature'] = _signature.signatureHmacSha1(
-        _signature.getSignatureKey(),
-        _signature.signatureDate(),
-      );
-      final hedaer = authHeader(params);
+      params['oauth_signature'] = _signature.signatureHmacSha1();
+      final header = Utils.authHeader(params);
       final http.BaseClient _httpClient = http.Client();
       final http.Response res = await _httpClient.post(
         url,
-        headers: <String, String>{'Authorization': hedaer},
+        headers: <String, String>{'Authorization': header},
       );
       if (res.statusCode != 200) {
         throw Exception("Failed ${res.reasonPhrase}");
@@ -36,7 +33,7 @@ class HttpClient {
 
       return Uri.splitQueryString(res.body);
     } on Exception catch (error) {
-      throw Exception(error.toString());
+      throw Exception(error);
     }
   }
 }
