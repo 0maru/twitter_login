@@ -1,6 +1,5 @@
-import 'package:http/http.dart' as http;
 import 'package:twitter_login/schemes/request_header.dart';
-import 'package:twitter_login/src/signature.dart';
+import 'package:twitter_login/src/http_client.dart';
 import 'package:twitter_login/src/utils.dart';
 
 /// The access token for using Twitter API.
@@ -28,27 +27,12 @@ class AccessToken {
       queries['oauth_token'],
       queries['oauth_verifier'],
     );
-    final _signature = Signature(
-      url: accessTokenURI,
-      method: 'POST',
-      params: authParams,
-      apiKey: apiKey,
-      apiSecretKey: apiSecretKey,
-      tokenSecretKey: '',
-    );
-    authParams['oauth_signature'] = _signature.signatureHmacSha1(
-      _signature.getSignatureKey(),
-      _signature.signatureDate(),
-    );
-    final String hedaer = authHeader(authParams);
-
-    final http.BaseClient _httpClient = http.Client();
-    final http.Response res = await _httpClient.post(
+    final params = await HttpClient.send(
       accessTokenURI,
-      headers: <String, String>{'Authorization': hedaer},
+      authParams,
+      apiKey,
+      apiSecretKey,
     );
-
-    final Map<String, String> params = Uri.splitQueryString(res.body);
     final accessToken = AccessToken._(params);
     return accessToken;
   }

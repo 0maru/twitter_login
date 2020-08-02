@@ -1,9 +1,8 @@
-import 'package:http/http.dart' as http;
 import 'package:twitter_login/schemes/request_header.dart';
-import 'package:twitter_login/src/signature.dart';
+import 'package:twitter_login/src/http_client.dart';
 import 'package:twitter_login/src/utils.dart';
 
-///
+/// The Request token for Twitter API.
 class RequestToken {
   /// Oauth token
   final String _token;
@@ -11,7 +10,7 @@ class RequestToken {
   /// Oauth token secret
   final String _tokenSecret;
 
-  ///
+  /// Oauth callback confirmed
   final String _callbackConfirmed;
 
   String get token => _token;
@@ -35,30 +34,12 @@ class RequestToken {
       apiKey,
       redirectURI,
     );
-    final _signature = Signature(
-      url: requestTokenURI,
-      method: 'POST',
-      params: authParams,
-      apiKey: apiKey,
-      apiSecretKey: apiSecretKey,
-      tokenSecretKey: '',
-    );
-    authParams['oauth_signature'] = _signature.signatureHmacSha1(
-      _signature.getSignatureKey(),
-      _signature.signatureDate(),
-    );
-    final String header = authHeader(authParams);
-    final http.BaseClient _httpClient = http.Client();
-    final http.Response res = await _httpClient.post(
+    final params = await HttpClient.send(
       requestTokenURI,
-      headers: <String, String>{'Authorization': header},
+      authParams,
+      apiKey,
+      apiSecretKey,
     );
-
-    if (res.statusCode != 200) {
-      throw Exception("Failed ${res.reasonPhrase}");
-    }
-
-    final params = Uri.splitQueryString(res.body);
     final requestToken = RequestToken._(params);
     if (requestToken.callbackConfirmed.toLowerCase() != 'true') {
       throw StateError('oauth_callback_confirmed mast be true');
