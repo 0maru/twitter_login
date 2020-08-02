@@ -1,7 +1,5 @@
 import 'dart:convert';
-
 import 'package:flutter/foundation.dart';
-import 'package:twitter_login/src/utils.dart';
 
 const SIGNATURE_METHOD = 'HMAC-SHA1';
 

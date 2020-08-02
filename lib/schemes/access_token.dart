@@ -3,6 +3,7 @@ import 'package:twitter_login/schemes/request_header.dart';
 import 'package:twitter_login/src/signature.dart';
 import 'package:twitter_login/src/utils.dart';
 
+/// The access token for using Twitter API.
 class AccessToken {
   /// The access token for using the Twitter APIs
   final String _authToken;
