@@ -4,7 +4,10 @@ import 'package:twitter_login/src/signature.dart';
 import 'package:twitter_login/src/utils.dart';
 
 class AccessToken {
+  /// The access token for using the Twitter APIs
   final String _authToken;
+
+  /// The access token secret for using the Twitter APIs
   final String _authTokenSecret;
 
   String get authToken => _authToken;
@@ -17,13 +20,12 @@ class AccessToken {
   static Future<AccessToken> getAccessToken(
     String apiKey,
     String apiSecretKey,
-    String oauthToken,
-    String oauthVerifier,
+    Map<String, String> queries,
   ) async {
     final authParams = RequestHeader.accessTokenHeaderParams(
       apiKey,
-      oauthToken,
-      oauthVerifier,
+      queries['oauth_token'],
+      queries['oauth_verifier'],
     );
     final _signature = Signature(
       url: accessTokenURI,
@@ -34,18 +36,15 @@ class AccessToken {
       tokenSecretKey: '',
     );
     authParams['oauth_signature'] = _signature.signatureHmacSha1(
-      _signature.createSignatureKey(),
-      _signature.signatureDate().toString(),
+      _signature.getSignatureKey(),
+      _signature.signatureDate(),
     );
-    final String authHeader = 'OAuth ' +
-        authParams.keys.map((k) {
-          return '$k="${Uri.encodeComponent(authParams[k])}"';
-        }).join(', ');
+    final String hedaer = authHeader(authParams);
 
     final http.BaseClient _httpClient = http.Client();
     final http.Response res = await _httpClient.post(
       accessTokenURI,
-      headers: <String, String>{'Authorization': authHeader},
+      headers: <String, String>{'Authorization': hedaer},
     );
 
     final Map<String, String> params = Uri.splitQueryString(res.body);
