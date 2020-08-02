@@ -6,6 +6,7 @@ import 'package:twitter_login/schemes/access_token.dart';
 import 'package:twitter_login/schemes/auth_result.dart';
 import 'package:twitter_login/schemes/request_token.dart';
 import 'package:twitter_login/src/chrome_custom_tab.dart';
+import 'package:twitter_login/src/exception.dart';
 
 /// The status after a Twitter login flow has completed.
 enum TwitterLoginStatus {
@@ -19,6 +20,7 @@ enum TwitterLoginStatus {
   error,
 }
 
+///
 class TwitterLogin {
   // Consumer API key
   final String apiKey;
@@ -33,27 +35,28 @@ class TwitterLogin {
   static final _eventChannel = EventChannel('twitter_login/event');
   static final Stream<dynamic> _eventStream = _eventChannel.receiveBroadcastStream();
 
+  /// constructor
   TwitterLogin({
     this.apiKey,
     this.apiSecretKey,
     this.redirectURI,
   });
 
-  // TODO: Error 時の処理
+  // Logs the user
   Future<AuthResult> login() async {
-    // TODO: requestTokenが取れなかったらエラー
     try {
-      final requestToken = await getRequestToken();
-
+      final requestToken = await RequestToken.getRequestToken(
+        apiKey,
+        apiSecretKey,
+        redirectURI,
+      );
       String resultURI = '';
       if (Platform.isIOS) {
-        // PlatformView でログイン処理
         resultURI = await _channel.invokeMethod('authentication', {
           'url': requestToken.authorizeURI,
           'redirectURL': redirectURI,
         });
       } else if (Platform.isAndroid) {
-        // in_app_browser でログイン処理
         final uri = Uri.parse(redirectURI);
         await _channel.invokeMethod('setScheme', uri.scheme);
         final completer = Completer<String>();
@@ -73,28 +76,20 @@ class TwitterLogin {
       } else {
         throw Exception();
       }
-      // query からToken を取得する
-      final params = Uri.splitQueryString(Uri.parse(resultURI).query);
-      if (params['error'] != null) {
-        throw Exception('Error Response: ${params['error']}');
+      final queries = Uri.splitQueryString(Uri.parse(resultURI).query);
+      if (queries['error'] != null) {
+        throw Exception('Error Response: ${queries['error']}');
       }
 
-      // ユーザーがキャンセルした
-      if (params['denied'] != null) {
-        return AuthResult(
-          accessToken: null,
-          authToken: null,
-          authTokenSecret: null,
-          status: TwitterLoginStatus.error,
-          errorMessage: 'The user cancelled the login flow',
-        );
+      // The user cancelled the login flow.
+      if (queries['denied'] != null) {
+        throw CanceldByUserException();
       }
 
       final accessToken = await AccessToken.getAccessToken(
         apiKey,
         apiSecretKey,
-        params['oauth_token'],
-        params['oauth_verifier'],
+        queries,
       );
       return AuthResult(
         accessToken: accessToken,
@@ -103,20 +98,22 @@ class TwitterLogin {
         status: TwitterLoginStatus.loggedIn,
         errorMessage: '',
       );
+    } on CanceldByUserException {
+      return AuthResult(
+        accessToken: null,
+        authToken: null,
+        authTokenSecret: null,
+        status: TwitterLoginStatus.cancelledByUser,
+        errorMessage: 'The user cancelled the login flow',
+      );
     } catch (error) {
       return AuthResult(
         accessToken: null,
         authToken: null,
         authTokenSecret: null,
         status: TwitterLoginStatus.error,
-        errorMessage: error.message.toString(),
+        errorMessage: error.toString(),
       );
     }
   }
-
-  Future<RequestToken> getRequestToken() async => await RequestToken.getRequestToken(
-        apiKey,
-        apiSecretKey,
-        redirectURI,
-      );
 }
