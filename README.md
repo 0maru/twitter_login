@@ -10,6 +10,17 @@ Flutter Twitter Login Plugin
 - Android: minSdkVersion 17 and add support for androidx
 - iOS: --ios-language swift, Xcode version >= 11
 
+# Android Configuration
+If you flutter created your project prior to version 1.12, you need to make sure to update your project in order to use the new Java Embedding API.
+Make use you have flutter_embedding v2 enabled. Add the following code on the manifest file inside <application> tag to enable embedding.
+Flutter wiki: [Upgrading pre 1.12 Android projects.](https://github.com/flutter/flutter/wiki/Upgrading-pre-1.12-Android-projects)
+
+```
+<meta-data
+  android:name="flutterEmbedding"
+  android:value="2" />
+```
+
 # Example code 
 
 See the example directory for a complete sample app using twitter_login.
