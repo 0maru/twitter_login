@@ -17,3 +17,8 @@
 ## 1.0.0
 
 * Stable Release
+
+## 1.0.1
+
+* Minor update
+* add Android Configuration
