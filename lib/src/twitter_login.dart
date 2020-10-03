@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:twitter_login/schemes/access_token.dart';
 import 'package:twitter_login/schemes/auth_result.dart';
@@ -37,10 +38,12 @@ class TwitterLogin {
 
   /// constructor
   TwitterLogin({
-    this.apiKey,
-    this.apiSecretKey,
-    this.redirectURI,
-  });
+    @required this.apiKey,
+    @required this.apiSecretKey,
+    @required this.redirectURI,
+  })  : assert(apiKey != null),
+        assert(apiSecretKey != null),
+        assert(redirectURI != null);
 
   // Logs the user
   Future<AuthResult> login() async {
@@ -52,10 +55,13 @@ class TwitterLogin {
       );
       String resultURI = '';
       if (Platform.isIOS) {
-        resultURI = await _channel.invokeMethod('authentication', {
-          'url': requestToken.authorizeURI,
-          'redirectURL': redirectURI,
-        });
+        resultURI = await _channel.invokeMethod(
+          'authentication',
+          {
+            'url': requestToken.authorizeURI,
+            'redirectURL': redirectURI,
+          },
+        );
       } else if (Platform.isAndroid) {
         final uri = Uri.parse(redirectURI);
         await _channel.invokeMethod('setScheme', uri.scheme);
