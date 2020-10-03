@@ -30,7 +30,6 @@ public class SwiftTwitterLoginPlugin: NSObject, FlutterPlugin, ASWebAuthenticati
         let url = args["url"] as! String
         let urlScheme = args["redirectURL"] as? String
         
-        // iOS12以降
         if #available(iOS 12.0, *) {
             var authSession: ASWebAuthenticationSession?
             authSession = ASWebAuthenticationSession(
@@ -48,7 +47,7 @@ public class SwiftTwitterLoginPlugin: NSObject, FlutterPlugin, ASWebAuthenticati
             if !authSession!.start() {
             // TODO: failed
             }
-        // iOS11のみ
+        // Only iOS11
         } else if #available(iOS 11.0, *) {
             var authSession: SFAuthenticationSession?
             authSession = SFAuthenticationSession(
@@ -64,7 +63,6 @@ public class SwiftTwitterLoginPlugin: NSObject, FlutterPlugin, ASWebAuthenticati
             // TODO: failed
             }
         } else {
-            // iOS10以前は未対応
             result(nil)
             return
         }
