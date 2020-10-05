@@ -25,7 +25,7 @@ Flutter Twitter Login Plugin
   <category android:name="android.intent.category.BROWSABLE" />
   <!-- Accepts URIs that begin with "example://gizmos” -->
   <data android:scheme="example"
-				android:host="gizmos" />
+        android:host="gizmos" />
 </intent-filter>
 ```
 
@@ -39,7 +39,7 @@ Flutter wiki: [Upgrading pre 1.12 Android projects.](https://github.com/flutter/
 
 ```xml
 <meta-data
-		android:name="flutterEmbedding"
+    android:name="flutterEmbedding"
     android:value="2" />
 ```
 
