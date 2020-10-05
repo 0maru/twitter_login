@@ -10,15 +10,61 @@ Flutter Twitter Login Plugin
 - Android: minSdkVersion 17 and add support for androidx
 - iOS: --ios-language swift, Xcode version >= 11
 
-# Android Configuration
+
+
+## Android Configuration
+
+### Add intent filters for incoming links
+
+[/example/android/app/src/main/AndroidManifest.xm](https://github.com/0maru/twitter_login/blob/master/example/android/app/src/main/AndroidManifest.xml)
+
+```xml
+<intent-filter>
+  <action android:name="android.intent.action.VIEW" />
+  <category android:name="android.intent.category.DEFAULT" />
+  <category android:name="android.intent.category.BROWSABLE" />
+  <!-- Accepts URIs that begin with "example://gizmos” -->
+  <data android:scheme="example"
+				android:host="gizmos" />
+</intent-filter>
+```
+
+
+
+### Supporting the new Android plugins APIs
+
 If you flutter created your project prior to version 1.12, you need to make sure to update your project in order to use the new Java Embedding API.
 Make use you have flutter_embedding v2 enabled. Add the following code on the manifest file inside <application> tag to enable embedding.
 Flutter wiki: [Upgrading pre 1.12 Android projects.](https://github.com/flutter/flutter/wiki/Upgrading-pre-1.12-Android-projects)
 
-```
+```xml
 <meta-data
-  android:name="flutterEmbedding"
-  android:value="2" />
+		android:name="flutterEmbedding"
+    android:value="2" />
+```
+
+
+
+## iOS Configuration
+
+### Add URLScheme
+
+[/example/ios/Runner/Info.plist](https://github.com/0maru/twitter_login/blob/master/example/ios/Runner/Info.plist#L21)
+
+```xml
+<key>CFBundleURLTypes</key>
+<array>
+  <dict>
+    <key>CFBundleTypeRole</key>
+    <string>Editor</string>
+    <key>CFBundleURLName</key>
+    <string>app.flutter.twitter.login.schemes</string>
+    <key>CFBundleURLSchemes</key>
+    <array>
+      <string>app</string>
+    </array>
+  </dict>
+</array>
 ```
 
 # Example code 
@@ -33,7 +79,7 @@ To use this plugin, add `twitter_login` as a [dependency in your pubspec.yaml fi
 
 ### Example
 
-```
+```dart
 import 'package:flutter/material.dart';
 import 'package:twitter_login/twitter_login.dart';
 
