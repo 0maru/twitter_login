@@ -77,7 +77,7 @@ class TwitterLogin {
         resultURI = await completer.future;
         subscribe.cancel();
       } else {
-        throw Exception();
+        throw UnsupportedError('Not supported by this os.');
       }
       final queries = Uri.splitQueryString(Uri.parse(resultURI).query);
       if (queries['error'] != null) {
