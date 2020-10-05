@@ -30,6 +30,9 @@ class _MyAppState extends State<MyApp> {
                 // Android is a deeplink
                 // iOS is a URLScheme
                 redirectURI: 'URLScheme',
+                // Forces the user to enter their credentials
+                // to ensure the correct users account is authorized.
+                forceLogin: true,
               );
               final authResult = await twitterLogin.login();
               switch (authResult.status) {
