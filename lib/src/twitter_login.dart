@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:twitter_login/schemes/access_token.dart';
 import 'package:twitter_login/schemes/auth_result.dart';
@@ -37,10 +38,12 @@ class TwitterLogin {
 
   /// constructor
   TwitterLogin({
-    this.apiKey,
-    this.apiSecretKey,
-    this.redirectURI,
-  });
+    @required this.apiKey,
+    @required this.apiSecretKey,
+    @required this.redirectURI,
+  })  : assert(apiKey != null),
+        assert(apiSecretKey != null),
+        assert(redirectURI != null);
 
   // Logs the user
   Future<AuthResult> login() async {
