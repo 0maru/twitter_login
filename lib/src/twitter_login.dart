@@ -23,14 +23,17 @@ enum TwitterLoginStatus {
 
 ///
 class TwitterLogin {
-  // Consumer API key
+  /// Consumer API key
   final String apiKey;
 
-  // Consumer API secret key
+  /// Consumer API secret key
   final String apiSecretKey;
 
-  // Callback URL
+  /// Callback URL
   final String redirectURI;
+
+  /// 	Forces the user to enter their credentials to ensure the correct users account is authorized
+  final bool forceLogin;
 
   static const _channel = const MethodChannel('twitter_login');
   static final _eventChannel = EventChannel('twitter_login/event');
@@ -41,17 +44,19 @@ class TwitterLogin {
     @required this.apiKey,
     @required this.apiSecretKey,
     @required this.redirectURI,
+    this.forceLogin = false,
   })  : assert(apiKey != null),
         assert(apiSecretKey != null),
         assert(redirectURI != null);
 
-  // Logs the user
+  /// Logs the user
   Future<AuthResult> login() async {
     try {
       final requestToken = await RequestToken.getRequestToken(
         apiKey,
         apiSecretKey,
         redirectURI,
+        forceLogin,
       );
       String resultURI = '';
       if (Platform.isIOS) {
