@@ -22,3 +22,8 @@
 
 * Minor update
 * add Android Configuration
+
+## 1.0.2
+
+* Minor update
+* Update README
