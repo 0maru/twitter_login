@@ -14,7 +14,6 @@ class HttpClient {
     try {
       final _signature = Signature(
         url: url,
-        method: 'POST',
         params: params,
         apiKey: apiKey,
         apiSecretKey: apiSecretKey,
