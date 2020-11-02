@@ -20,6 +20,7 @@ String authHeader(Map<String, dynamic> params) {
       }).join(', ');
 }
 
+/// send http request
 Future<Map<String, dynamic>> send(
   String url,
   Map<String, dynamic> params,
