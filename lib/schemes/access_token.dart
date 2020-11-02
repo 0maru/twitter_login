@@ -28,7 +28,7 @@ class AccessToken {
       queries['oauth_verifier'],
     );
     final params = await HttpClient.send(
-      Utils.accessTokenURI,
+      ACCESS_TOKEN_URI,
       authParams,
       apiKey,
       apiSecretKey,

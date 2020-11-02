@@ -21,7 +21,7 @@ class HttpClient {
         tokenSecretKey: '',
       );
       params['oauth_signature'] = _signature.signatureHmacSha1();
-      final header = Utils.authHeader(params);
+      final header = authHeader(params);
       final http.BaseClient _httpClient = http.Client();
       final http.Response res = await _httpClient.post(
         url,

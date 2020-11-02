@@ -16,7 +16,7 @@ class RequestToken {
   String get token => _token;
   String get tokenSecret => _tokenSecret;
   String get callbackConfirmed => _callbackConfirmed;
-  String get authorizeURI => '${Utils.authorizeURI}?oauth_token=$_token';
+  String get authorizeURI => '${AUTHORIZE_URI}?oauth_token=$_token';
 
   /// constructor
   RequestToken._(Map<String, dynamic> params)
@@ -35,7 +35,7 @@ class RequestToken {
       redirectURI,
     );
     final params = await HttpClient.send(
-      Utils.requestTokenURI,
+      REQUSER_TOKEN_URL,
       authParams,
       apiKey,
       apiSecretKey,
