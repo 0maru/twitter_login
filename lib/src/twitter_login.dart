@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:twitter_login/schemes/access_token.dart';
 import 'package:twitter_login/schemes/auth_result.dart';
@@ -22,13 +23,13 @@ enum TwitterLoginStatus {
 
 ///
 class TwitterLogin {
-  // Consumer API key
+  /// Consumer API key
   final String apiKey;
 
-  // Consumer API secret key
+  /// Consumer API secret key
   final String apiSecretKey;
 
-  // Callback URL
+  /// Callback URL
   final String redirectURI;
 
   static const _channel = const MethodChannel('twitter_login');
@@ -37,18 +38,22 @@ class TwitterLogin {
 
   /// constructor
   TwitterLogin({
-    this.apiKey,
-    this.apiSecretKey,
-    this.redirectURI,
-  });
+    @required this.apiKey,
+    @required this.apiSecretKey,
+    @required this.redirectURI,
+  })  : assert(apiKey != null),
+        assert(apiSecretKey != null),
+        assert(redirectURI != null);
 
-  // Logs the user
-  Future<AuthResult> login() async {
+  /// Logs the user
+  /// Forces the user to enter their credentials to ensure the correct users account is authorized.
+  Future<AuthResult> login({bool forceLogin = false}) async {
     try {
       final requestToken = await RequestToken.getRequestToken(
         apiKey,
         apiSecretKey,
         redirectURI,
+        forceLogin,
       );
       String resultURI = '';
       if (Platform.isIOS) {
@@ -74,7 +79,7 @@ class TwitterLogin {
         resultURI = await completer.future;
         subscribe.cancel();
       } else {
-        throw Exception();
+        throw UnsupportedError('Not supported by this os.');
       }
       final queries = Uri.splitQueryString(Uri.parse(resultURI).query);
       if (queries['error'] != null) {
