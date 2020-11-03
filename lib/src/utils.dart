@@ -3,17 +3,17 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:twitter_login/src/signature.dart';
 
-///
+/// Allows a Consumer application to obtain an OAuth Request Token to request user authorization.
 const REQUSER_TOKEN_URL = 'https://api.twitter.com/oauth/request_token';
 
-///
+/// Allows a Consumer application to use an OAuth Request Token to request user authorization.
 const AUTHORIZE_URI = 'https://api.twitter.com/oauth/authorize';
 
-///
+/// Allows a Consumer application to use an OAuth request_token to request user authorization.
 const ACCESS_TOKEN_URI = 'https://api.twitter.com/oauth/access_token';
 
 ///
-String authHeader(Map<String, dynamic> params) {
+String generateAuthHeader(Map<String, dynamic> params) {
   return 'OAuth ' +
       params.keys.map((k) {
         return '$k="${Uri.encodeComponent(params[k])}"';
@@ -36,7 +36,7 @@ Future<Map<String, dynamic>> send(
       tokenSecretKey: '',
     );
     params['oauth_signature'] = _signature.signatureHmacSha1();
-    final header = authHeader(params);
+    final header = generateAuthHeader(params);
     final http.BaseClient _httpClient = http.Client();
     final http.Response res = await _httpClient.post(
       url,
