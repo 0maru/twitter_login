@@ -32,9 +32,6 @@ class TwitterLogin {
   /// Callback URL
   final String redirectURI;
 
-  /// 	Forces the user to enter their credentials to ensure the correct users account is authorized
-  final bool forceLogin;
-
   static const _channel = const MethodChannel('twitter_login');
   static final _eventChannel = EventChannel('twitter_login/event');
   static final Stream<dynamic> _eventStream = _eventChannel.receiveBroadcastStream();
@@ -44,13 +41,12 @@ class TwitterLogin {
     @required this.apiKey,
     @required this.apiSecretKey,
     @required this.redirectURI,
-    this.forceLogin = false,
   })  : assert(apiKey != null),
         assert(apiSecretKey != null),
         assert(redirectURI != null);
 
   /// Logs the user
-  Future<AuthResult> login() async {
+  Future<AuthResult> login({bool forceLogin = false}) async {
     try {
       final requestToken = await RequestToken.getRequestToken(
         apiKey,
@@ -86,7 +82,9 @@ class TwitterLogin {
       }
       final queries = Uri.splitQueryString(Uri.parse(resultURI).query);
       if (queries['error'] != null) {
-        throw Exception('Error Response: ${queries['error']}');
+        throw PlatformException(
+          message: 'Error Response: ${queries['error']}',
+        );
       }
 
       // The user cancelled the login flow.

@@ -12,10 +12,20 @@ class RequestToken {
   /// Oauth callback confirmed
   final String _callbackConfirmed;
 
+  /// authorize url
+  final String _authorizeURI;
+
+  /// Oauth token
   String get token => _token;
+
+  /// Oauth token secret
   String get tokenSecret => _tokenSecret;
+
+  /// Oauth callback confirmed
   String get callbackConfirmed => _callbackConfirmed;
-  String get authorizeURI => '$AUTHORIZE_URI?oauth_token=$_token';
+
+  /// authorize url
+  String get authorizeURI => _authorizeURI;
 
   /// constructor
   RequestToken._(
@@ -23,7 +33,8 @@ class RequestToken {
     String authorizeURI,
   )   : this._token = params['oauth_token'],
         this._tokenSecret = params['oauth_token_secret'],
-        this._callbackConfirmed = params['oauth_callback_confirmed'];
+        this._callbackConfirmed = params['oauth_callback_confirmed'],
+        this._authorizeURI = authorizeURI;
 
   /// Request user authorization token
   static Future<RequestToken> getRequestToken(
@@ -43,9 +54,9 @@ class RequestToken {
       apiSecretKey,
     );
 
-    var authorizeURI = '$ACCESS_TOKEN_URI?oauth_token=${params['oauth_token']}';
+    var authorizeURI = '$AUTHORIZE_URI?oauth_token=${params['oauth_token']}';
     if (forceLogin) {
-      authorizeURI += '&force_login';
+      authorizeURI += '&force_login=true';
     }
     final requestToken = RequestToken._(params, authorizeURI);
     if (requestToken.callbackConfirmed.toLowerCase() != 'true') {
