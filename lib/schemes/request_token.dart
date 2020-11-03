@@ -12,8 +12,6 @@ class RequestToken {
   /// Oauth callback confirmed
   final String _callbackConfirmed;
 
-  final String _authorizeURI;
-
   String get token => _token;
   String get tokenSecret => _tokenSecret;
   String get callbackConfirmed => _callbackConfirmed;
@@ -25,8 +23,7 @@ class RequestToken {
     String authorizeURI,
   )   : this._token = params['oauth_token'],
         this._tokenSecret = params['oauth_token_secret'],
-        this._callbackConfirmed = params['oauth_callback_confirmed'],
-        this._authorizeURI = authorizeURI;
+        this._callbackConfirmed = params['oauth_callback_confirmed'];
 
   /// Request user authorization token
   static Future<RequestToken> getRequestToken(
@@ -46,7 +43,7 @@ class RequestToken {
       apiSecretKey,
     );
 
-    var authorizeURI = '${Utils.accessTokenURI}?oauth_token=${params['oauth_token']}';
+    var authorizeURI = '$ACCESS_TOKEN_URI?oauth_token=${params['oauth_token']}';
     if (forceLogin) {
       authorizeURI += '&force_login';
     }
