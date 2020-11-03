@@ -113,6 +113,8 @@ class _MyAppState extends State<MyApp> {
                 // iOS is a URLScheme
                 redirectURI: 'URLScheme',
               );
+              // If you want to implement Twitter account switching, set [force_login] to true
+              // login(forceLogin: true);
               final authResult = twitterLogin.login();
               switch (authResult.status) {
                 case TwitterLoginStatus.loggedIn:

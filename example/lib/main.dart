@@ -33,7 +33,9 @@ class _MyAppState extends State<MyApp> {
                 // Forces the user to enter their credentials
                 // to ensure the correct users account is authorized.
               );
-              final authResult = await twitterLogin.login(forceLogin: true);
+              // If you want to implement Twitter account switching, set [force_login] to true
+              // login(forceLogin: true);
+              final authResult = await twitterLogin.login();
               switch (authResult.status) {
                 case TwitterLoginStatus.loggedIn:
                   // success
