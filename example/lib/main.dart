@@ -32,9 +32,8 @@ class _MyAppState extends State<MyApp> {
                 redirectURI: 'URLScheme',
                 // Forces the user to enter their credentials
                 // to ensure the correct users account is authorized.
-                forceLogin: true,
               );
-              final authResult = await twitterLogin.login();
+              final authResult = await twitterLogin.login(forceLogin: true);
               switch (authResult.status) {
                 case TwitterLoginStatus.loggedIn:
                   // success
