@@ -1,5 +1,4 @@
 import 'package:twitter_login/schemes/request_header.dart';
-import 'package:twitter_login/src/http_client.dart';
 import 'package:twitter_login/src/utils.dart';
 
 /// The access token for Twitter API.
@@ -27,8 +26,8 @@ class AccessToken {
       queries['oauth_token'],
       queries['oauth_verifier'],
     );
-    final params = await HttpClient.send(
-      Utils.accessTokenURI,
+    final params = await send(
+      ACCESS_TOKEN_URI,
       authParams,
       apiKey,
       apiSecretKey,

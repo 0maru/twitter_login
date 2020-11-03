@@ -25,7 +25,7 @@ class Signature {
   /// constructor
   Signature({
     this.url,
-    this.method,
+    this.method = 'POST',
     this.params,
     this.apiKey,
     this.apiSecretKey,

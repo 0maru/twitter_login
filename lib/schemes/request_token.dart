@@ -1,5 +1,4 @@
 import 'package:twitter_login/schemes/request_header.dart';
-import 'package:twitter_login/src/http_client.dart';
 import 'package:twitter_login/src/utils.dart';
 
 /// The Request token for Twitter API.
@@ -18,7 +17,7 @@ class RequestToken {
   String get token => _token;
   String get tokenSecret => _tokenSecret;
   String get callbackConfirmed => _callbackConfirmed;
-  String get authorizeURI => _authorizeURI;
+  String get authorizeURI => '$AUTHORIZE_URI?oauth_token=$_token';
 
   /// constructor
   RequestToken._(
@@ -40,8 +39,8 @@ class RequestToken {
       apiKey,
       redirectURI,
     );
-    final params = await HttpClient.send(
-      Utils.requestTokenURI,
+    final params = await send(
+      REQUSER_TOKEN_URL,
       authParams,
       apiKey,
       apiSecretKey,
