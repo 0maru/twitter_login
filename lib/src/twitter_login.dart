@@ -46,6 +46,7 @@ class TwitterLogin {
         assert(redirectURI != null);
 
   /// Logs the user
+  /// Forces the user to enter their credentials to ensure the correct users account is authorized.
   Future<AuthResult> login({bool forceLogin = false}) async {
     try {
       final requestToken = await RequestToken.getRequestToken(
@@ -82,9 +83,7 @@ class TwitterLogin {
       }
       final queries = Uri.splitQueryString(Uri.parse(resultURI).query);
       if (queries['error'] != null) {
-        throw PlatformException(
-          message: 'Error Response: ${queries['error']}',
-        );
+        throw Exception('Error Response: ${queries['error']}');
       }
 
       // The user cancelled the login flow.
