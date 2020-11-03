@@ -27,3 +27,7 @@
 
 * Minor update
 * Update README
+
+## 2.0.0
+
+* Add ForceLogin
