@@ -11,6 +11,16 @@ Flutter Twitter Login Plugin
 - iOS: --ios-language swift, Xcode version >= 11
 
 
+## Twitter Configuration
+[Twitter Developer](https://developer.twitter.com/)
+
+required to create TwitterApp.
+this plugin is need Callback URLs.
+
+For example
+```
+example://
+```
 
 ## Android Configuration
 
@@ -24,8 +34,9 @@ Flutter Twitter Login Plugin
   <category android:name="android.intent.category.DEFAULT" />
   <category android:name="android.intent.category.BROWSABLE" />
   <!-- Accepts URIs that begin with "example://gizmos” -->
+  <!-- Registered Callback URLs in TwitterApp -->
   <data android:scheme="example"
-        android:host="gizmos" />
+        android:host="gizmos" /> <!-- option -->
 </intent-filter>
 ```
 
@@ -58,7 +69,8 @@ Flutter wiki: [Upgrading pre 1.12 Android projects.](https://github.com/flutter/
     <key>CFBundleTypeRole</key>
     <string>Editor</string>
     <key>CFBundleURLName</key>
-    <string>app.flutter.twitter.login.schemes</string>
+    <!-- Registered Callback URLs in TwitterApp -->
+    <string>example</string>
     <key>CFBundleURLSchemes</key>
     <array>
       <string>app</string>
@@ -98,20 +110,21 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Plugin example app'),
+          title: const Text('Twitter Login App'),
         ),
         body: Center(
           child: FlatButton(
-            child: Text('login'),
+            child: Text('Login With Twitter'),
             onPressed: () async {
               final twitterLogin = TwitterLogin(  
                 // Consumer API keys 
                 apiKey: 'xxxx',
+                // Consumer API Secret keys 
                 apiSecretKey: 'xxxx',
-                // Callback URL for Twitter App
+                // Registered Callback URLs in TwitterApp
                 // Android is a deeplink
                 // iOS is a URLScheme
-                redirectURI: 'URLScheme',
+                redirectURI: 'example://',
               );
               final authResult = twitterLogin.login();
               switch (authResult.status) {
@@ -133,4 +146,3 @@ class _MyAppState extends State<MyApp> {
   }
 }
 ```
-
