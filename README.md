@@ -28,6 +28,8 @@ example://
 
 [/example/android/app/src/main/AndroidManifest.xm](https://github.com/0maru/twitter_login/blob/master/example/android/app/src/main/AndroidManifest.xml)
 
+You need to replace the scheme with a Callback URLs.  
+
 ```xml
 <intent-filter>
   <action android:name="android.intent.action.VIEW" />
@@ -61,6 +63,8 @@ Flutter wiki: [Upgrading pre 1.12 Android projects.](https://github.com/flutter/
 ### Add URLScheme
 
 [/example/ios/Runner/Info.plist](https://github.com/0maru/twitter_login/blob/master/example/ios/Runner/Info.plist#L21)
+
+You need to replace the example with a Callback URLs.  
 
 ```xml
 <key>CFBundleURLTypes</key>
@@ -126,8 +130,6 @@ class _MyAppState extends State<MyApp> {
                 // iOS is a URLScheme
                 redirectURI: 'example://',
               );
-              // If you want to implement Twitter account switching, set [force_login] to true
-              // login(forceLogin: true);
               final authResult = twitterLogin.login();
               switch (authResult.status) {
                 case TwitterLoginStatus.loggedIn:
