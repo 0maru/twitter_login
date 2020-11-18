@@ -14,7 +14,7 @@ Flutter Twitter Login Plugin
 ## Twitter Configuration
 [Twitter Developer](https://developer.twitter.com/)
 
-required to create TwitterApp.
+required to create TwitterApp.  
 this plugin is need Callback URLs.
 
 For example
@@ -44,9 +44,9 @@ example://
 
 ### Supporting the new Android plugins APIs
 
-If you flutter created your project prior to version 1.12, you need to make sure to update your project in order to use the new Java Embedding API.
-Make use you have flutter_embedding v2 enabled. Add the following code on the manifest file inside <application> tag to enable embedding.
-Flutter wiki: [Upgrading pre 1.12 Android projects.](https://github.com/flutter/flutter/wiki/Upgrading-pre-1.12-Android-projects)
+If you flutter created your project prior to version 1.12, you need to make sure to update your project in order to use the new Java Embedding API.  
+Make use you have flutter_embedding v2 enabled. Add the following code on the manifest file inside <application> tag to enable embedding.  
+Flutter wiki: [Upgrading pre 1.12 Android projects.](https://github.com/flutter/flutter/wiki/Upgrading-pre-1.12-Android-projects)  
 
 ```xml
 <meta-data
@@ -81,13 +81,13 @@ Flutter wiki: [Upgrading pre 1.12 Android projects.](https://github.com/flutter/
 
 # Example code 
 
-See the example directory for a complete sample app using twitter_login.
+See the example directory for a complete sample app using twitter_login.  
 
 [example](https://github.com/0maru/twitter_login/tree/master/example)
 
 # Usage
 
-To use this plugin, add `twitter_login` as a [dependency in your pubspec.yaml file.](https://flutter.dev/platform-plugins/)
+To use this plugin, add `twitter_login` as a [dependency in your pubspec.yaml file.](https://flutter.dev/platform-plugins/)  
 
 ### Example
 
