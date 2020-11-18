@@ -24,7 +24,8 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string>app.flutter.twitter.login.schemes</string>
+			<!-- Registered Callback URLs in TwitterApp -->
+			<string>example</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>app</string>

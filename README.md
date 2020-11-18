@@ -36,7 +36,7 @@ example://
   <!-- Accepts URIs that begin with "example://gizmos” -->
   <!-- Registered Callback URLs in TwitterApp -->
   <data android:scheme="example"
-        android:host="gizmos" /> <!-- option -->
+        android:host="gizmos" /> <!-- host is option -->
 </intent-filter>
 ```
 
