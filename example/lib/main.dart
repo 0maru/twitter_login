@@ -25,11 +25,12 @@ class _MyAppState extends State<MyApp> {
               final twitterLogin = TwitterLogin(
                 // Consumer API keys
                 apiKey: 'xxxx',
+                // Consumer API Secret keys
                 apiSecretKey: 'xxxx',
-                // Callback URL for Twitter App
+                // Registered Callback URLs in TwitterApp
                 // Android is a deeplink
                 // iOS is a URLScheme
-                redirectURI: 'URLScheme',
+                redirectURI: 'example://',
                 // Forces the user to enter their credentials
                 // to ensure the correct users account is authorized.
               );
