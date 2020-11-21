@@ -12,6 +12,9 @@ const AUTHORIZE_URI = 'https://api.twitter.com/oauth/authorize';
 /// Allows a Consumer application to use an OAuth request_token to request user authorization.
 const ACCESS_TOKEN_URI = 'https://api.twitter.com/oauth/access_token';
 
+/// The "Request email addresses from users"
+const ACCOUNT_VERIFY_URI = 'https://api.twitter.com/1.1/account/verify_credentials.json';
+
 ///
 String generateAuthHeader(Map<String, dynamic> params) {
   return 'OAuth ' +
