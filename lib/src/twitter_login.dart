@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:twitter_login/schemes/access_token.dart';
-import 'package:twitter_login/schemes/auth_result.dart';
+import 'package:twitter_login/entity/auth_result.dart';
 import 'package:twitter_login/schemes/request_token.dart';
 import 'package:twitter_login/src/chrome_custom_tab.dart';
 import 'package:twitter_login/src/exception.dart';
