@@ -29,7 +29,7 @@ class User {
     String accessTokenSecret,
   ) async {
     try {
-      final authParams = RequestHeader.create(
+      final authParams = RequestHeader.accountVerifierHeaderParams(
         apiKey: apiKey,
         oauthToken: accessToken,
       );
