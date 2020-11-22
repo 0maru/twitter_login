@@ -1,3 +1,6 @@
+import 'package:twitter_login/schemes/request_header.dart';
+import 'package:twitter_login/src/utils.dart';
+
 class User {
   /// user email address
   final String _email;
@@ -13,11 +16,34 @@ class User {
   String get screenName => _screenName;
 
   /// constractor
-  User({
-    String email,
-    String thumbnailImage,
-    String screenName,
-  })  : this._email = email,
-        this._thumbnailImage = thumbnailImage,
-        this._screenName = screenName;
+  User._(Map<String, dynamic> params)
+      : this._email = params['email'],
+        this._thumbnailImage = params['profile_image_url_https'],
+        this._screenName = params['screen_name'];
+
+  /// get user info
+  static Future<User> getUserData(
+    String apiKey,
+    String apiSecretKey,
+    String accessToken,
+    String accessTokenSecret,
+  ) async {
+    try {
+      final authParams = RequestHeader.create(
+        apiKey: apiKey,
+        oauthToken: accessToken,
+      );
+      final params = await httpGet(
+        ACCOUNT_VERIFY_URI,
+        authParams,
+        apiKey,
+        apiSecretKey,
+        accessTokenSecret,
+      );
+      print(params);
+      return User._(params);
+    } on Exception catch (error) {
+      throw Exception(error);
+    }
+  }
 }
