@@ -81,7 +81,7 @@ class RequestHeader {
     String oauthVerifier,
   ) {
     final dtNow = DateTime.now().millisecondsSinceEpoch;
-    return {
+    final params = {
       'oauth_consumer_key': apiKey,
       'oauth_token': oauthToken,
       'oauth_signature_method': SIGNATURE_METHOD,
@@ -90,5 +90,27 @@ class RequestHeader {
       'oauth_version': '1.0',
       'oauth_verifier': oauthVerifier,
     };
+    return params;
+  }
+
+  static Map<String, dynamic> accountVerifierHeaderParams({
+    String apiKey,
+    String oauthToken = '',
+    String oauthVerifier = '',
+    String redirectURL = '',
+    String tokenSecret = '',
+  }) {
+    final dtNow = DateTime.now().millisecondsSinceEpoch;
+
+    final params = {
+      'oauth_consumer_key': apiKey,
+      'oauth_token': oauthToken,
+      'oauth_signature_method': SIGNATURE_METHOD,
+      'oauth_timestamp': (dtNow / 1000).floor().toString(),
+      'oauth_nonce': dtNow.toString(),
+      'oauth_version': '1.0',
+    };
+
+    return params;
   }
 }
