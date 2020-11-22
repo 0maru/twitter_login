@@ -66,6 +66,7 @@ Future<Map<String, dynamic>> httpGet(
   try {
     final _signature = Signature(
       url: url,
+      method: 'GET',
       params: params,
       apiKey: apiKey,
       apiSecretKey: apiSecretKey,
