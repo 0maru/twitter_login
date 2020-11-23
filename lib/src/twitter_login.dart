@@ -3,9 +3,8 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:twitter_login/entity/user.dart';
 import 'package:twitter_login/schemes/access_token.dart';
-import 'package:twitter_login/entity/auth_result.dart';
+import 'package:twitter_login/schemes/auth_result.dart';
 import 'package:twitter_login/schemes/request_token.dart';
 import 'package:twitter_login/src/chrome_custom_tab.dart';
 import 'package:twitter_login/src/exception.dart';
@@ -97,21 +96,12 @@ class TwitterLogin {
         apiSecretKey,
         queries,
       );
-
-      final userData = await User.getUserData(
-        apiKey,
-        apiSecretKey,
-        accessToken.authToken,
-        accessToken.authTokenSecret,
-      );
-
       return AuthResult(
         accessToken: accessToken,
         authToken: accessToken.authToken,
         authTokenSecret: accessToken.authTokenSecret,
         status: TwitterLoginStatus.loggedIn,
         errorMessage: '',
-        user: userData,
       );
     } on CanceldByUserException {
       return AuthResult(
@@ -120,7 +110,6 @@ class TwitterLogin {
         authTokenSecret: null,
         status: TwitterLoginStatus.cancelledByUser,
         errorMessage: 'The user cancelled the login flow',
-        user: null,
       );
     } catch (error) {
       return AuthResult(
@@ -129,7 +118,6 @@ class TwitterLogin {
         authTokenSecret: null,
         status: TwitterLoginStatus.error,
         errorMessage: error.toString(),
-        user: null,
       );
     }
   }

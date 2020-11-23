@@ -1,3 +1,4 @@
+import 'package:twitter_login/schemes/request_header.dart';
 import 'package:twitter_login/src/utils.dart';
 
 /// The Request token for Twitter API.
@@ -42,11 +43,11 @@ class RequestToken {
     String redirectURI,
     bool forceLogin,
   ) async {
-    final authParams = requestHeader(
-      apiKey: apiKey,
-      redirectURI: redirectURI,
+    final authParams = RequestHeader.authorizeHeaderParams(
+      apiKey,
+      redirectURI,
     );
-    final params = await httpPost(
+    final params = await send(
       REQUSER_TOKEN_URL,
       authParams,
       apiKey,
@@ -54,7 +55,6 @@ class RequestToken {
     );
 
     var authorizeURI = '$AUTHORIZE_URI?oauth_token=${params['oauth_token']}';
-    //
     if (forceLogin) {
       authorizeURI += '&force_login=true';
     }
