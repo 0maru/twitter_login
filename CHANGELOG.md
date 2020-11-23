@@ -31,3 +31,7 @@
 ## 2.0.0
 
 * Add ForceLogin
+
+## 2.1.0
+
+* Add account verify
