@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
@@ -25,7 +26,7 @@ String generateAuthHeader(Map<String, dynamic> params) {
 }
 
 /// send http request
-Future<Map<String, dynamic>> send(
+Future<Map<String, dynamic>> httpPost(
   String url,
   Map<String, dynamic> params,
   String apiKey,
@@ -83,8 +84,32 @@ Future<Map<String, dynamic>> httpGet(
       throw HttpException("Failed ${res.reasonPhrase}");
     }
 
-    return Uri.splitQueryString(res.body);
+    return jsonDecode(res.body);
   } on Exception catch (error) {
     throw Exception(error);
   }
+}
+
+Map<String, String> requestHeader({
+  String apiKey,
+  String oauthToken = '',
+  String redirectURI = '',
+  String oauthVerifier = '',
+}) {
+  final dtNow = DateTime.now().millisecondsSinceEpoch;
+  final params = {
+    'oauth_consumer_key': apiKey,
+    'oauth_token': oauthToken,
+    'oauth_signature_method': 'HMAC-SHA1',
+    'oauth_timestamp': (dtNow / 1000).floor().toString(),
+    'oauth_nonce': dtNow.toString(),
+    'oauth_version': '1.0',
+  };
+  if (redirectURI.isNotEmpty ?? true) {
+    params.addAll({'oauth_callback': redirectURI});
+  }
+  if (oauthVerifier.isNotEmpty ?? true) {
+    params.addAll({'oauth_verifier': oauthVerifier});
+  }
+  return params;
 }
