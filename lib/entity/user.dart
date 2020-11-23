@@ -1,4 +1,3 @@
-import 'package:twitter_login/schemes/request_header.dart';
 import 'package:twitter_login/src/utils.dart';
 
 class User {
@@ -9,16 +8,28 @@ class User {
   final String _thumbnailImage;
 
   /// user name
+  final String _name;
+
+  /// user name
   final String _screenName;
 
+  /// email address
   String get email => _email;
+
+  /// thumbnailImage
   String get thumbnailImage => _thumbnailImage;
+
+  /// Twitter account name
+  String get name => _name;
+
+  /// Twitter account id
   String get screenName => _screenName;
 
   /// constractor
   User._(Map<String, dynamic> params)
       : this._email = params['email'],
         this._thumbnailImage = params['profile_image_url_https'],
+        this._name = params['name'],
         this._screenName = params['screen_name'];
 
   /// get user info
@@ -29,7 +40,7 @@ class User {
     String accessTokenSecret,
   ) async {
     try {
-      final authParams = RequestHeader.accountVerifierHeaderParams(
+      final authParams = requestHeader(
         apiKey: apiKey,
         oauthToken: accessToken,
       );
@@ -40,7 +51,6 @@ class User {
         apiSecretKey,
         accessTokenSecret,
       );
-      print(params);
       return User._(params);
     } on Exception catch (error) {
       throw Exception(error);
