@@ -82,6 +82,10 @@ class TwitterLogin {
       } else {
         throw UnsupportedError('Not supported by this os.');
       }
+      // The user closed the browser
+      if (resultURI == null) {
+        throw CanceldByUserException();
+      }
       final queries = Uri.splitQueryString(Uri.parse(resultURI).query);
       if (queries['error'] != null) {
         throw Exception('Error Response: ${queries['error']}');
