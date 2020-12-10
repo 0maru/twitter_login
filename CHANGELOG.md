@@ -35,3 +35,7 @@
 ## 2.1.0
 
 * Add account verify
+
+## 2.1.1
+
+* Exception when the user closes the browser
