@@ -4,9 +4,9 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:twitter_login/entity/auth_result.dart';
 import 'package:twitter_login/entity/user.dart';
 import 'package:twitter_login/schemes/access_token.dart';
-import 'package:twitter_login/entity/auth_result.dart';
 import 'package:twitter_login/schemes/request_token.dart';
 import 'package:twitter_login/src/chrome_custom_tab.dart';
 import 'package:twitter_login/src/exception.dart';
@@ -39,19 +39,17 @@ class TwitterLogin {
 
   static const _channel = const MethodChannel('twitter_login');
   static final _eventChannel = EventChannel('twitter_login/event');
-  static final Stream<dynamic> _eventStream =
-      _eventChannel.receiveBroadcastStream();
+  static final Stream<dynamic> _eventStream = _eventChannel.receiveBroadcastStream();
 
   /// constructor
   TwitterLogin({
     @required this.apiKey,
     @required this.apiSecretKey,
     @required this.redirectURI,
-    @required this.browserFallback,
+    this.browserFallback,
   })  : assert(apiKey != null),
         assert(apiSecretKey != null),
-        assert(redirectURI != null),
-        assert(browserFallback != null);
+        assert(redirectURI != null);
 
   /// Logs the user
   /// Forces the user to enter their credentials to ensure the correct users account is authorized.
@@ -78,11 +76,14 @@ class TwitterLogin {
             completer.complete(data['url']?.toString());
           }
         });
-        final browser = ChromeCustomTab(this.browserFallback, onClose: () {
-          if (!completer.isCompleted) {
-            completer.complete(null);
-          }
-        });
+        final browser = ChromeCustomTab(
+          this.browserFallback ?? CustomInAppBrowser(),
+          onClose: () {
+            if (!completer.isCompleted) {
+              completer.complete(null);
+            }
+          },
+        );
         await browser.open(url: requestToken.authorizeURI);
         resultURI = await completer.future;
         subscribe.cancel();
