@@ -43,3 +43,7 @@
 ## 2.1.2
 
 * Add fallback browser parameter
+
+## 2.1.3
+
+* fallback browser parameter is option
