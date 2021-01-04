@@ -39,3 +39,7 @@
 ## 2.1.1
 
 * Exception when the user closes the browser
+
+## 2.1.2
+
+* Add fallback browser parameter
