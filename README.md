@@ -18,11 +18,12 @@ required to create TwitterApp.
 this plugin is need Callback URLs.
 
 this plugin cannot use the Firebase default callback URL.
-please register a different callback URL on Twitter Developers.
-
 ```
 https://abcdefg.firebaseapp.com/__/auth/handler
+```
 
+please register a different callback URL on Twitter Developers.  
+```
 app_name://
 ```
 
