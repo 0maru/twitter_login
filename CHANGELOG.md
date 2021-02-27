@@ -47,3 +47,7 @@
 ## 2.1.3
 
 * fallback browser parameter is option
+
+## 2.1.4
+
+* Add dartdoc
