@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="generator" content="made with love by dartdoc 0.39.0">
+  <meta name="description" content="twitter_login API docs, for the Dart programming language.">
+  <title>twitter_login - Dart API docs</title>
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="static-assets/github.css">
+  <link rel="stylesheet" href="static-assets/styles.css">
+  <link rel="icon" href="static-assets/favicon.png">
+
+</head>
+
+<body data-base-href=""
+      data-using-base-href="false">
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <button id="sidenav-left-toggle" type="button">&nbsp;</button>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="https://twitter.com/0maru_dev">twitter_login package</a></li>
+  </ol>
+  <div class="self-name">twitter_login</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<main>
+
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <header id="header-search-sidebar" class="hidden-l">
+      <form class="search-sidebar" role="search">
+        <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+      </form>
+    </header>
+    
+    <ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+      <li><a href="https://twitter.com/0maru_dev">twitter_login package</a></li>
+    </ol>
+    
+    <h5 class="hidden-xs"><span class="package-name">twitter_login</span> <span class="package-kind">package</span></h5>
+    <ol>
+          <li class="section-title">Libraries</li>
+          <li><a href="schemes_access_token/schemes_access_token-library.html">access_token</a></li>
+          <li><a href="entity_auth_result/entity_auth_result-library.html">auth_result</a></li>
+          <li><a href="schemes_auth_token/schemes_auth_token-library.html">auth_token</a></li>
+          <li><a href="schemes_request_token/schemes_request_token-library.html">request_token</a></li>
+          <li><a href="twitter_login/twitter_login-library.html">twitter_login</a></li>
+          <li><a href="entity_user/entity_user-library.html">user</a></li>
+    </ol>
+  </div>
+
+  <div id="dartdoc-main-content" class="main-content">
+      <section class="desc markdown">
+        <h1 id="twitter_login">twitter_login</h1>
+<p><img src="https://img.shields.io/pub/v/twitter_login?color=blue" alt="Pub Version"></p>
+<p>Flutter Twitter Login Plugin</p>
+<h1 id="requirements">Requirements</h1>
+<ul>
+<li>Dart sdk: "&gt;=2.7.0 &lt;3.0.0"</li>
+<li>Flutter: "&gt;=1.10.0"</li>
+<li>Android: minSdkVersion 17 and add support for androidx</li>
+<li>iOS: --ios-language swift, Xcode version &gt;= 11</li>
+</ul>
+<h2 id="twitter-configuration">Twitter Configuration</h2>
+<p><a href="https://developer.twitter.com/">Twitter Developer</a></p>
+<p>required to create TwitterApp.<br>
+this plugin is need Callback URLs.</p>
+<p>this plugin cannot use the Firebase default callback URL.</p>
+<pre class="language-dart"><code>https://abcdefg.firebaseapp.com/__/auth/handler
+</code></pre>
+<p>please register a different callback URL on Twitter Developers.</p>
+<pre class="language-dart"><code>app_name://
+</code></pre>
+<h2 id="android-configuration">Android Configuration</h2>
+<h3 id="add-intent-filters-for-incoming-links">Add intent filters for incoming links</h3>
+<p><a href="https://github.com/0maru/twitter_login/blob/master/example/android/app/src/main/AndroidManifest.xml">/example/android/app/src/main/AndroidManifest.xm</a></p>
+<pre class="language-xml"><code class="language-xml">&lt;intent-filter&gt;
+  &lt;action android:name="android.intent.action.VIEW" /&gt;
+  &lt;category android:name="android.intent.category.DEFAULT" /&gt;
+  &lt;category android:name="android.intent.category.BROWSABLE" /&gt;
+  &lt;!-- Accepts URIs that begin with "example://gizmos” --&gt;
+  &lt;!-- Registered Callback URLs in TwitterApp --&gt;
+  &lt;data android:scheme="example"
+        android:host="gizmos" /&gt; &lt;!-- host is option --&gt;
+&lt;/intent-filter&gt;
+</code></pre>
+<h3 id="supporting-the-new-android-plugins-apis">Supporting the new Android plugins APIs</h3>
+<p>If you flutter created your project prior to version 1.12, you need to make sure to update your project in order to use the new Java Embedding API.<br>
+Make use you have flutter_embedding v2 enabled. Add the following code on the manifest file inside <application> tag to enable embedding.<br>
+Flutter wiki: <a href="https://github.com/flutter/flutter/wiki/Upgrading-pre-1.12-Android-projects">Upgrading pre 1.12 Android projects.</a></application></p>
+<pre class="language-xml"><code class="language-xml">&lt;meta-data
+    android:name="flutterEmbedding"
+    android:value="2" /&gt;
+</code></pre>
+<h2 id="ios-configuration">iOS Configuration</h2>
+<h3 id="add-urlscheme">Add URLScheme</h3>
+<p><a href="https://github.com/0maru/twitter_login/blob/master/example/ios/Runner/Info.plist#L21">/example/ios/Runner/Info.plist</a></p>
+<pre class="language-xml"><code class="language-xml">&lt;key&gt;CFBundleURLTypes&lt;/key&gt;
+&lt;array&gt;
+  &lt;dict&gt;
+    &lt;key&gt;CFBundleTypeRole&lt;/key&gt;
+    &lt;string&gt;Editor&lt;/string&gt;
+    &lt;key&gt;CFBundleURLName&lt;/key&gt;
+    &lt;!-- Registered Callback URLs in TwitterApp --&gt;
+    &lt;string&gt;example&lt;/string&gt;
+    &lt;key&gt;CFBundleURLSchemes&lt;/key&gt;
+    &lt;array&gt;
+      &lt;string&gt;app&lt;/string&gt;
+    &lt;/array&gt;
+  &lt;/dict&gt;
+&lt;/array&gt;
+</code></pre>
+<h1 id="example-code">Example code</h1>
+<p>See the example directory for a complete sample app using twitter_login.</p>
+<p><a href="https://github.com/0maru/twitter_login/tree/master/example">example</a></p>
+<h1 id="usage">Usage</h1>
+<p>To use this plugin, add <code>twitter_login</code> as a <a href="https://flutter.dev/platform-plugins/">dependency in your pubspec.yaml file.</a></p>
+<h3 id="example">Example</h3>
+<pre class="language-dart"><code class="language-dart">import 'package:flutter/material.dart';
+import 'package:twitter_login/twitter_login.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() =&gt; _MyAppState();
+}
+
+class _MyAppState extends State&lt;MyApp&gt; {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text('Twitter Login App'),
+        ),
+        body: Center(
+          child: FlatButton(
+            child: Text('Login With Twitter'),
+            onPressed: () async {
+              final twitterLogin = TwitterLogin(  
+                // Consumer API keys 
+                apiKey: 'xxxx',
+                // Consumer API Secret keys 
+                apiSecretKey: 'xxxx',
+                // Registered Callback URLs in TwitterApp
+                // Android is a deeplink
+                // iOS is a URLScheme
+                redirectURI: 'example://',
+              );
+              final authResult = twitterLogin.login();
+              switch (authResult.status) {
+                case TwitterLoginStatus.loggedIn:
+                  // success
+                  break;
+                case TwitterLoginStatus.cancelledByUser:
+                  // cancel
+                  break;
+                case TwitterLoginStatus.error:
+                  // error
+                  break;
+              }
+            },
+          ),
+        ),
+      ),
+    );
+  }
+}
+</code></pre>
+      </section>
+      
+      <section class="summary">
+          <h2>Libraries</h2>
+        <dl>
+          <dt id="access_token">
+            <span class="name"><a href="schemes_access_token/schemes_access_token-library.html">access_token</a></span>           
+          </dt>
+          <dd>
+             
+          </dd>
+          <dt id="auth_result">
+            <span class="name"><a href="entity_auth_result/entity_auth_result-library.html">auth_result</a></span>           
+          </dt>
+          <dd>
+             
+          </dd>
+          <dt id="auth_token">
+            <span class="name"><a href="schemes_auth_token/schemes_auth_token-library.html">auth_token</a></span>           
+          </dt>
+          <dd>
+             
+          </dd>
+          <dt id="request_token">
+            <span class="name"><a href="schemes_request_token/schemes_request_token-library.html">request_token</a></span>           
+          </dt>
+          <dd>
+             
+          </dd>
+          <dt id="twitter_login">
+            <span class="name"><a href="twitter_login/twitter_login-library.html">twitter_login</a></span>           
+          </dt>
+          <dd>
+             
+          </dd>
+          <dt id="user">
+            <span class="name"><a href="entity_user/entity_user-library.html">user</a></span>           
+          </dt>
+          <dd>
+             
+          </dd>
+        </dl>
+      </section>
+
+  </div> <!-- /.main-content -->
+
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+  </div>
+
+</main>
+
+<footer>
+  <span class="no-break">
+    twitter_login
+      1.0.2
+  </span>
+
+</footer>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="static-assets/typeahead.bundle.min.js"></script>
+<script src="static-assets/highlight.pack.js"></script>
+<script src="static-assets/script.js"></script>
+
+
+</body>
+
+</html>
