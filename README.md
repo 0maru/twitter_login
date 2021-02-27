@@ -17,9 +17,13 @@ Flutter Twitter Login Plugin
 required to create TwitterApp.  
 this plugin is need Callback URLs.
 
-For example
+this plugin cannot use the Firebase default callback URL.
+please register a different callback URL on Twitter Developers.
+
 ```
-example://
+https://abcdefg.firebaseapp.com/__/auth/handler
+
+app_name://
 ```
 
 ## Android Configuration
