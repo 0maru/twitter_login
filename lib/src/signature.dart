@@ -10,7 +10,7 @@ class Signature {
   /// Request method
   final String method;
 
-  /// Request Parameter　
+  /// Request Parameter
   final Map<String, dynamic> params;
 
   /// Oauth Consumer Key
@@ -83,7 +83,8 @@ class Signature {
   /// create a signing key which will be used to generate the signature
   String getSignatureKey() {
     final consumerSecret = Uri.encodeComponent(apiSecretKey);
-    final tokenSecret = tokenSecretKey != null ? Uri.encodeComponent(tokenSecretKey) : '';
+    final tokenSecret =
+        tokenSecretKey != null ? Uri.encodeComponent(tokenSecretKey) : '';
     return '$consumerSecret&$tokenSecret';
   }
 }
