@@ -27,3 +27,23 @@
 
 * Minor update
 * Update README
+
+## 2.0.0
+
+* Add ForceLogin
+
+## 2.1.0
+
+* Add account verify
+
+## 2.1.1
+
+* Exception when the user closes the browser
+
+## 2.1.2
+
+* Add fallback browser parameter
+
+## 2.1.3
+
+* fallback browser parameter is option
