@@ -3,16 +3,12 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 /// This class uses the [flutter_inappwebview].
 class ChromeCustomTab extends ChromeSafariBrowser {
   /// Event fires when the [ChromeSafariBrowser] is closed.
-  final Function onClose;
-
-  /// Fallback browser
-  final InAppBrowser browserFallback;
+  final Function? onClose;
 
   /// constructor
-  ChromeCustomTab(
-    this.browserFallback, {
+  ChromeCustomTab({
     this.onClose,
-  }) : super(bFallback: browserFallback);
+  }) : super();
 
   @override
   void onClosed() => onClose?.call();
