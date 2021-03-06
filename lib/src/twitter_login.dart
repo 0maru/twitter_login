@@ -1,9 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:twitter_login/entity/auth_result.dart';
 import 'package:twitter_login/entity/user.dart';
 import 'package:twitter_login/schemes/access_token.dart';
@@ -34,23 +32,16 @@ class TwitterLogin {
   /// Callback URL
   final String redirectURI;
 
-  /// Fallback browser
-  final InAppBrowser browserFallback;
-
   static const _channel = const MethodChannel('twitter_login');
   static final _eventChannel = EventChannel('twitter_login/event');
-  static final Stream<dynamic> _eventStream =
-      _eventChannel.receiveBroadcastStream();
+  static final Stream<dynamic> _eventStream = _eventChannel.receiveBroadcastStream();
 
   /// constructor
   TwitterLogin({
-    @required this.apiKey,
-    @required this.apiSecretKey,
-    @required this.redirectURI,
-    this.browserFallback,
-  })  : assert(apiKey != null),
-        assert(apiSecretKey != null),
-        assert(redirectURI != null);
+    required this.apiKey,
+    required this.apiSecretKey,
+    required this.redirectURI,
+  });
 
   /// Logs the user
   /// Forces the user to enter their credentials to ensure the correct users account is authorized.
@@ -62,7 +53,7 @@ class TwitterLogin {
         redirectURI,
         forceLogin,
       );
-      String resultURI = '';
+      String? resultURI = '';
       if (Platform.isIOS) {
         resultURI = await _channel.invokeMethod('authentication', {
           'url': requestToken.authorizeURI,
@@ -78,21 +69,20 @@ class TwitterLogin {
           }
         });
         final browser = ChromeCustomTab(
-          this.browserFallback ?? CustomInAppBrowser(),
           onClose: () {
             if (!completer.isCompleted) {
               completer.complete(null);
             }
           },
         );
-        await browser.open(url: requestToken.authorizeURI);
+        await browser.open(url: Uri.parse(requestToken.authorizeURI));
         resultURI = await completer.future;
         subscribe.cancel();
       } else {
         throw UnsupportedError('Not supported by this os.');
       }
       // The user closed the browser
-      if (resultURI == null) {
+      if (resultURI!.isEmpty) {
         throw CanceldByUserException();
       }
       final queries = Uri.splitQueryString(Uri.parse(resultURI).query);
