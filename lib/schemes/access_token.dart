@@ -11,8 +11,8 @@ class AccessToken {
   String get authToken => _authToken;
   String get authTokenSecret => _authTokenSecret;
 
-  AccessToken._(Map<String, dynamic> params)
-      : this._authToken = params['oauth_token'],
+  AccessToken._(Map<String, dynamic>? params)
+      : this._authToken = params!['oauth_token'],
         this._authTokenSecret = params['oauth_token_secret'];
 
   static Future<AccessToken> getAccessToken(
