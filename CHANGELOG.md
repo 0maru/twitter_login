@@ -48,6 +48,10 @@
 
 * fallback browser parameter is option
 
+## 2.1.4
+
+* Add dartdoc
+
 ## 3.0.0
 
 * Update to null safety.
