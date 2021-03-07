@@ -56,3 +56,7 @@
 
 * Add docs
 * Update Plugins
+
+## 3.0.1
+
+* bug fix
