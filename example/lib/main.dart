@@ -19,14 +19,14 @@ class _MyAppState extends State<MyApp> {
           title: const Text('Plugin example app'),
         ),
         body: Center(
-          child: FlatButton(
+          child: TextButton(
             child: Text('login'),
             onPressed: () async {
               final twitterLogin = TwitterLogin(
                 // Consumer API keys
-                apiKey: 'xxxx',
+                apiKey: 'xxx',
                 // Consumer API Secret keys
-                apiSecretKey: 'xxxx',
+                apiSecretKey: 'xxxxx',
                 // Registered Callback URLs in TwitterApp
                 // Android is a deeplink
                 // iOS is a URLScheme

@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:twitter_login/entity/auth_result.dart';
 import 'package:twitter_login/entity/user.dart';
@@ -39,12 +38,10 @@ class TwitterLogin {
 
   /// constructor
   TwitterLogin({
-    @required this.apiKey,
-    @required this.apiSecretKey,
-    @required this.redirectURI,
-  })  : assert(apiKey != null),
-        assert(apiSecretKey != null),
-        assert(redirectURI != null);
+    required this.apiKey,
+    required this.apiSecretKey,
+    required this.redirectURI,
+  });
 
   /// Logs the user
   /// Forces the user to enter their credentials to ensure the correct users account is authorized.
@@ -56,7 +53,7 @@ class TwitterLogin {
         redirectURI,
         forceLogin,
       );
-      String resultURI = '';
+      String? resultURI = '';
       if (Platform.isIOS) {
         resultURI = await _channel.invokeMethod('authentication', {
           'url': requestToken.authorizeURI,
@@ -85,7 +82,7 @@ class TwitterLogin {
         throw UnsupportedError('Not supported by this os.');
       }
       // The user closed the browser
-      if (resultURI == null) {
+      if (resultURI!.isEmpty) {
         throw CanceldByUserException();
       }
       final queries = Uri.splitQueryString(Uri.parse(resultURI).query);
