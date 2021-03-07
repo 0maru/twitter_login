@@ -2,6 +2,12 @@ PODS:
   - Flutter (1.0.0)
   - flutter_inappwebview (0.0.1):
     - Flutter
+    - flutter_inappwebview/Core (= 0.0.1)
+    - OrderedSet (~> 5.0)
+  - flutter_inappwebview/Core (0.0.1):
+    - Flutter
+    - OrderedSet (~> 5.0)
+  - OrderedSet (5.0.0)
   - twitter_login (0.0.1):
     - Flutter
 
@@ -9,6 +15,10 @@ DEPENDENCIES:
   - Flutter (from `Flutter`)
   - flutter_inappwebview (from `.symlinks/plugins/flutter_inappwebview/ios`)
   - twitter_login (from `.symlinks/plugins/twitter_login/ios`)
+
+SPEC REPOS:
+  trunk:
+    - OrderedSet
 
 EXTERNAL SOURCES:
   Flutter:
@@ -19,10 +29,11 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/twitter_login/ios"
 
 SPEC CHECKSUMS:
-  Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
-  flutter_inappwebview: 69dfbac46157b336ffbec19ca6dfd4638c7bf189
+  Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
+  flutter_inappwebview: bfd58618f49dc62f2676de690fc6dcda1d6c3721
+  OrderedSet: aaeb196f7fef5a9edf55d89760da9176ad40b93c
   twitter_login: 2794db69b7640681171b17b3c2c84ad9dfb4a57f
 
-PODFILE CHECKSUM: c34e2287a9ccaa606aeceab922830efb9a6ff69a
+PODFILE CHECKSUM: aafe91acc616949ddb318b77800a7f51bffa2a4c
 
-COCOAPODS: 1.9.2
+COCOAPODS: 1.10.0
