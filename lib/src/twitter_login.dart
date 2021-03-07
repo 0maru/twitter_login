@@ -78,7 +78,7 @@ class TwitterLogin {
             }
           },
         );
-        await browser.open(url: requestToken.authorizeURI);
+        await browser.open(url: Uri.parse(requestToken.authorizeURI));
         resultURI = await completer.future;
         subscribe.cancel();
       } else {

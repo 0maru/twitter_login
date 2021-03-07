@@ -42,9 +42,9 @@ Future<Map<String, dynamic>> httpPost(
     );
     params['oauth_signature'] = _signature.signatureHmacSha1();
     final header = generateAuthHeader(params);
-    final http.BaseClient _httpClient = http.Client();
+    final http.Client _httpClient = http.Client();
     final http.Response res = await _httpClient.post(
-      url,
+      Uri.parse(url),
       headers: <String, String>{'Authorization': header},
     );
     if (res.statusCode != 200) {
@@ -77,7 +77,7 @@ Future<Map<String, dynamic>> httpGet(
     final header = generateAuthHeader(params);
     final http.Client _httpClient = http.Client();
     final http.Response res = await _httpClient.get(
-      url,
+      Uri.parse(url),
       headers: <String, String>{'Authorization': header},
     );
     if (res.statusCode != 200) {
