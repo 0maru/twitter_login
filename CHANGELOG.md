@@ -54,4 +54,11 @@
 
 ## 3.0.0
 
-* Update to null safety.
+* Add docs
+* Update Plugins
+
+## 3.0.0-nullsafety.0
+
+* update null safety
+* Add docs
+* Update Plugins
