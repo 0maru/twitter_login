@@ -47,3 +47,7 @@
 ## 2.1.3
 
 * fallback browser parameter is option
+
+## 3.0.0
+
+* Update to null safety.
