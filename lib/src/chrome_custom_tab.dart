@@ -12,7 +12,7 @@ class ChromeCustomTab extends ChromeSafariBrowser {
   }) : super();
 
   @override
-  void onClosed() => onClose.call();
+  void onClosed() => onClose?.call();
 }
 
 class CustomInAppBrowser extends InAppBrowser {}
