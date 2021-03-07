@@ -55,3 +55,10 @@
 ## 3.0.0
 
 * Add docs
+* Update Plugins
+
+## 3.0.0
+
+* update null safety
+* Add docs
+* Update Plugins
