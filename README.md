@@ -78,11 +78,11 @@ You need to replace the example with a Callback URLs.
     <key>CFBundleTypeRole</key>
     <string>Editor</string>
     <key>CFBundleURLName</key>
-    <!-- Registered Callback URLs in TwitterApp -->
-    <string>example</string>
+    <string></string>
     <key>CFBundleURLSchemes</key>
     <array>
-      <string>app</string>
+      <!-- Registered Callback URLs in TwitterApp -->
+      <string>example</string>
     </array>
   </dict>
 </array>

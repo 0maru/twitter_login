@@ -75,7 +75,7 @@ Future<Map<String, dynamic>> httpGet(
     );
     params['oauth_signature'] = _signature.signatureHmacSha1();
     final header = generateAuthHeader(params);
-    final http.BaseClient _httpClient = http.Client();
+    final http.Client _httpClient = http.Client();
     final http.Response res = await _httpClient.get(
       url,
       headers: <String, String>{'Authorization': header},

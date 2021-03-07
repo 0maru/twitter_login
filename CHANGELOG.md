@@ -51,3 +51,7 @@
 ## 2.1.4
 
 * Add dartdoc
+
+## 3.0.0
+
+* Add docs
