@@ -66,3 +66,7 @@
 ## 3.0.1
 
 * bug fix
+
+## 3.0.1-nullsafety.0
+
+* update docs
