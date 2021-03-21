@@ -2,6 +2,10 @@ import 'package:twitter_login/src/utils.dart';
 
 class User {
   /// user email address
+  ///
+  /// If your Twitter account does not have an email address,
+  /// or if the API is not configured to retrieve email addresses,
+  /// you may not be able to retrieve email addresses.
   final String _email;
 
   /// user profile image
@@ -13,7 +17,11 @@ class User {
   /// user name
   final String _screenName;
 
-  /// email address
+  /// user email address
+  ///
+  /// If your Twitter account does not have an email address,
+  /// or if the API is not configured to retrieve email addresses,
+  /// you may not be able to retrieve email addresses.
   String get email => _email;
 
   /// thumbnailImage
@@ -25,12 +33,12 @@ class User {
   /// Twitter account id
   String get screenName => _screenName;
 
-  /// constractor
-  User._(Map<String, dynamic> params)
-      : this._email = params['email'],
-        this._thumbnailImage = params['profile_image_url_https'],
-        this._name = params['name'],
-        this._screenName = params['screen_name'];
+  /// constructor
+  User(Map<String, dynamic> params)
+      : this._email = params['email'] ?? '',
+        this._thumbnailImage = params['profile_image_url_https'] ?? '',
+        this._name = params['name'] ?? '',
+        this._screenName = params['screen_name'] ?? '';
 
   /// get user info
   static Future<User> getUserData(
@@ -51,7 +59,7 @@ class User {
         apiSecretKey,
         accessTokenSecret,
       );
-      return User._(params);
+      return User(params);
     } on Exception catch (error) {
       throw Exception(error);
     }
