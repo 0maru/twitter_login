@@ -47,7 +47,7 @@ class RequestToken {
       redirectURI: redirectURI,
     );
     final params = await httpPost(
-      REQUSER_TOKEN_URL,
+      REQUEST_TOKEN_URL,
       authParams,
       apiKey,
       apiSecretKey,

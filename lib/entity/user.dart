@@ -2,10 +2,6 @@ import 'package:twitter_login/src/utils.dart';
 
 class User {
   /// user email address
-  ///
-  /// If your Twitter account does not have an email address,
-  /// or if the API is not configured to retrieve email addresses,
-  /// you may not be able to retrieve email addresses.
   final String _email;
 
   /// user profile image
