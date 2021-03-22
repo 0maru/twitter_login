@@ -27,7 +27,7 @@ class User {
 
   /// constractor
   User._(Map<String, dynamic> params)
-      : this._email = params['email'],
+      : this._email = params['email'] ?? '',
         this._thumbnailImage = params['profile_image_url_https'],
         this._name = params['name'],
         this._screenName = params['screen_name'];
