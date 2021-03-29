@@ -29,12 +29,12 @@ class User {
   /// Twitter account id
   String get screenName => _screenName;
 
-  /// constructor
-  User(Map<String, dynamic> params)
+  /// constractor
+  User._(Map<String, dynamic> params)
       : this._email = params['email'] ?? '',
-        this._thumbnailImage = params['profile_image_url_https'] ?? '',
-        this._name = params['name'] ?? '',
-        this._screenName = params['screen_name'] ?? '';
+        this._thumbnailImage = params['profile_image_url_https'],
+        this._name = params['name'],
+        this._screenName = params['screen_name'];
 
   /// get user info
   static Future<User> getUserData(
