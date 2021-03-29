@@ -53,7 +53,7 @@ class RequestToken {
       apiSecretKey,
     );
 
-    var authorizeURI = '$AUTHORIZE_URI?oauth_token=${params['oauth_token']}';
+    var authorizeURI = '$AUTHORIZE_URI?oauth_token=${params!['oauth_token']}';
     //
     if (forceLogin) {
       authorizeURI += '&force_login=true';

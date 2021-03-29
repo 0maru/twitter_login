@@ -57,6 +57,16 @@
 * Add docs
 * Update Plugins
 
+## 3.0.0-nullsafety.0
+
+* update null safety
+* Add docs
+* Update Plugins
+
 ## 3.0.1
 
 * bug fix
+
+## 3.0.1-nullsafety.0
+
+* update docs

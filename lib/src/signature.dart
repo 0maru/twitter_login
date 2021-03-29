@@ -5,22 +5,22 @@ import 'package:crypto/crypto.dart';
 /// OAuth 1.0a HMAC-SHA1 signature for an HTTP request
 class Signature {
   /// EndpointURL
-  final String url;
+  final String? url;
 
   /// Request method
-  final String method;
+  final String? method;
 
   /// Request Parameter
-  final Map<String, dynamic> params;
+  final Map<String, dynamic>? params;
 
   /// Oauth Consumer Key
-  final String apiKey;
+  final String? apiKey;
 
   /// Oauth　token secret
-  final String apiSecretKey;
+  final String? apiSecretKey;
 
   /// Oauth Consumer Secret Key
-  final String tokenSecretKey;
+  final String? tokenSecretKey;
 
   /// constructor
   Signature({
@@ -33,28 +33,28 @@ class Signature {
   });
 
   ///
-  String signatureHmacSha1() {
+  String? signatureHmacSha1() {
     final key = getSignatureKey();
     final text = signatureDate();
-    final bytes = Hmac(sha1, key.codeUnits).convert(text.codeUnits).bytes;
+    final bytes = Hmac(sha1, key!.codeUnits).convert(text!.codeUnits).bytes;
     return base64.encode(bytes);
   }
 
   ///
-  String signatureDate() {
-    final uri = Uri.parse(url);
-    final encodedParams = encodeParams(uri, params);
-    final sortedEncodedKeys = encodedParams.keys.toList()..sort();
+  String? signatureDate() {
+    final uri = Uri.parse(url!);
+    final encodedParams = encodeParams(uri, params!);
+    final sortedEncodedKeys = encodedParams!.keys.toList()..sort();
     final baseParams = sortedEncodedKeys.map((String k) {
       return '$k=${encodedParams[k]}';
     }).join('&');
-    final base = appendParams(method, uri, baseParams);
+    final base = appendParams(method!, uri, baseParams);
     return base;
   }
 
   /// Percent encode every key and value that will be signed and Sort
   /// the list of parameters alphabetically by encoded key.
-  Map<String, dynamic> encodeParams(Uri uri, Map<String, dynamic> params) {
+  Map<String, dynamic>? encodeParams(Uri uri, Map<String, dynamic> params) {
     final encodedParams = <String, String>{};
     params.forEach((k, v) {
       encodedParams[Uri.encodeComponent(k)] = Uri.encodeComponent(v as String);
@@ -66,7 +66,7 @@ class Signature {
   }
 
   /// Create a Http Request
-  String appendParams(
+  String? appendParams(
     String method,
     Uri uri,
     String baseParams,
@@ -81,10 +81,9 @@ class Signature {
   }
 
   /// create a signing key which will be used to generate the signature
-  String getSignatureKey() {
-    final consumerSecret = Uri.encodeComponent(apiSecretKey);
-    final tokenSecret =
-        tokenSecretKey != null ? Uri.encodeComponent(tokenSecretKey) : '';
+  String? getSignatureKey() {
+    final consumerSecret = Uri.encodeComponent(apiSecretKey!);
+    final tokenSecret = tokenSecretKey != null ? Uri.encodeComponent(tokenSecretKey!) : '';
     return '$consumerSecret&$tokenSecret';
   }
 }
