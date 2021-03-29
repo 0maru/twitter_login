@@ -13,7 +13,8 @@ class User {
   /// user name
   final String _screenName;
 
-  /// email address
+  /// user email address
+  ///
   /// If your Twitter account does not have an email address,
   /// or if the API is not configured to retrieve email addresses,
   /// you may not be able to retrieve email addresses.
@@ -54,7 +55,7 @@ class User {
         apiSecretKey,
         accessTokenSecret,
       );
-      return User._(params);
+      return User(params);
     } on Exception catch (error) {
       throw Exception(error);
     }
