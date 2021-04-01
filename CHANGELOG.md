@@ -70,3 +70,7 @@
 ## 3.0.1-nullsafety.0
 
 * update docs
+
+## 3.0.4
+
+* update dependencies ( Fixes [#34](https://github.com/0maru/twitter_login/issues/34) & [#32](https://github.com/0maru/twitter_login/issues/32) )
