@@ -47,6 +47,7 @@ class _MyAppState extends State<MyApp> {
                   print('====== Login cancel ======');
                   break;
                 case TwitterLoginStatus.error:
+                case null:
                   // error
                   print('====== Login error ======');
                   break;

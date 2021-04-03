@@ -55,7 +55,7 @@ class User {
         apiSecretKey,
         accessTokenSecret,
       );
-      return User(params);
+      return User._(params);
     } on Exception catch (error) {
       throw Exception(error);
     }
