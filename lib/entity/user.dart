@@ -13,7 +13,11 @@ class User {
   /// user name
   final String _screenName;
 
-  /// email address
+  /// user email address
+  ///
+  /// If your Twitter account does not have an email address,
+  /// or if the API is not configured to retrieve email addresses,
+  /// you may not be able to retrieve email addresses.
   String get email => _email;
 
   /// thumbnailImage
@@ -27,7 +31,7 @@ class User {
 
   /// constractor
   User._(Map<String, dynamic> params)
-      : this._email = params['email'],
+      : this._email = params['email'] ?? '',
         this._thumbnailImage = params['profile_image_url_https'],
         this._name = params['name'],
         this._screenName = params['screen_name'];

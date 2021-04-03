@@ -27,6 +27,9 @@ please register a different callback URL on Twitter Developers.
 app_name://
 ```
 
+If the API is not set to get email, email may be null.
+If you want to use email, turn on Request email address from users.
+
 ## Android Configuration
 
 ### Add intent filters for incoming links
