@@ -1,6 +1,12 @@
 import 'package:twitter_login/src/utils.dart';
 
+/// https://developer.twitter.com/en/docs/twitter-api/data-dictionary/object-model/user
 class User {
+  /// The unique identifier of this user.
+  ///
+  /// Use this to programmatically retrieve information about a specific Twitter user.
+  final String _id;
+
   /// user email address
   final String _email;
 
@@ -12,6 +18,11 @@ class User {
 
   /// user name
   final String _screenName;
+
+  /// The unique identifier of this user.
+  ///
+  /// Use this to programmatically retrieve information about a specific Twitter user.
+  String get id => _id;
 
   /// user email address
   ///
@@ -31,7 +42,8 @@ class User {
 
   /// constractor
   User._(Map<String, dynamic> params)
-      : this._email = params['email'] ?? '',
+      : this._id = params['id'] ?? '',
+        this._email = params['email'] ?? '',
         this._thumbnailImage = params['profile_image_url_https'],
         this._name = params['name'],
         this._screenName = params['screen_name'];
