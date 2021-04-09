@@ -5,7 +5,7 @@ class User {
   /// The unique identifier of this user.
   ///
   /// Use this to programmatically retrieve information about a specific Twitter user.
-  final String _id;
+  final int _id;
 
   /// user email address
   final String _email;
@@ -22,7 +22,7 @@ class User {
   /// The unique identifier of this user.
   ///
   /// Use this to programmatically retrieve information about a specific Twitter user.
-  String get id => _id;
+  int get id => _id;
 
   /// user email address
   ///
