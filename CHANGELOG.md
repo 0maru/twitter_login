@@ -78,3 +78,7 @@
 ## 3.0.5
 
 * add User id
+
+## 3.0.6
+
+* Fix userId type [#41](https://github.com/0maru/twitter_login/pull/41)

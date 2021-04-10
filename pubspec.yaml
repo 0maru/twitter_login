@@ -1,6 +1,6 @@
 name: twitter_login
 description: Flutter Twitter Login Plugin. Library for login with Twitter APIs OAuth service
-version: 3.0.5
+version: 3.0.6
 homepage: https://twitter.com/0maru_dev
 repository: https://github.com/0maru/twitter_login
 
