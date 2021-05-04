@@ -71,7 +71,7 @@ class TwitterLogin {
         final browser = ChromeCustomTab(
           onClose: () {
             if (!completer.isCompleted) {
-              completer.complete(null);
+              completer.complete('');
             }
           },
         );
