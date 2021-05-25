@@ -10,6 +10,8 @@ import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.browser.customtabs.CustomTabsServiceConnection;
 import androidx.browser.customtabs.CustomTabsSession;
 
+import com.pichillilorenzo.flutter_inappwebview.chrome_custom_tabs.CustomTabsHelper;
+
 import java.util.List;
 
 /**
@@ -152,5 +154,9 @@ public class CustomTabActivityHelper implements ServiceConnectionCallback {
          * @param uri The uri to be opened by the fallback.
          */
         void openUri(Activity activity, Uri uri);
+    }
+
+    public static boolean isEnable(Activity activity) {
+        return CustomTabsHelper.getPackageNameToUse(activity) != null;
     }
 }

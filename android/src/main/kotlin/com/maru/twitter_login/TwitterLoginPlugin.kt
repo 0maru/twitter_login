@@ -47,11 +47,18 @@ public class TwitterLoginPlugin: FlutterPlugin, MethodCallHandler, ActivityAware
   }
 
   override fun onMethodCall(call: MethodCall, result: Result) {
-    if (call.method == "setScheme") {
-      scheme = call.arguments as String
-      result.success(null)
-    } else {
-      result.notImplemented()
+    when (call.method) {
+        "setScheme" -> {
+          scheme = call.arguments as String
+          result.success(null)
+        }
+        "authentication" -> {
+          url = call.arguments as String
+
+        }
+        else -> {
+          result.notImplemented()
+        }
     }
   }
 
