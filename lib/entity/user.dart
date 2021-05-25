@@ -40,8 +40,8 @@ class User {
   /// Twitter account id
   String get screenName => _screenName;
 
-  /// constractor
-  User._(Map<String, dynamic> params)
+  /// constructor
+  User(Map<String, dynamic> params)
       : this._id = params['id'] ?? '',
         this._email = params['email'] ?? '',
         this._thumbnailImage = params['profile_image_url_https'],
@@ -67,7 +67,7 @@ class User {
         apiSecretKey,
         accessTokenSecret,
       );
-      return User._(params);
+      return User(params);
     } on Exception catch (error) {
       throw Exception(error);
     }

@@ -27,7 +27,7 @@ class RequestToken {
   String get authorizeURI => _authorizeURI;
 
   /// constructor
-  RequestToken._(
+  RequestToken(
     Map<String, dynamic> params,
     String authorizeURI,
   )   : this._token = params['oauth_token'],
@@ -58,7 +58,7 @@ class RequestToken {
     if (forceLogin) {
       authorizeURI += '&force_login=true';
     }
-    final requestToken = RequestToken._(params, authorizeURI);
+    final requestToken = RequestToken(params, authorizeURI);
     if (requestToken.callbackConfirmed.toLowerCase() != 'true') {
       throw StateError('oauth_callback_confirmed mast be true');
     }

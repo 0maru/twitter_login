@@ -16,7 +16,7 @@ void main() {
         'screen_name': 'test_screen_name',
       };
 
-      final user = User._(json);
+      final user = User(json);
       expect(user is User, isTrue);
     });
 
@@ -28,7 +28,7 @@ void main() {
         'screen_name': 'test_screen_name',
       };
 
-      final user = User._(json);
+      final user = User(json);
       expect(user is User, isTrue);
     });
   });
