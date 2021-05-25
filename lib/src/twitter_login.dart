@@ -83,7 +83,7 @@ class TwitterLogin {
       }
       // The user closed the browser
       if (resultURI!.isEmpty) {
-        throw CanceldByUserException();
+        throw CanceledByUserException();
       }
       final queries = Uri.splitQueryString(Uri.parse(resultURI).query);
       if (queries['error'] != null) {
@@ -92,7 +92,7 @@ class TwitterLogin {
 
       // The user cancelled the login flow.
       if (queries['denied'] != null) {
-        throw CanceldByUserException();
+        throw CanceledByUserException();
       }
 
       final accessToken = await AccessToken.getAccessToken(
@@ -115,7 +115,7 @@ class TwitterLogin {
         errorMessage: '',
         user: userData,
       );
-    } on CanceldByUserException {
+    } on CanceledByUserException {
       return AuthResult(
         authToken: null,
         authTokenSecret: null,
