@@ -78,3 +78,15 @@
 ## 3.0.5
 
 * add User id
+
+## 3.0.6
+
+* Fix userId type [#41](https://github.com/0maru/twitter_login/pull/41)
+
+## 3.0.7
+
+* Fix crash on Xcode 12.5 
+
+## 3.0.8
+
+* Fix Future Complete [#44](https://github.com/0maru/twitter_login/issues/44)

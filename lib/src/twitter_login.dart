@@ -54,13 +54,13 @@ class TwitterLogin {
         forceLogin,
       );
       String? resultURI = '';
+      final uri = Uri.parse(redirectURI);
       if (Platform.isIOS) {
         resultURI = await _channel.invokeMethod('authentication', {
           'url': requestToken.authorizeURI,
-          'redirectURL': redirectURI,
+          'redirectURL': uri.scheme,
         });
       } else if (Platform.isAndroid) {
-        final uri = Uri.parse(redirectURI);
         await _channel.invokeMethod('setScheme', uri.scheme);
         final completer = Completer<String>();
         final subscribe = _eventStream.listen((data) async {
@@ -71,7 +71,7 @@ class TwitterLogin {
         final browser = ChromeCustomTab(
           onClose: () {
             if (!completer.isCompleted) {
-              completer.complete(null);
+              completer.complete('');
             }
           },
         );
