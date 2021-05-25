@@ -109,7 +109,6 @@ class TwitterLogin {
       );
 
       return AuthResult(
-        accessToken: accessToken,
         authToken: accessToken.authToken,
         authTokenSecret: accessToken.authTokenSecret,
         status: TwitterLoginStatus.loggedIn,
@@ -118,7 +117,6 @@ class TwitterLogin {
       );
     } on CanceldByUserException {
       return AuthResult(
-        accessToken: null,
         authToken: null,
         authTokenSecret: null,
         status: TwitterLoginStatus.cancelledByUser,
@@ -127,7 +125,6 @@ class TwitterLogin {
       );
     } catch (error) {
       return AuthResult(
-        accessToken: null,
         authToken: null,
         authTokenSecret: null,
         status: TwitterLoginStatus.error,
