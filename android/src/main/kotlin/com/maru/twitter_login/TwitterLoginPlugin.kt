@@ -1,11 +1,14 @@
 package com.maru.twitter_login
 
-import android.app.Activity
+
 import android.content.Intent
+import io.flutter.embedding.android.FlutterActivity
+import io.flutter.embedding.engine.FlutterEngine
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
+import io.flutter.embedding.engine.plugins.util.GeneratedPluginRegister
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
@@ -14,12 +17,14 @@ import io.flutter.plugin.common.EventChannel
 import io.flutter.plugin.common.EventChannel.EventSink
 import io.flutter.plugin.common.EventChannel.StreamHandler
 import io.flutter.plugin.common.BinaryMessenger
-import io.flutter.plugin.common.PluginRegistry.Registrar
 import io.flutter.plugin.common.PluginRegistry.NewIntentListener
-import java.sql.DriverManager.println
 
 /** TwitterLoginPlugin */
-public class TwitterLoginPlugin : FlutterPlugin, MethodCallHandler, ActivityAware, NewIntentListener {
+public class TwitterLoginPlugin : FlutterActivity(), FlutterPlugin, MethodCallHandler, ActivityAware, NewIntentListener {
+    companion object {
+        private const val CHANNEL = "twitter_login"
+        private const val EVENT_CHANNEL = "twitter_login/event"
+    }
     /// The MethodChannel that will the communication between Flutter and native Android
     ///
     /// This local reference serves to register the plugin with the Flutter Engine and unregister it
@@ -29,27 +34,14 @@ public class TwitterLoginPlugin : FlutterPlugin, MethodCallHandler, ActivityAwar
     private var eventSink: EventSink? = null
     private var activityPluginBinding: ActivityPluginBinding? = null
     private var scheme: String? = ""
-    private var activity: Activity? = null
 
-    // This static function is optional and equivalent to onAttachedToEngine. It supports the old
-    // pre-Flutter-1.12 Android projects. You are encouraged to continue supporting
-    // plugin registration via this function while apps migrate to use the new Android APIs
-    // post-flutter-1.12 via https://flutter.dev/go/android-project-migration.
-    //
-    // It is encouraged to share logic between onAttachedToEngine and registerWith to keep
-    // them functionally equivalent. Only one of onAttachedToEngine or registerWith will be called
-    // depending on the user's project. onAttachedToEngine or registerWith must both be defined
-    // in the same class.
-    companion object {
-        @JvmStatic
-        fun registerWith(registrar: Registrar) {
-            MethodChannel(registrar.messenger(), "twitter_login")
-            TwitterLoginPlugin().onAttachedToEngine(registrar.messenger())
-        }
+    override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
+        super.configureFlutterEngine(flutterEngine)
+        GeneratedPluginRegister.registerGeneratedPlugins(flutterEngine)
     }
 
     override fun onMethodCall(call: MethodCall, result: Result) {
-        when (call.method) {
+        when(call.method) {
             "setScheme" -> {
                 scheme = call.arguments as String
                 result.success(null)
@@ -67,11 +59,11 @@ public class TwitterLoginPlugin : FlutterPlugin, MethodCallHandler, ActivityAwar
         }
     }
 
-    fun onAttachedToEngine(messenger: BinaryMessenger) {
-        methodChannel = MethodChannel(messenger, "twitter_login")
+    private fun onAttachedToEngine(messenger: BinaryMessenger) {
+        methodChannel = MethodChannel(messenger, CHANNEL)
         methodChannel!!.setMethodCallHandler(this)
 
-        eventChannel = EventChannel(messenger, "twitter_login/event")
+        eventChannel = EventChannel(messenger, EVENT_CHANNEL)
         eventChannel!!.setStreamHandler(object : StreamHandler {
             override fun onListen(arguments: Any?, events: EventSink?) {
                 eventSink = events!!
@@ -104,7 +96,6 @@ public class TwitterLoginPlugin : FlutterPlugin, MethodCallHandler, ActivityAwar
 
     override fun onAttachedToActivity(binding: ActivityPluginBinding) {
         activityPluginBinding = binding
-        activity = binding.activity
         binding.addOnNewIntentListener(this)
     }
 
