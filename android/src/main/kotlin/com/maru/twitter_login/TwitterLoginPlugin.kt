@@ -1,5 +1,6 @@
 package com.maru.twitter_login
 
+import android.app.Activity
 import android.content.Intent
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin
@@ -18,102 +19,107 @@ import io.flutter.plugin.common.PluginRegistry.NewIntentListener
 import java.sql.DriverManager.println
 
 /** TwitterLoginPlugin */
-public class TwitterLoginPlugin: FlutterPlugin, MethodCallHandler, ActivityAware, NewIntentListener {
-  /// The MethodChannel that will the communication between Flutter and native Android
-  ///
-  /// This local reference serves to register the plugin with the Flutter Engine and unregister it
-  /// when the Flutter Engine is detached from the Activity
-  private var methodChannel : MethodChannel? = null
-  private var eventChannel: EventChannel? = null
-  private var eventSink: EventSink? = null
-  private var activityPluginBinding: ActivityPluginBinding? = null
-  private var scheme : String? = ""
+public class TwitterLoginPlugin : FlutterPlugin, MethodCallHandler, ActivityAware, NewIntentListener {
+    /// The MethodChannel that will the communication between Flutter and native Android
+    ///
+    /// This local reference serves to register the plugin with the Flutter Engine and unregister it
+    /// when the Flutter Engine is detached from the Activity
+    private var methodChannel: MethodChannel? = null
+    private var eventChannel: EventChannel? = null
+    private var eventSink: EventSink? = null
+    private var activityPluginBinding: ActivityPluginBinding? = null
+    private var scheme: String? = ""
+    private var activity: Activity? = null
 
-  // This static function is optional and equivalent to onAttachedToEngine. It supports the old
-  // pre-Flutter-1.12 Android projects. You are encouraged to continue supporting
-  // plugin registration via this function while apps migrate to use the new Android APIs
-  // post-flutter-1.12 via https://flutter.dev/go/android-project-migration.
-  //
-  // It is encouraged to share logic between onAttachedToEngine and registerWith to keep
-  // them functionally equivalent. Only one of onAttachedToEngine or registerWith will be called
-  // depending on the user's project. onAttachedToEngine or registerWith must both be defined
-  // in the same class.
-  companion object {
-    @JvmStatic
-    fun registerWith(registrar: Registrar) {
-      val channel = MethodChannel(registrar.messenger(), "twitter_login")
-      TwitterLoginPlugin().onAttachedToEngine(registrar.messenger())
-    }
-  }
-
-  override fun onMethodCall(call: MethodCall, result: Result) {
-    when (call.method) {
-        "setScheme" -> {
-          scheme = call.arguments as String
-          result.success(null)
-        }
-        "authentication" -> {
-          url = call.arguments as String
-
-        }
-        else -> {
-          result.notImplemented()
+    // This static function is optional and equivalent to onAttachedToEngine. It supports the old
+    // pre-Flutter-1.12 Android projects. You are encouraged to continue supporting
+    // plugin registration via this function while apps migrate to use the new Android APIs
+    // post-flutter-1.12 via https://flutter.dev/go/android-project-migration.
+    //
+    // It is encouraged to share logic between onAttachedToEngine and registerWith to keep
+    // them functionally equivalent. Only one of onAttachedToEngine or registerWith will be called
+    // depending on the user's project. onAttachedToEngine or registerWith must both be defined
+    // in the same class.
+    companion object {
+        @JvmStatic
+        fun registerWith(registrar: Registrar) {
+            MethodChannel(registrar.messenger(), "twitter_login")
+            TwitterLoginPlugin().onAttachedToEngine(registrar.messenger())
         }
     }
-  }
 
-  fun onAttachedToEngine(messenger: BinaryMessenger) {
-    methodChannel = MethodChannel(messenger, "twitter_login")
-    methodChannel!!.setMethodCallHandler(this)
-
-    eventChannel = EventChannel(messenger, "twitter_login/event")
-    eventChannel!!.setStreamHandler(object: StreamHandler {
-      override fun onListen(arguments: Any?, events: EventSink?) {
-        eventSink = events!!
-      }
-
-      override fun onCancel(arguments: Any?) {
-        eventSink = null
-      }
-    })
-  }
-
-  override fun onNewIntent(intent: Intent?): Boolean {
-    if (scheme == intent!!.data?.scheme) {
-      eventSink?.success(mapOf("type" to "url", "url" to intent!!.data?.toString()))
+    override fun onMethodCall(call: MethodCall, result: Result) {
+        when (call.method) {
+            "setScheme" -> {
+                scheme = call.arguments as String
+                result.success(null)
+            }
+            "isAvailable" -> {
+                val isAvailable = CustomTabActivityHelper.isAvailable(activity)
+                result.success(isAvailable)
+            }
+            "authentication" -> {
+                url = call.arguments as String
+            }
+            else -> {
+                result.notImplemented()
+            }
+        }
     }
-    return true
-  }
 
-  override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
-    onAttachedToEngine(flutterPluginBinding.binaryMessenger)
-  }
+    fun onAttachedToEngine(messenger: BinaryMessenger) {
+        methodChannel = MethodChannel(messenger, "twitter_login")
+        methodChannel!!.setMethodCallHandler(this)
 
-  override fun onDetachedFromEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
-    methodChannel!!.setMethodCallHandler(null)
-    methodChannel = null
+        eventChannel = EventChannel(messenger, "twitter_login/event")
+        eventChannel!!.setStreamHandler(object : StreamHandler {
+            override fun onListen(arguments: Any?, events: EventSink?) {
+                eventSink = events!!
+            }
 
-    eventChannel!!.setStreamHandler(null)
-    eventChannel = null
-  }
+            override fun onCancel(arguments: Any?) {
+                eventSink = null
+            }
+        })
+    }
 
-  override fun onAttachedToActivity(binding: ActivityPluginBinding) {
-    activityPluginBinding = binding
-    binding.addOnNewIntentListener(this)
-  }
+    override fun onNewIntent(intent: Intent?): Boolean {
+        if (scheme == intent!!.data?.scheme) {
+            eventSink?.success(mapOf("type" to "url", "url" to intent!!.data?.toString()))
+        }
+        return true
+    }
 
-  override fun onDetachedFromActivity() {
-    activityPluginBinding?.removeOnNewIntentListener(this)
-    activityPluginBinding = null
-  }
+    override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
+        onAttachedToEngine(flutterPluginBinding.binaryMessenger)
+    }
 
-  override fun onDetachedFromActivityForConfigChanges() {
-    activityPluginBinding?.removeOnNewIntentListener(this)
-    activityPluginBinding = null
-  }
+    override fun onDetachedFromEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
+        methodChannel!!.setMethodCallHandler(null)
+        methodChannel = null
 
-  override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
-    activityPluginBinding = binding
-    binding.addOnNewIntentListener(this)
-  }
+        eventChannel!!.setStreamHandler(null)
+        eventChannel = null
+    }
+
+    override fun onAttachedToActivity(binding: ActivityPluginBinding) {
+        activityPluginBinding = binding
+        activity = binding.activity
+        binding.addOnNewIntentListener(this)
+    }
+
+    override fun onDetachedFromActivity() {
+        activityPluginBinding?.removeOnNewIntentListener(this)
+        activityPluginBinding = null
+    }
+
+    override fun onDetachedFromActivityForConfigChanges() {
+        activityPluginBinding?.removeOnNewIntentListener(this)
+        activityPluginBinding = null
+    }
+
+    override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
+        activityPluginBinding = binding
+        binding.addOnNewIntentListener(this)
+    }
 }

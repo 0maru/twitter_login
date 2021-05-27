@@ -156,7 +156,7 @@ public class CustomTabActivityHelper implements ServiceConnectionCallback {
         void openUri(Activity activity, Uri uri);
     }
 
-    public static boolean isEnable(Activity activity) {
+    public static boolean isAvailable(Activity activity) {
         return CustomTabsHelper.getPackageNameToUse(activity) != null;
     }
 }

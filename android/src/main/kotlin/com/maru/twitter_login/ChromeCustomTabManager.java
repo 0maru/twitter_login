@@ -16,10 +16,6 @@ public class ChromeCustomTabManager implements MethodChannel.MethodCallHandler {
     }
 
     public void open(Activity activity, @NonNull String url, MethodChannel.Result result) {
-        if (!CustomTabActivityHelper.isEnable(activity)) {
-            result.error('ChromeCustomTabs is not Available!');
-            return;
-        }
         Intent intent = new Intent(activity, CustomTabActivity.class);
         activity.startActivity(intent);
         result.success(true);
