@@ -6,6 +6,7 @@ import 'package:twitter_login/entity/auth_result.dart';
 import 'package:twitter_login/entity/user.dart';
 import 'package:twitter_login/schemes/access_token.dart';
 import 'package:twitter_login/schemes/request_token.dart';
+import 'package:twitter_login/src/auth_browser.dart';
 import 'package:twitter_login/src/chrome_custom_tab.dart';
 import 'package:twitter_login/src/exception.dart';
 
@@ -56,10 +57,10 @@ class TwitterLogin {
       String? resultURI = '';
       final uri = Uri.parse(redirectURI);
       if (Platform.isIOS) {
-        resultURI = await _channel.invokeMethod('authentication', {
-          'url': requestToken.authorizeURI,
-          'redirectURL': uri.scheme,
-        });
+        resultURI = await AuthBrowser.doAuth(
+          requestToken.authorizeURI,
+          uri.scheme,
+        );
       } else if (Platform.isAndroid) {
         await _channel.invokeMethod('setScheme', uri.scheme);
         final completer = Completer<String>();
