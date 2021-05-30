@@ -1,4 +1,4 @@
-package com.maru.twitter_login;
+package com.maru.twitter_login.chrome_custom_tab;
 
 import androidx.browser.customtabs.CustomTabsClient;
 

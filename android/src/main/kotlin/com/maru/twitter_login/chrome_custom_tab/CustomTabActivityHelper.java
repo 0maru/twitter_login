@@ -1,10 +1,9 @@
-package com.maru.twitter_login;
+package com.maru.twitter_login.chrome_custom_tab;
 
 import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
 
-import androidx.browser.customtabs.CustomTabsCallback;
 import androidx.browser.customtabs.CustomTabsClient;
 import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.browser.customtabs.CustomTabsServiceConnection;
