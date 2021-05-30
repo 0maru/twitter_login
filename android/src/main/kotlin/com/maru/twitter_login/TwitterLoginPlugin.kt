@@ -50,14 +50,6 @@ public class TwitterLoginPlugin : FlutterActivity(), FlutterPlugin, MethodCallHa
                 scheme = call.arguments as String
                 result.success(null)
             }
-            "isAvailable" -> {
-                val isAvailable = CustomTabActivityHelper.isAvailable(activity)
-                result.success(isAvailable)
-            }
-            "authentication" -> {
-                val url = call.arguments as String
-                chromeCustomTabManager.open(activityPluginBinding?.activity, url, result)
-            }
             else -> {
                 result.notImplemented()
             }
@@ -65,7 +57,7 @@ public class TwitterLoginPlugin : FlutterActivity(), FlutterPlugin, MethodCallHa
     }
 
     private fun onAttachedToEngine(messenger: BinaryMessenger) {
-        chromeCustomTabManager = ChromeCustomTabManager()
+        chromeCustomTabManager = ChromeCustomTabManager(messenger, activityPluginBinding?.activity)
         methodChannel = MethodChannel(messenger, CHANNEL)
         methodChannel!!.setMethodCallHandler(this)
 
