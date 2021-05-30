@@ -25,6 +25,7 @@ public class TwitterLoginPlugin : FlutterActivity(), FlutterPlugin, MethodCallHa
         private const val CHANNEL = "twitter_login"
         private const val EVENT_CHANNEL = "twitter_login/event"
     }
+
     /// The MethodChannel that will the communication between Flutter and native Android
     ///
     /// This local reference serves to register the plugin with the Flutter Engine and unregister it
@@ -34,6 +35,7 @@ public class TwitterLoginPlugin : FlutterActivity(), FlutterPlugin, MethodCallHa
     private var eventSink: EventSink? = null
     private var activityPluginBinding: ActivityPluginBinding? = null
     private var scheme: String? = ""
+    private lateinit var chromeCustomTabManager: ChromeCustomTabManager
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
@@ -51,7 +53,8 @@ public class TwitterLoginPlugin : FlutterActivity(), FlutterPlugin, MethodCallHa
                 result.success(isAvailable)
             }
             "authentication" -> {
-                url = call.arguments as String
+                val url = call.arguments as String
+                chromeCustomTabManager.open(activityPluginBinding?.activity, url, result)
             }
             else -> {
                 result.notImplemented()
@@ -60,6 +63,7 @@ public class TwitterLoginPlugin : FlutterActivity(), FlutterPlugin, MethodCallHa
     }
 
     private fun onAttachedToEngine(messenger: BinaryMessenger) {
+        chromeCustomTabManager = ChromeCustomTabManager()
         methodChannel = MethodChannel(messenger, CHANNEL)
         methodChannel!!.setMethodCallHandler(this)
 
@@ -77,7 +81,7 @@ public class TwitterLoginPlugin : FlutterActivity(), FlutterPlugin, MethodCallHa
 
     override fun onNewIntent(intent: Intent?): Boolean {
         if (scheme == intent!!.data?.scheme) {
-            eventSink?.success(mapOf("type" to "url", "url" to intent!!.data?.toString()))
+            eventSink?.success(mapOf("type" to "url", "url" to intent.data?.toString()))
         }
         return true
     }
