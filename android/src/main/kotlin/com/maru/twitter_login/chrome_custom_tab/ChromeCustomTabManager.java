@@ -6,17 +6,19 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 
+import com.maru.twitter_login.TwitterLoginPlugin;
+
 import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 
 public class ChromeCustomTabManager implements MethodChannel.MethodCallHandler {
-    private final Activity activity;
+    public TwitterLoginPlugin plugin;
     private static CustomTabActivity customTabActivity;
 
-    public ChromeCustomTabManager(BinaryMessenger messenger, Activity activity) {
-        this.activity = activity;
-        MethodChannel methodChannel = new MethodChannel(messenger, "twitter_login/auth_browser");
+    public ChromeCustomTabManager(final TwitterLoginPlugin plugin) {
+        this.plugin = plugin;
+        MethodChannel methodChannel = new MethodChannel(plugin.messenger, "twitter_login/auth_browser");
         methodChannel.setMethodCallHandler(this);
     }
 
@@ -24,11 +26,11 @@ public class ChromeCustomTabManager implements MethodChannel.MethodCallHandler {
     public void onMethodCall(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
         if ("authentication".equals(call.method)) {
             final String url = call.argument("url");
-            open(activity, url, result);
+            open(plugin.pluginActivity, url, result);
         } else if ("close".equals(call.method)) {
-            close(activity, result);
+            close(plugin.pluginActivity, result);
         } else if ("isAvailable".equals(call.method)) {
-            final boolean isAvailable = CustomTabActivityHelper.isAvailable(activity);
+            final boolean isAvailable = CustomTabActivityHelper.isAvailable(plugin.pluginActivity);
             result.success(isAvailable);
         } else {
             result.notImplemented();
@@ -54,5 +56,9 @@ public class ChromeCustomTabManager implements MethodChannel.MethodCallHandler {
 
     public void close(Activity activity, MethodChannel.Result result) {
         customTabActivity.dispose(activity, result);
+    }
+    
+    public void dispose() {
+        
     }
 }

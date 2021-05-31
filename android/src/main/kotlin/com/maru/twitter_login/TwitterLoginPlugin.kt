@@ -1,6 +1,7 @@
 package com.maru.twitter_login
 
 
+import android.app.Activity
 import android.content.Intent
 import com.maru.twitter_login.chrome_custom_tab.ChromeCustomTabManager
 import com.maru.twitter_login.chrome_custom_tab.CustomTabActivityHelper
@@ -37,7 +38,9 @@ public class TwitterLoginPlugin : FlutterActivity(), FlutterPlugin, MethodCallHa
     private var eventSink: EventSink? = null
     private var activityPluginBinding: ActivityPluginBinding? = null
     private var scheme: String? = ""
-    private lateinit var chromeCustomTabManager: ChromeCustomTabManager
+    private var chromeCustomTabManager: ChromeCustomTabManager? = null
+    lateinit var messenger: BinaryMessenger
+    lateinit var pluginActivity: Activity
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
@@ -57,7 +60,9 @@ public class TwitterLoginPlugin : FlutterActivity(), FlutterPlugin, MethodCallHa
     }
 
     private fun onAttachedToEngine(messenger: BinaryMessenger) {
-        chromeCustomTabManager = ChromeCustomTabManager(messenger, activityPluginBinding?.activity)
+        this.messenger = messenger
+
+        chromeCustomTabManager = ChromeCustomTabManager(this)
         methodChannel = MethodChannel(messenger, CHANNEL)
         methodChannel!!.setMethodCallHandler(this)
 
@@ -85,6 +90,9 @@ public class TwitterLoginPlugin : FlutterActivity(), FlutterPlugin, MethodCallHa
     }
 
     override fun onDetachedFromEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
+        chromeCustomTabManager!!.dispose()
+        chromeCustomTabManager = null
+
         methodChannel!!.setMethodCallHandler(null)
         methodChannel = null
 
@@ -94,6 +102,7 @@ public class TwitterLoginPlugin : FlutterActivity(), FlutterPlugin, MethodCallHa
 
     override fun onAttachedToActivity(binding: ActivityPluginBinding) {
         activityPluginBinding = binding
+        this.pluginActivity = binding.activity
         binding.addOnNewIntentListener(this)
     }
 

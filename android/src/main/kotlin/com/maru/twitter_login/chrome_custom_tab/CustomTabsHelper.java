@@ -9,6 +9,8 @@ import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.maru.twitter_login.shared.KeepAliveService;
+
 import java.util.ArrayList;
 import java.util.List;
 

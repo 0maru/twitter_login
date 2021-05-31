@@ -9,7 +9,8 @@ import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.browser.customtabs.CustomTabsServiceConnection;
 import androidx.browser.customtabs.CustomTabsSession;
 
-import com.pichillilorenzo.flutter_inappwebview.chrome_custom_tabs.CustomTabsHelper;
+import com.maru.twitter_login.shared.ServiceConnection;
+import com.maru.twitter_login.shared.ServiceConnectionCallback;
 
 import java.util.List;
 

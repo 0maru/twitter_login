@@ -22,7 +22,7 @@ public class CustomTabActivity extends Activity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.chrome_custom_tabs_layout);
+        setContentView(R.layout.chrome_custom_tab);
 
         final Bundle bundle = getIntent().getExtras();
         final String url = bundle.getString("url");
