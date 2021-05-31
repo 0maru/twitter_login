@@ -5,9 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:twitter_login/entity/auth_result.dart';
 import 'package:twitter_login/entity/user.dart';
 import 'package:twitter_login/schemes/access_token.dart';
-import 'package:twitter_login/schemes/request_token.dart';
 import 'package:twitter_login/src/auth_browser.dart';
-import 'package:twitter_login/src/chrome_custom_tab.dart';
 import 'package:twitter_login/src/exception.dart';
 
 /// The status after a Twitter login flow has completed.
@@ -48,42 +46,42 @@ class TwitterLogin {
   /// Forces the user to enter their credentials to ensure the correct users account is authorized.
   Future<AuthResult> login({bool forceLogin = false}) async {
     try {
-      final requestToken = await RequestToken.getRequestToken(
-        apiKey,
-        apiSecretKey,
-        redirectURI,
-        forceLogin,
-      );
-      String? resultURI = '';
+      // final requestToken = await RequestToken.getRequestToken(
+      //   apiKey,
+      //   apiSecretKey,
+      //   redirectURI,
+      //   forceLogin,
+      // );
       final uri = Uri.parse(redirectURI);
+      String resultURI;
       if (Platform.isIOS) {
         resultURI = await AuthBrowser.doAuth(
-          requestToken.authorizeURI,
+          // requestToken.authorizeURI,
+          'https://google.com',
           uri.scheme,
         );
       } else if (Platform.isAndroid) {
         await _channel.invokeMethod('setScheme', uri.scheme);
+        resultURI = await AuthBrowser.doAuth(
+          // requestToken.authorizeURI,
+          'https://google.com',
+          uri.scheme,
+        );
+
         final completer = Completer<String>();
         final subscribe = _eventStream.listen((data) async {
           if (data['type'] == 'url') {
             completer.complete(data['url']?.toString());
           }
         });
-        final browser = ChromeCustomTab(
-          onClose: () {
-            if (!completer.isCompleted) {
-              completer.complete('');
-            }
-          },
-        );
-        await browser.open(url: Uri.parse(requestToken.authorizeURI));
+
         resultURI = await completer.future;
         subscribe.cancel();
       } else {
         throw UnsupportedError('Not supported by this os.');
       }
       // The user closed the browser
-      if (resultURI!.isEmpty) {
+      if (resultURI.isEmpty) {
         throw CanceledByUserException();
       }
       final queries = Uri.splitQueryString(Uri.parse(resultURI).query);
