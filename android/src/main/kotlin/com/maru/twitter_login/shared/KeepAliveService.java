@@ -1,4 +1,4 @@
-package com.maru.twitter_login.chrome_custom_tab;
+package com.maru.twitter_login.shared;
 
 import android.app.Service;
 import android.content.Intent;
