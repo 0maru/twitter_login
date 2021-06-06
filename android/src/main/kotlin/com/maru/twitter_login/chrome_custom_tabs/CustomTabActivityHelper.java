@@ -1,27 +1,27 @@
-package com.maru.twitter_login.chrome_custom_tab;
+package com.maru.twitter_login.chrome_custom_tabs;
 
 import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.browser.customtabs.CustomTabsCallback;
 import androidx.browser.customtabs.CustomTabsClient;
 import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.browser.customtabs.CustomTabsServiceConnection;
 import androidx.browser.customtabs.CustomTabsSession;
 
-import com.maru.twitter_login.shared.ServiceConnection;
-import com.maru.twitter_login.shared.ServiceConnectionCallback;
+import com.maru.twitter_login.customtabsclient.CustomTabsHelper;
+import com.maru.twitter_login.customtabsclient.ServiceConnection;
+import com.maru.twitter_login.customtabsclient.ServiceConnectionCallback;
 
 import java.util.List;
 
-/**
- * This is a helper class to manage the connection to the Custom Tabs Service.
- */
 public class CustomTabActivityHelper implements ServiceConnectionCallback {
     private CustomTabsSession mCustomTabsSession;
     private CustomTabsClient mClient;
     private CustomTabsServiceConnection mConnection;
     private ConnectionCallback mConnectionCallback;
+    private CustomTabsCallback mCustomTabsCallback;
 
     /**
      * Opens the URL on a Custom Tab if possible. Otherwise fallsback to opening it on a WebView.
@@ -32,9 +32,14 @@ public class CustomTabActivityHelper implements ServiceConnectionCallback {
      */
     public static void openCustomTab(Activity activity,
                                      CustomTabsIntent customTabsIntent,
-                                     Uri uri) {
+                                     Uri uri,
+                                     int requestCode) {
         customTabsIntent.intent.setData(uri);
-        activity.startActivityForResult(customTabsIntent.intent, 100);
+        activity.startActivityForResult(customTabsIntent.intent, requestCode);
+    }
+
+    public static boolean isAvailable(Activity activity) {
+        return CustomTabsHelper.getPackageNameToUse(activity) != null;
     }
 
     /**
@@ -58,7 +63,7 @@ public class CustomTabActivityHelper implements ServiceConnectionCallback {
         if (mClient == null) {
             mCustomTabsSession = null;
         } else if (mCustomTabsSession == null) {
-            mCustomTabsSession = mClient.newSession(null);
+            mCustomTabsSession = mClient.newSession(mCustomTabsCallback);
         }
         return mCustomTabsSession;
     }
@@ -69,6 +74,10 @@ public class CustomTabActivityHelper implements ServiceConnectionCallback {
      */
     public void setConnectionCallback(ConnectionCallback connectionCallback) {
         this.mConnectionCallback = connectionCallback;
+    }
+
+    public void setCustomTabsCallback(CustomTabsCallback customTabsCallback) {
+        this.mCustomTabsCallback = customTabsCallback;
     }
 
     /**
@@ -102,18 +111,14 @@ public class CustomTabActivityHelper implements ServiceConnectionCallback {
     public void onServiceConnected(CustomTabsClient client) {
         mClient = client;
         mClient.warmup(0L);
-        if (mConnectionCallback != null) {
-            mConnectionCallback.onCustomTabsConnected();
-        }
+        if (mConnectionCallback != null) mConnectionCallback.onCustomTabsConnected();
     }
 
     @Override
     public void onServiceDisconnected() {
         mClient = null;
         mCustomTabsSession = null;
-        if (mConnectionCallback != null) {
-            mConnectionCallback.onCustomTabsDisconnected();
-        }
+        if (mConnectionCallback != null) mConnectionCallback.onCustomTabsDisconnected();
     }
 
     /**
@@ -132,19 +137,4 @@ public class CustomTabActivityHelper implements ServiceConnectionCallback {
         void onCustomTabsDisconnected();
     }
 
-    /**
-     * To be used as a fallback to open the Uri when Custom Tabs is not available.
-     */
-    public interface CustomTabFallback {
-        /**
-         *
-         * @param activity The Activity that wants to open the Uri.
-         * @param uri The uri to be opened by the fallback.
-         */
-        void openUri(Activity activity, Uri uri);
-    }
-
-    public static boolean isAvailable(Activity activity) {
-        return CustomTabsHelper.getPackageNameToUse(activity) != null;
-    }
 }

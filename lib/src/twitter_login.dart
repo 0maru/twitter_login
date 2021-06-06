@@ -2,9 +2,11 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/services.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:twitter_login/entity/auth_result.dart';
 import 'package:twitter_login/entity/user.dart';
 import 'package:twitter_login/schemes/access_token.dart';
+import 'package:twitter_login/schemes/request_token.dart';
 import 'package:twitter_login/src/auth_browser.dart';
 import 'package:twitter_login/src/exception.dart';
 
@@ -46,35 +48,33 @@ class TwitterLogin {
   /// Forces the user to enter their credentials to ensure the correct users account is authorized.
   Future<AuthResult> login({bool forceLogin = false}) async {
     try {
-      // final requestToken = await RequestToken.getRequestToken(
-      //   apiKey,
-      //   apiSecretKey,
-      //   redirectURI,
-      //   forceLogin,
-      // );
+      final requestToken = await RequestToken.getRequestToken(
+        apiKey,
+        apiSecretKey,
+        redirectURI,
+        forceLogin,
+      );
       final uri = Uri.parse(redirectURI);
       String resultURI;
+      final completer = Completer<String>();
+      final authBrowser = AuthBrowser(
+        onClose: () {
+          print("onClose");
+          if (!completer.isCompleted) {
+            completer.complete('');
+          }
+        },
+      );
       if (Platform.isIOS) {
-        resultURI = await AuthBrowser.doAuth(
-          // requestToken.authorizeURI,
-          'https://google.com',
-          uri.scheme,
-        );
+        resultURI = await authBrowser.doAuth(requestToken.authorizeURI, uri.scheme);
       } else if (Platform.isAndroid) {
         await _channel.invokeMethod('setScheme', uri.scheme);
-        resultURI = await AuthBrowser.doAuth(
-          // requestToken.authorizeURI,
-          'https://google.com',
-          uri.scheme,
-        );
-
-        final completer = Completer<String>();
         final subscribe = _eventStream.listen((data) async {
           if (data['type'] == 'url') {
             completer.complete(data['url']?.toString());
           }
         });
-
+        await authBrowser.open(requestToken.authorizeURI, uri.scheme);
         resultURI = await completer.future;
         subscribe.cancel();
       } else {

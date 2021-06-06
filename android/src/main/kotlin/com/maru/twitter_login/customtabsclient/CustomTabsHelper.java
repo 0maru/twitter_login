@@ -1,18 +1,33 @@
-package com.maru.twitter_login.chrome_custom_tab;
-
+package com.maru.twitter_login.customtabsclient;/*
+ * Copyright (c) 2015 Zhang Hai <Dreaming.in.Code.ZH@Gmail.com>
+ * All Rights Reserved.
+ */
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.maru.twitter_login.shared.KeepAliveService;
-
 import java.util.ArrayList;
 import java.util.List;
+
+// Copyright 2015 Google Inc. All Rights Reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 /**
  * Helper class for Custom Tabs.
@@ -23,10 +38,13 @@ public class CustomTabsHelper {
     static final String BETA_PACKAGE = "com.chrome.beta";
     static final String DEV_PACKAGE = "com.chrome.dev";
     static final String LOCAL_PACKAGE = "com.google.android.apps.chrome";
-    private static final String EXTRA_CUSTOM_TABS_KEEP_ALIVE =
-            "android.support.customtabs.extra.KEEP_ALIVE";
-    private static final String ACTION_CUSTOM_TABS_CONNECTION =
-            "android.support.customtabs.action.CustomTabsService";
+    // HACK: Using a StringBuilder prevents Jetifier from tempering with our constants.
+    @SuppressWarnings("StringBufferReplaceableByString")
+    private static final String EXTRA_CUSTOM_TABS_KEEP_ALIVE = new StringBuilder("android")
+            .append(".support.customtabs.extra.KEEP_ALIVE").toString();
+    @SuppressWarnings("StringBufferReplaceableByString")
+    private static final String ACTION_CUSTOM_TABS_CONNECTION = new StringBuilder("android")
+            .append(".support.customtabs.action.CustomTabsService").toString();
 
     private static String sPackageNameToUse;
 
@@ -61,7 +79,12 @@ public class CustomTabsHelper {
         }
 
         // Get all apps that can handle VIEW intents.
-        List<ResolveInfo> resolvedActivityList = pm.queryIntentActivities(activityIntent, 0);
+        List<ResolveInfo> resolvedActivityList;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            resolvedActivityList = pm.queryIntentActivities(activityIntent, PackageManager.MATCH_ALL);
+        } else {
+            resolvedActivityList = pm.queryIntentActivities(activityIntent, 0);
+        }
         List<String> packagesSupportingCustomTabs = new ArrayList<>();
         for (ResolveInfo info : resolvedActivityList) {
             Intent serviceIntent = new Intent();

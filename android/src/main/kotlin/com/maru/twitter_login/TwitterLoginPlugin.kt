@@ -3,8 +3,9 @@ package com.maru.twitter_login
 
 import android.app.Activity
 import android.content.Intent
-import com.maru.twitter_login.chrome_custom_tab.ChromeCustomTabManager
-import com.maru.twitter_login.chrome_custom_tab.CustomTabActivityHelper
+//import com.maru.twitter_login.chrome_custom_tab.ChromeCustomTabManager
+import com.maru.twitter_login.chrome_custom_tabs.ChromeSafariBrowserManager
+import io.flutter.Log
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 
@@ -12,14 +13,11 @@ import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.util.GeneratedPluginRegister
-import io.flutter.plugin.common.MethodCall
-import io.flutter.plugin.common.MethodChannel
+import io.flutter.plugin.common.*
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
-import io.flutter.plugin.common.EventChannel
 import io.flutter.plugin.common.EventChannel.EventSink
 import io.flutter.plugin.common.EventChannel.StreamHandler
-import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.PluginRegistry.NewIntentListener
 
 /** TwitterLoginPlugin */
@@ -27,6 +25,11 @@ public class TwitterLoginPlugin : FlutterActivity(), FlutterPlugin, MethodCallHa
     companion object {
         private const val CHANNEL = "twitter_login"
         private const val EVENT_CHANNEL = "twitter_login/event"
+//        @JvmStatic
+//        fun registerWith(registrar: PluginRegistry.Registrar) {
+//            val channel = MethodChannel(registrar.messenger(), "twitter_login")
+//            TwitterLoginPlugin().onAttachedToEngine(registrar.messenger())
+//        }
     }
 
     /// The MethodChannel that will the communication between Flutter and native Android
@@ -38,9 +41,9 @@ public class TwitterLoginPlugin : FlutterActivity(), FlutterPlugin, MethodCallHa
     private var eventSink: EventSink? = null
     private var activityPluginBinding: ActivityPluginBinding? = null
     private var scheme: String? = ""
-    private var chromeCustomTabManager: ChromeCustomTabManager? = null
-    lateinit var messenger: BinaryMessenger
-    lateinit var pluginActivity: Activity
+    private var chromeCustomTabManager: ChromeSafariBrowserManager? = null
+    public var messenger: BinaryMessenger? = null
+    public var pluginActivity: Activity? = null
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
@@ -62,7 +65,7 @@ public class TwitterLoginPlugin : FlutterActivity(), FlutterPlugin, MethodCallHa
     private fun onAttachedToEngine(messenger: BinaryMessenger) {
         this.messenger = messenger
 
-        chromeCustomTabManager = ChromeCustomTabManager(this)
+        chromeCustomTabManager = ChromeSafariBrowserManager(this)
         methodChannel = MethodChannel(messenger, CHANNEL)
         methodChannel!!.setMethodCallHandler(this)
 
@@ -79,6 +82,7 @@ public class TwitterLoginPlugin : FlutterActivity(), FlutterPlugin, MethodCallHa
     }
 
     override fun onNewIntent(intent: Intent?): Boolean {
+        Log.d("TwitterLoginPlugin", "onNewIntent")
         if (scheme == intent!!.data?.scheme) {
             eventSink?.success(mapOf("type" to "url", "url" to intent.data?.toString()))
         }
@@ -101,23 +105,30 @@ public class TwitterLoginPlugin : FlutterActivity(), FlutterPlugin, MethodCallHa
     }
 
     override fun onAttachedToActivity(binding: ActivityPluginBinding) {
+        Log.d("TwitterLoginPlugin", "onAttachedToActivity")
         activityPluginBinding = binding
         this.pluginActivity = binding.activity
         binding.addOnNewIntentListener(this)
     }
 
     override fun onDetachedFromActivity() {
+        Log.d("TwitterLoginPlugin", "onDetachedFromActivity")
         activityPluginBinding?.removeOnNewIntentListener(this)
         activityPluginBinding = null
+        pluginActivity = null
     }
 
     override fun onDetachedFromActivityForConfigChanges() {
+        Log.d("TwitterLoginPlugin", "onDetachedFromActivityForConfigChanges")
         activityPluginBinding?.removeOnNewIntentListener(this)
         activityPluginBinding = null
+        pluginActivity = null
     }
 
     override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
+        Log.d("TwitterLoginPlugin", "onReattachedToActivityForConfigChanges")
         activityPluginBinding = binding
+        pluginActivity = binding.activity
         binding.addOnNewIntentListener(this)
     }
 }
