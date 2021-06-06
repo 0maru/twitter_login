@@ -8,6 +8,8 @@ import androidx.annotation.Nullable;
 
 import com.maru.twitter_login.TwitterLoginPlugin;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -32,7 +34,7 @@ public class ChromeSafariBrowserManager implements MethodChannel.MethodCallHandl
     }
 
     @Override
-    public void onMethodCall(final MethodCall call, final MethodChannel.Result result) {
+    public void onMethodCall(final MethodCall call, @NotNull final MethodChannel.Result result) {
         if ("open".equals(call.method)) {
             final String id = (String) call.argument("id");
             String url = (String) call.argument("url");
@@ -45,8 +47,8 @@ public class ChromeSafariBrowserManager implements MethodChannel.MethodCallHandl
     }
 
     public void open(Activity activity, String id, String url, MethodChannel.Result result) {
-        if (CustomTabActivityHelper.isAvailable(activity)) {
-            result.notImplemented();
+        if (!CustomTabActivityHelper.isAvailable(activity)) {
+            result.success(false);
         }
 
         Bundle extras = new Bundle();
