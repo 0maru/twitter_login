@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/services.dart';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:twitter_login/entity/auth_result.dart';
 import 'package:twitter_login/entity/user.dart';
 import 'package:twitter_login/schemes/access_token.dart';
@@ -47,33 +46,49 @@ class TwitterLogin {
   /// Logs the user
   /// Forces the user to enter their credentials to ensure the correct users account is authorized.
   Future<AuthResult> login({bool forceLogin = false}) async {
+    String resultURI;
+    RequestToken requestToken;
     try {
-      final requestToken = await RequestToken.getRequestToken(
+      requestToken = await RequestToken.getRequestToken(
         apiKey,
         apiSecretKey,
         redirectURI,
         forceLogin,
       );
-      final uri = Uri.parse(redirectURI);
-      String resultURI;
-      final completer = Completer<String>();
-      final authBrowser = AuthBrowser(
-        onClose: () {
-          print("onClose");
-          if (!completer.isCompleted) {
-            completer.complete('');
-          }
-        },
+    } on Exception {
+      throw PlatformException(
+        code: "400",
+        message: "Failed to generate request token.",
+        details: "Please check your APIKey or APISecret.",
       );
+    }
+
+    final uri = Uri.parse(redirectURI);
+    final completer = Completer<String>();
+    late StreamSubscription subscribe;
+
+    if (Platform.isAndroid) {
+      await _channel.invokeMethod('setScheme', uri.scheme);
+      subscribe = _eventStream.listen((data) async {
+        if (data['type'] == 'url') {
+          completer.complete(data['url']?.toString());
+        }
+      });
+    }
+
+    final authBrowser = AuthBrowser(
+      onClose: () {
+        print("onClose");
+        if (!completer.isCompleted) {
+          completer.complete('');
+        }
+      },
+    );
+
+    try {
       if (Platform.isIOS) {
         resultURI = await authBrowser.doAuth(requestToken.authorizeURI, uri.scheme);
       } else if (Platform.isAndroid) {
-        await _channel.invokeMethod('setScheme', uri.scheme);
-        final subscribe = _eventStream.listen((data) async {
-          if (data['type'] == 'url') {
-            completer.complete(data['url']?.toString());
-          }
-        });
         await authBrowser.open(requestToken.authorizeURI, uri.scheme);
         resultURI = await completer.future;
         subscribe.cancel();
@@ -119,7 +134,7 @@ class TwitterLogin {
         authToken: null,
         authTokenSecret: null,
         status: TwitterLoginStatus.cancelledByUser,
-        errorMessage: 'The user cancelled the login flow',
+        errorMessage: 'The user cancelled the login flow.',
         user: null,
       );
     } catch (error) {
