@@ -6,7 +6,7 @@ import 'package:twitter_login/entity/auth_result.dart';
 import 'package:twitter_login/entity/user.dart';
 import 'package:twitter_login/schemes/access_token.dart';
 import 'package:twitter_login/schemes/request_token.dart';
-import 'package:twitter_login/src/chrome_custom_tab.dart';
+import 'package:twitter_login/src/auth_browser.dart';
 import 'package:twitter_login/src/exception.dart';
 
 /// The status after a Twitter login flow has completed.
@@ -46,44 +46,60 @@ class TwitterLogin {
   /// Logs the user
   /// Forces the user to enter their credentials to ensure the correct users account is authorized.
   Future<AuthResult> login({bool forceLogin = false}) async {
+    String resultURI;
+    RequestToken requestToken;
     try {
-      final requestToken = await RequestToken.getRequestToken(
+      requestToken = await RequestToken.getRequestToken(
         apiKey,
         apiSecretKey,
         redirectURI,
         forceLogin,
       );
-      String? resultURI = '';
-      final uri = Uri.parse(redirectURI);
+    } on Exception {
+      throw PlatformException(
+        code: "400",
+        message: "Failed to generate request token.",
+        details: "Please check your APIKey or APISecret.",
+      );
+    }
+
+    final uri = Uri.parse(redirectURI);
+    final completer = Completer<String>();
+    late StreamSubscription subscribe;
+
+    if (Platform.isAndroid) {
+      await _channel.invokeMethod('setScheme', uri.scheme);
+      subscribe = _eventStream.listen((data) async {
+        if (data['type'] == 'url') {
+          completer.complete(data['url']?.toString());
+        }
+      });
+    }
+
+    final authBrowser = AuthBrowser(
+      onClose: () {
+        print("onClose");
+        if (!completer.isCompleted) {
+          completer.complete('');
+        }
+      },
+    );
+
+    try {
       if (Platform.isIOS) {
-        resultURI = await _channel.invokeMethod('authentication', {
-          'url': requestToken.authorizeURI,
-          'redirectURL': uri.scheme,
-        });
+        /// Login to Twitter account with SFAuthenticationSession or ASWebAuthenticationSession.
+        resultURI = await authBrowser.doAuth(requestToken.authorizeURI, uri.scheme);
       } else if (Platform.isAndroid) {
-        await _channel.invokeMethod('setScheme', uri.scheme);
-        final completer = Completer<String>();
-        final subscribe = _eventStream.listen((data) async {
-          if (data['type'] == 'url') {
-            completer.complete(data['url']?.toString());
-          }
-        });
-        final browser = ChromeCustomTab(
-          onClose: () {
-            if (!completer.isCompleted) {
-              completer.complete('');
-            }
-          },
-        );
-        await browser.open(url: Uri.parse(requestToken.authorizeURI));
+        // Login to Twitter account with chrome_custom_tabs.
+        await authBrowser.open(requestToken.authorizeURI, uri.scheme);
         resultURI = await completer.future;
         subscribe.cancel();
       } else {
         throw UnsupportedError('Not supported by this os.');
       }
       // The user closed the browser
-      if (resultURI!.isEmpty) {
-        throw CanceldByUserException();
+      if (resultURI.isEmpty) {
+        throw CanceledByUserException();
       }
       final queries = Uri.splitQueryString(Uri.parse(resultURI).query);
       if (queries['error'] != null) {
@@ -92,7 +108,7 @@ class TwitterLogin {
 
       // The user cancelled the login flow.
       if (queries['denied'] != null) {
-        throw CanceldByUserException();
+        throw CanceledByUserException();
       }
 
       final accessToken = await AccessToken.getAccessToken(
@@ -109,25 +125,22 @@ class TwitterLogin {
       );
 
       return AuthResult(
-        accessToken: accessToken,
         authToken: accessToken.authToken,
         authTokenSecret: accessToken.authTokenSecret,
         status: TwitterLoginStatus.loggedIn,
         errorMessage: '',
         user: userData,
       );
-    } on CanceldByUserException {
+    } on CanceledByUserException {
       return AuthResult(
-        accessToken: null,
         authToken: null,
         authTokenSecret: null,
         status: TwitterLoginStatus.cancelledByUser,
-        errorMessage: 'The user cancelled the login flow',
+        errorMessage: 'The user cancelled the login flow.',
         user: null,
       );
     } catch (error) {
       return AuthResult(
-        accessToken: null,
         authToken: null,
         authTokenSecret: null,
         status: TwitterLoginStatus.error,
