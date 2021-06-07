@@ -8,7 +8,7 @@ public class SwiftTwitterLoginPlugin: NSObject, FlutterPlugin, ASWebAuthenticati
 
     public static func register(with registrar: FlutterPluginRegistrar) {
         let channel = FlutterMethodChannel(
-            name: "twitter_login",
+            name: "twitter_login/auth_browser",
             binaryMessenger: registrar.messenger()
         )
         let instance = SwiftTwitterLoginPlugin()

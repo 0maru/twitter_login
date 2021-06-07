@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:http/http.dart' as http;
 import 'package:twitter_login/src/signature.dart';
@@ -112,4 +113,10 @@ Map<String, String?> requestHeader({
     params.addAll({'oauth_verifier': oauthVerifier});
   }
   return params;
+}
+
+String createCryptoRandomString([int length = 32]) {
+  var values = List<int>.generate(length, (i) => Random.secure().nextInt(256));
+
+  return base64Url.encode(values);
 }

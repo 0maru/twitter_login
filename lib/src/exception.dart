@@ -1,5 +1,5 @@
 /// Exception thrown when doing user cancelled the login flow.
-class CanceldByUserException implements Exception {
-  const CanceldByUserException();
-  String toString() => "CanceldByUserException";
+class CanceledByUserException implements Exception {
+  const CanceledByUserException();
+  String toString() => "CanceledByUserException";
 }

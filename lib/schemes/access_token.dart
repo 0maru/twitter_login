@@ -11,7 +11,7 @@ class AccessToken {
   String get authToken => _authToken;
   String get authTokenSecret => _authTokenSecret;
 
-  AccessToken._(Map<String, dynamic>? params)
+  AccessToken(Map<String, dynamic>? params)
       : this._authToken = params!['oauth_token'],
         this._authTokenSecret = params['oauth_token_secret'];
 
@@ -31,7 +31,7 @@ class AccessToken {
       apiKey,
       apiSecretKey,
     );
-    final accessToken = AccessToken._(params);
+    final accessToken = AccessToken(params);
     return accessToken;
   }
 }
