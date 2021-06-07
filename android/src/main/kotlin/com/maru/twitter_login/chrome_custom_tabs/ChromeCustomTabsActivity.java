@@ -37,16 +37,16 @@ public class ChromeCustomTabsActivity extends Activity implements MethodChannel.
 
         Bundle bundle = getIntent().getExtras();
         assert bundle != null;
-        id = bundle.getString("id");
 
         String managerId = bundle.getString("managerId");
         manager = (ChromeSafariBrowserManager) ChromeSafariBrowserManager.shared.get(managerId);
 
+        //　Create a methodChannel for each Activity.
+        id = bundle.getString("id");
         channel = new MethodChannel(manager.plugin.getMessenger(), "twitter_login/auth_browser_" + id);
         channel.setMethodCallHandler(this);
 
         final String url = bundle.getString("url");
-
 
         final ChromeCustomTabsActivity chromeCustomTabsActivity = this;
 
@@ -60,7 +60,12 @@ public class ChromeCustomTabsActivity extends Activity implements MethodChannel.
                 builder = new CustomTabsIntent.Builder(session);
                 CustomTabsIntent customTabsIntent = builder.build();
                 prepareCustomTabsIntent(customTabsIntent);
-                CustomTabActivityHelper.openCustomTab(chromeCustomTabsActivity, customTabsIntent, uri, CHROME_CUSTOM_TAB_REQUEST_CODE);
+                CustomTabActivityHelper.openCustomTab(
+                        chromeCustomTabsActivity,
+                        customTabsIntent,
+                        uri,
+                        CHROME_CUSTOM_TAB_REQUEST_CODE
+                );
             }
 
             @Override
@@ -78,7 +83,10 @@ public class ChromeCustomTabsActivity extends Activity implements MethodChannel.
             this.onDestroy();
             this.close();
 
-            Intent intent = new Intent(manager.plugin.getActivity(), manager.plugin.getActivity().getClass());
+            Intent intent = new Intent(
+                    manager.plugin.getActivity(),
+                    manager.plugin.getActivity().getClass()
+            );
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
             manager.plugin.getActivity().startActivity(intent);
