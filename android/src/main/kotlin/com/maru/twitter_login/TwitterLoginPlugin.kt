@@ -1,6 +1,5 @@
 package com.maru.twitter_login
 
-
 import android.app.Activity
 import android.content.Intent
 import com.maru.twitter_login.chrome_custom_tabs.ChromeSafariBrowserManager
@@ -44,7 +43,7 @@ public class TwitterLoginPlugin : FlutterActivity(), FlutterPlugin, MethodCallHa
     }
 
     override fun onMethodCall(call: MethodCall, result: Result) {
-        when(call.method) {
+        when (call.method) {
             "setScheme" -> {
                 scheme = call.arguments as String
                 result.success(null)

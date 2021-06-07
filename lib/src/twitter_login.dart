@@ -87,8 +87,10 @@ class TwitterLogin {
 
     try {
       if (Platform.isIOS) {
+        /// Login to Twitter account with SFAuthenticationSession or ASWebAuthenticationSession.
         resultURI = await authBrowser.doAuth(requestToken.authorizeURI, uri.scheme);
       } else if (Platform.isAndroid) {
+        // Login to Twitter account with chrome_custom_tabs.
         await authBrowser.open(requestToken.authorizeURI, uri.scheme);
         resultURI = await completer.future;
         subscribe.cancel();

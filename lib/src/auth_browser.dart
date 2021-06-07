@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:twitter_login/src/utils.dart';
@@ -25,13 +27,17 @@ class AuthBrowser {
         _isOpen = false;
         break;
       default:
-        throw PlatformException(code: '');
+        return;
     }
   }
 
+  ///　Open a web browser and log in to your Twitter account.
   Future<String> doAuth(String url, String scheme) async {
+    if (Platform.isAndroid) {
+      return '';
+    }
     if (_isOpen) {
-      throw PlatformException(code: 'custom_browser is opened.');
+      throw PlatformException(code: 'AuthBrowser is opened.');
     }
 
     _isOpen = true;
@@ -40,12 +46,17 @@ class AuthBrowser {
       'redirectURL': scheme,
       'id': id,
     });
+    _isOpen = false;
     return token;
   }
 
+  ///　Open a web browser and log in to your Twitter account.
   Future<void> open(String url, String scheme) async {
+    if (Platform.isIOS) {
+      return;
+    }
     if (_isOpen) {
-      throw PlatformException(code: 'custom_browser is opened.');
+      throw PlatformException(code: 'AuthBrowser is opened.');
     }
 
     _isOpen = true;
