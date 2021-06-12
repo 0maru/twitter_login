@@ -78,25 +78,7 @@ public class ChromeCustomTabsActivity extends Activity implements MethodChannel.
 
     @Override
     public void onMethodCall(final MethodCall call, @NotNull final MethodChannel.Result result) {
-        if ("close".equals(call.method)) {
-            this.onStop();
-            this.onDestroy();
-            this.close();
-
-            Intent intent = new Intent(
-                    manager.plugin.getActivity(),
-                    manager.plugin.getActivity().getClass()
-            );
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            manager.plugin.getActivity().startActivity(intent);
-
-            dispose();
-
-            result.success(true);
-        } else {
-            result.notImplemented();
-        }
+        // invokeMethod is defined to pass the cancelled operation to the Dart side.
     }
 
 
@@ -134,6 +116,6 @@ public class ChromeCustomTabsActivity extends Activity implements MethodChannel.
         session = null;
         finish();
         Map<String, Object> obj = new HashMap<>();
-        channel.invokeMethod("onChromeSafariBrowserClosed", obj);
+        channel.invokeMethod("onClose", obj);
     }
 }

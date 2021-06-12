@@ -78,7 +78,6 @@ class TwitterLogin {
 
     final authBrowser = AuthBrowser(
       onClose: () {
-        print("onClose");
         if (!completer.isCompleted) {
           completer.complete('');
         }
@@ -93,6 +92,10 @@ class TwitterLogin {
         // Login to Twitter account with chrome_custom_tabs.
         await authBrowser.open(requestToken.authorizeURI, uri.scheme);
         resultURI = await completer.future;
+
+        if (resultURI.isEmpty) {
+          throw CanceledByUserException();
+        }
         subscribe.cancel();
       } else {
         throw UnsupportedError('Not supported by this os.');
