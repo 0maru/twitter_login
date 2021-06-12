@@ -46,7 +46,7 @@ class TwitterLogin {
   /// Logs the user
   /// Forces the user to enter their credentials to ensure the correct users account is authorized.
   Future<AuthResult> login({bool forceLogin = false}) async {
-    String resultURI;
+    String? resultURI;
     RequestToken requestToken;
     try {
       requestToken = await RequestToken.getRequestToken(
@@ -102,7 +102,7 @@ class TwitterLogin {
       }
 
       // The user closed the browser.
-      if (resultURI.isEmpty) {
+      if (resultURI!.isEmpty) {
         throw CanceledByUserException();
       }
 

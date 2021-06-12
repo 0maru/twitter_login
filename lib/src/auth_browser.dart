@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:twitter_login/src/exception.dart';
 import 'package:twitter_login/src/utils.dart';
 
 const String methodName = 'twitter_login/auth_browser';
@@ -32,7 +33,7 @@ class AuthBrowser {
   }
 
   ///　Open a web browser and log in to your Twitter account.
-  Future<String> doAuth(String url, String scheme) async {
+  Future<String?> doAuth(String url, String scheme) async {
     if (Platform.isAndroid) {
       return '';
     }
@@ -41,11 +42,16 @@ class AuthBrowser {
     }
 
     _isOpen = true;
-    final token = await _channel.invokeMethod('open', {
+    final token = await _channel.invokeMethod<String>('authentication', {
       'url': url,
       'redirectURL': scheme,
       'id': id,
     });
+
+    if (token == null) {
+      throw CanceledByUserException();
+    }
+
     _isOpen = false;
     return token;
   }
