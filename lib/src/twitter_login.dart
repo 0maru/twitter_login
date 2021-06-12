@@ -71,7 +71,11 @@ class TwitterLogin {
       await _channel.invokeMethod('setScheme', uri.scheme);
       subscribe = _eventStream.listen((data) async {
         if (data['type'] == 'url') {
-          completer.complete(data['url']?.toString());
+          if (!completer.isCompleted) {
+            completer.complete(data['url']?.toString());
+          } else {
+            throw CanceledByUserException();
+          }
         }
       });
     }
@@ -92,18 +96,16 @@ class TwitterLogin {
         // Login to Twitter account with chrome_custom_tabs.
         await authBrowser.open(requestToken.authorizeURI, uri.scheme);
         resultURI = await completer.future;
-
-        if (resultURI.isEmpty) {
-          throw CanceledByUserException();
-        }
         subscribe.cancel();
       } else {
         throw UnsupportedError('Not supported by this os.');
       }
-      // The user closed the browser
+
+      // The user closed the browser.
       if (resultURI.isEmpty) {
         throw CanceledByUserException();
       }
+
       final queries = Uri.splitQueryString(Uri.parse(resultURI).query);
       if (queries['error'] != null) {
         throw Exception('Error Response: ${queries['error']}');
@@ -114,25 +116,23 @@ class TwitterLogin {
         throw CanceledByUserException();
       }
 
-      final accessToken = await AccessToken.getAccessToken(
+      final token = await AccessToken.getAccessToken(
         apiKey,
         apiSecretKey,
         queries,
       );
 
-      final userData = await User.getUserData(
-        apiKey,
-        apiSecretKey,
-        accessToken.authToken,
-        accessToken.authTokenSecret,
-      );
-
       return AuthResult(
-        authToken: accessToken.authToken,
-        authTokenSecret: accessToken.authTokenSecret,
+        authToken: token.authToken,
+        authTokenSecret: token.authTokenSecret,
         status: TwitterLoginStatus.loggedIn,
         errorMessage: '',
-        user: userData,
+        user: await User.getUserData(
+          apiKey,
+          apiSecretKey,
+          token.authToken,
+          token.authTokenSecret,
+        ),
       );
     } on CanceledByUserException {
       return AuthResult(
