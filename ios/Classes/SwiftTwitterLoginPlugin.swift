@@ -65,7 +65,7 @@ public class SwiftTwitterLoginPlugin: NSObject, FlutterPlugin, ASWebAuthenticati
             }
         } else {
             // iOS10以前は未対応
-            result(nil)
+            result("")
             return
         }
     }
