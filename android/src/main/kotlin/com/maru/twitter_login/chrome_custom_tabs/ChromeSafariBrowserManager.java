@@ -49,6 +49,7 @@ public class ChromeSafariBrowserManager implements MethodChannel.MethodCallHandl
     public void open(Activity activity, String id, String url, MethodChannel.Result result) {
         if (!CustomTabActivityHelper.isAvailable(activity)) {
             result.success(false);
+            return;
         }
 
         Bundle extras = new Bundle();
