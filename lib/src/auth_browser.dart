@@ -65,11 +65,14 @@ class AuthBrowser {
       throw PlatformException(code: 'AuthBrowser is opened.');
     }
 
-    _isOpen = true;
-    return await _channel.invokeMethod('open', {
+    final available = await _channel.invokeMethod('open', {
       'url': url,
       'redirectURL': scheme,
       'id': id,
     });
+    if (available) {
+      _isOpen = true;
+    }
+    return available;
   }
 }
