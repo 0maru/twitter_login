@@ -57,16 +57,16 @@ class AuthBrowser {
   }
 
   ///　Open a web browser and log in to your Twitter account.
-  Future<void> open(String url, String scheme) async {
+  Future<bool> open(String url, String scheme) async {
     if (Platform.isIOS) {
-      return;
+      return false;
     }
     if (_isOpen) {
       throw PlatformException(code: 'AuthBrowser is opened.');
     }
 
     _isOpen = true;
-    await _channel.invokeMethod('open', {
+    return await _channel.invokeMethod('open', {
       'url': url,
       'redirectURL': scheme,
       'id': id,
