@@ -95,3 +95,7 @@
 
 * remove flutter_inappwebview as a dependency [#48](https://github.com/0maru/twitter_login/issues/48)
 * update dependencies
+
+## 4.0.1
+
+* Fix browser suspend when custom tabs is unavailable
