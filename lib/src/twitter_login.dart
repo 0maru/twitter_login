@@ -34,8 +34,7 @@ class TwitterLogin {
 
   static const _channel = const MethodChannel('twitter_login');
   static final _eventChannel = EventChannel('twitter_login/event');
-  static final Stream<dynamic> _eventStream =
-      _eventChannel.receiveBroadcastStream();
+  static final Stream<dynamic> _eventStream = _eventChannel.receiveBroadcastStream();
 
   /// constructor
   TwitterLogin({
@@ -92,21 +91,23 @@ class TwitterLogin {
     try {
       if (Platform.isIOS) {
         /// Login to Twitter account with SFAuthenticationSession or ASWebAuthenticationSession.
-        resultURI =
-            await authBrowser.doAuth(requestToken.authorizeURI, uri.scheme);
+        resultURI = await authBrowser.doAuth(requestToken.authorizeURI, uri.scheme);
       } else if (Platform.isAndroid) {
         // Login to Twitter account with chrome_custom_tabs.
-        final success =
-            await authBrowser.open(requestToken.authorizeURI, uri.scheme);
+        final success = await authBrowser.open(requestToken.authorizeURI, uri.scheme);
         if (!success) {
-          throw UnsupportedError(
-            'Could not open browser, probably caused by unavailable custom tabs.',
+          throw PlatformException(
+            code: '200',
+            message: 'Could not open browser, probably caused by unavailable custom tabs.',
           );
         }
         resultURI = await completer.future;
         subscribe.cancel();
       } else {
-        throw UnsupportedError('Not supported by this os.');
+        throw PlatformException(
+          code: '100',
+          message: 'Not supported by this os.',
+        );
       }
 
       // The user closed the browser.
