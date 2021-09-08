@@ -69,7 +69,7 @@ class User {
       );
       return User(params);
     } on Exception catch (error) {
-      throw Exception(error);
+      rethrow;
     }
   }
 }
