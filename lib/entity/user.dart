@@ -68,7 +68,7 @@ class User {
         accessTokenSecret,
       );
       return User(params);
-    } on Exception catch (error) {
+    } on Exception {
       rethrow;
     }
   }
