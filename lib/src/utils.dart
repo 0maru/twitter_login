@@ -53,8 +53,8 @@ Future<Map<String, dynamic>>? httpPost(
     }
 
     return Uri.splitQueryString(res.body);
-  } on Exception catch (error) {
-    throw Exception(error);
+  } on Exception {
+    rethrow;
   }
 }
 
@@ -86,8 +86,8 @@ Future<Map<String, dynamic>> httpGet(
     }
 
     return jsonDecode(res.body);
-  } on Exception catch (error) {
-    throw Exception(error);
+  } on Exception {
+    rethrow;
   }
 }
 
