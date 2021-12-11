@@ -64,7 +64,7 @@ class TwitterLogin {
     }
 
     final uri = Uri.parse(redirectURI);
-    final completer = Completer<String>();
+    final completer = Completer<String?>();
     late StreamSubscription subscribe;
 
     if (Platform.isAndroid) {
@@ -83,7 +83,7 @@ class TwitterLogin {
     final authBrowser = AuthBrowser(
       onClose: () {
         if (!completer.isCompleted) {
-          completer.complete('');
+          completer.complete(null);
         }
       },
     );
@@ -111,11 +111,11 @@ class TwitterLogin {
       }
 
       // The user closed the browser.
-      if (resultURI!.isEmpty) {
+      if (resultURI?.isEmpty ?? true) {
         throw CanceledByUserException();
       }
 
-      final queries = Uri.splitQueryString(Uri.parse(resultURI).query);
+      final queries = Uri.splitQueryString(Uri.parse(resultURI!).query);
       if (queries['error'] != null) {
         throw Exception('Error Response: ${queries['error']}');
       }
@@ -135,7 +135,7 @@ class TwitterLogin {
         authToken: token.authToken,
         authTokenSecret: token.authTokenSecret,
         status: TwitterLoginStatus.loggedIn,
-        errorMessage: '',
+        errorMessage: null,
         user: await User.getUserData(
           apiKey,
           apiSecretKey,
