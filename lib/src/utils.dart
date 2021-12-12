@@ -120,3 +120,7 @@ String createCryptoRandomString([int length = 32]) {
 
   return base64Url.encode(values);
 }
+
+extension MapExt on Map {
+  T? get<T>(String key) => this.containsKey(key) ? this[key] as T : null;
+}

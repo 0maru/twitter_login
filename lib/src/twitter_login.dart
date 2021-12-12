@@ -131,6 +131,16 @@ class TwitterLogin {
         queries,
       );
 
+      if ((token.authToken?.isEmpty ?? true) || (token.authTokenSecret?.isEmpty ?? true)) {
+        return AuthResult(
+          authToken: token.authToken,
+          authTokenSecret: token.authTokenSecret,
+          status: TwitterLoginStatus.error,
+          errorMessage: 'Failed',
+          user: null,
+        );
+      }
+
       return AuthResult(
         authToken: token.authToken,
         authTokenSecret: token.authTokenSecret,
@@ -139,8 +149,8 @@ class TwitterLogin {
         user: await User.getUserData(
           apiKey,
           apiSecretKey,
-          token.authToken,
-          token.authTokenSecret,
+          token.authToken!,
+          token.authTokenSecret!,
         ),
       );
     } on CanceledByUserException {
