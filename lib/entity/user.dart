@@ -1,3 +1,4 @@
+import 'package:twitter_login/src/oauth_2.dart';
 import 'package:twitter_login/src/utils.dart';
 
 /// https://developer.twitter.com/en/docs/twitter-api/data-dictionary/object-model/user
@@ -8,14 +9,23 @@ class User {
   final int _id;
 
   /// user email address
+  @Deprecated('')
   final String _email;
 
   /// user profile image
   final String _thumbnailImage;
 
+  /// The Twitter screen name, handle, or alias that this user identifies themselves with.
+  /// Usernames are unique but subject to change.
+  /// Typically a maximum of 15 characters long, but some historical accounts may exist with longer names.
+  ///
   /// user name
   final String _name;
 
+  /// The name of the user, as they’ve defined it on their profile.
+  /// Not necessarily a person’s name.
+  /// Typically capped at 50 characters, but subject to change.
+  ///
   /// user name
   final String _screenName;
 
@@ -29,6 +39,7 @@ class User {
   /// If your Twitter account does not have an email address,
   /// or if the API is not configured to retrieve email addresses,
   /// you may not be able to retrieve email addresses.
+  @Deprecated('')
   String get email => _email;
 
   /// thumbnailImage
@@ -42,11 +53,11 @@ class User {
 
   /// constructor
   User(Map<String, dynamic> params)
-      : this._id = params['id'] ?? '',
-        this._email = params['email'] ?? '',
-        this._thumbnailImage = params['profile_image_url_https'],
-        this._name = params['name'],
-        this._screenName = params['screen_name'];
+      : this._id = int.parse(params.get('id')),
+        this._email = params.get('email') ?? '',
+        this._thumbnailImage = params.get('profile_image_url_https'),
+        this._name = params.get('name'),
+        this._screenName = params.get('screen_name');
 
   /// get user info
   static Future<User> getUserData(
@@ -62,14 +73,52 @@ class User {
       );
       final params = await httpGet(
         ACCOUNT_VERIFY_URI,
-        authParams,
-        apiKey,
-        apiSecretKey,
-        accessTokenSecret,
+        authHeader: authParams,
+        apiKey: apiKey,
+        apiSecretKey: apiSecretKey,
+        tokenSecret: accessTokenSecret,
       );
       return User(params);
     } on Exception catch (error) {
       throw Exception(error);
+    }
+  }
+
+  /// get user info.
+  ///
+  /// use Twitter API v2.
+  ///
+  /// https://api.twitter.com/2/users
+  static Future<User> getUserDataV2(
+    String apiKey,
+    String apiSecretKey,
+    String accessToken,
+    String accessTokenSecret,
+    String userId,
+  ) async {
+    try {
+      final token = await Oauth2.getBearerToken(apiKey: apiKey, apiSecretKey: apiSecretKey);
+      if (token?.isEmpty ?? true) {
+        throw Exception();
+      }
+
+      final params = await httpGetFromBearerToken(
+        '$USER_LOCKUP_URI/$userId',
+        query: {'user.fields': 'id,name,username,profile_image_url'},
+        bearerToken: token!,
+      );
+
+      // migrate v2 user model to v1.0a user model.
+      final data = params['data'] as Map<String, dynamic>;
+      final userDict = {
+        ...data,
+        'profile_image_url_https': data['profile_image_url'],
+        'screen_name': data['username'],
+      };
+
+      return User(userDict);
+    } on Exception {
+      rethrow;
     }
   }
 }
