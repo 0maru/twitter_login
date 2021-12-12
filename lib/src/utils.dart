@@ -18,6 +18,8 @@ const ACCESS_TOKEN_URI = 'https://api.twitter.com/oauth/access_token';
 const ACCOUNT_VERIFY_URI =
     'https://api.twitter.com/1.1/account/verify_credentials.json?include_email=true';
 
+const USER_LOCKUP_URI = 'https://api.twitter.com/2/users';
+
 ///
 String? generateAuthHeader(Map<String, dynamic> params) {
   return 'OAuth ' +
@@ -59,32 +61,54 @@ Future<Map<String, dynamic>>? httpPost(
 }
 
 Future<Map<String, dynamic>> httpGet(
-  String url,
-  Map<String, dynamic> params,
-  String apiKey,
-  String apiSecretKey,
-  String tokenSecret,
-) async {
+  String url, {
+  Map<String, dynamic>? query,
+  required Map<String, dynamic> authHeader,
+  required String apiKey,
+  required String apiSecretKey,
+  required String tokenSecret,
+}) async {
   try {
     final _signature = Signature(
       url: url,
       method: 'GET',
-      params: params,
+      params: authHeader,
       apiKey: apiKey,
       apiSecretKey: apiSecretKey,
       tokenSecretKey: tokenSecret,
     );
-    params['oauth_signature'] = _signature.signatureHmacSha1();
-    final header = generateAuthHeader(params);
+    authHeader['oauth_signature'] = _signature.signatureHmacSha1();
+    final header = generateAuthHeader(authHeader);
     final http.Client _httpClient = http.Client();
+    final _url = Uri.parse(url).replace(queryParameters: query);
     final http.Response res = await _httpClient.get(
-      Uri.parse(url),
+      _url,
       headers: <String, String>{'Authorization': header!},
     );
     if (res.statusCode != 200) {
       throw HttpException("Failed ${res.reasonPhrase}");
     }
 
+    return jsonDecode(res.body);
+  } on Exception catch (error) {
+    throw Exception(error);
+  }
+}
+
+Future<Map<String, dynamic>> httpGetFromBearerToken(
+  String url, {
+  Map<String, dynamic>? query,
+  required String bearerToken,
+}) async {
+  try {
+    final http.Client _httpClient = http.Client();
+    final http.Response res = await _httpClient.get(
+      Uri.parse(url).replace(queryParameters: query),
+      headers: <String, String>{'Authorization': 'Bearer $bearerToken'},
+    );
+    if (res.statusCode != 200) {
+      throw HttpException("Failed ${res.reasonPhrase}");
+    }
     return jsonDecode(res.body);
   } on Exception catch (error) {
     throw Exception(error);
