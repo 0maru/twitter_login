@@ -2,18 +2,16 @@ import 'package:twitter_login/src/utils.dart';
 
 /// The access token for Twitter API.
 class AccessToken {
-  /// The access token for using the Twitter APIs
-  final String _authToken;
+  final String? authToken;
+  final String? authTokenSecret;
+  final String? userId;
+  final String? screenName;
 
-  /// The access token secret for using the Twitter APIs
-  final String _authTokenSecret;
-
-  String get authToken => _authToken;
-  String get authTokenSecret => _authTokenSecret;
-
-  AccessToken(Map<String, dynamic>? params)
-      : this._authToken = params!['oauth_token'],
-        this._authTokenSecret = params['oauth_token_secret'];
+  AccessToken(Map<String, dynamic> params)
+      : this.authToken = params.get<String>('oauth_token'),
+        this.authTokenSecret = params.get<String>('oauth_token_secret'),
+        this.userId = params.get<String>('user_id'),
+        this.screenName = params.get<String>('screen_name');
 
   static Future<AccessToken> getAccessToken(
     String apiKey,
@@ -31,7 +29,9 @@ class AccessToken {
       apiKey,
       apiSecretKey,
     );
-    final accessToken = AccessToken(params);
-    return accessToken;
+    if (params == null) {
+      throw Exception();
+    }
+    return AccessToken(params);
   }
 }

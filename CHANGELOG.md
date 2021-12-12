@@ -99,3 +99,7 @@
 ## 4.0.1
 
 * Fix browser suspend when custom tabs is unavailable
+
+## 4.1.0-dev
+
+* Supported By Twitter API V2.0 ( Fixes [#67](https://github.com/0maru/twitter_login/issues/67) & [#69](https://github.com/0maru/twitter_login/issues/69) )
