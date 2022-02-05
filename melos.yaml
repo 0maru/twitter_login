@@ -1,0 +1,11 @@
+name: twitter_login
+repository: https://github.com/0maru/twitter_login
+
+packages:
+  - packages/**
+
+scripts:
+  analyze:
+    run: |
+      melos exec -- \
+        "dart analyze ."
