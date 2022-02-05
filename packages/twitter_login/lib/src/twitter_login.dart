@@ -2,46 +2,26 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/services.dart';
-import 'package:twitter_login/entity/auth_result.dart';
-import 'package:twitter_login/entity/user.dart';
-import 'package:twitter_login/schemes/access_token.dart';
-import 'package:twitter_login/schemes/request_token.dart';
 import 'package:twitter_login/src/auth_browser.dart';
-import 'package:twitter_login/src/exception.dart';
-
-/// The status after a Twitter login flow has completed.
-enum TwitterLoginStatus {
-  /// The login was successful and the user is now logged in.
-  loggedIn,
-
-  /// The user cancelled the login flow.
-  cancelledByUser,
-
-  /// The Twitter login completed with an error
-  error,
-}
+import 'package:twitter_login_platform_interface/twitter_login_platform_interface.dart';
 
 ///
-class TwitterLogin {
-  /// Consumer API key
-  final String apiKey;
-
-  /// Consumer API secret key
-  final String apiSecretKey;
-
-  /// Callback URL
-  final String redirectURI;
-
+class TwitterLogin extends TwitterLoginPlatform {
   static const _channel = const MethodChannel('twitter_login');
   static final _eventChannel = EventChannel('twitter_login/event');
   static final Stream<dynamic> _eventStream = _eventChannel.receiveBroadcastStream();
 
-  /// constructor
   TwitterLogin({
-    required this.apiKey,
-    required this.apiSecretKey,
-    required this.redirectURI,
-  });
+    required String apiKey,
+    required String apiSecretKey,
+    required String redirectURI,
+  }) : super(
+          apiKey: apiKey,
+          apiSecretKey: apiSecretKey,
+          redirectURI: redirectURI,
+        );
+
+  /// constructor
 
   /// Logs the user
   /// Forces the user to enter their credentials to ensure the correct users account is authorized.
@@ -127,12 +107,13 @@ class TwitterLogin {
         authTokenSecret: token.authTokenSecret,
         status: TwitterLoginStatus.loggedIn,
         errorMessage: '',
-        user: await User.getUserData(
-          apiKey,
-          apiSecretKey,
-          token.authToken,
-          token.authTokenSecret,
-        ),
+        user: null,
+        // user: await TwitterUser.getUserData(
+        //   apiKey,
+        //   apiSecretKey,
+        //   token.authToken,
+        //   token.authTokenSecret,
+        // ),
       );
     } on CanceledByUserException {
       return AuthResult(
