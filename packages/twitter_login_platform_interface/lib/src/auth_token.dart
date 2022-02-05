@@ -13,6 +13,13 @@ class AuthToken {
   /// Oauth token secret
   final String authTokenSecret;
 
+  factory AuthToken.fromJson(Map<String, dynamic> params) {
+    return AuthToken(
+      authToken: params['oauth_token'] ?? '',
+      authTokenSecret: params['oauth_token_secret'] ?? '',
+    );
+  }
+
   @override
   int get hashCode => hashObjects(<String>[authToken, authTokenSecret]);
 
