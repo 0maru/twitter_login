@@ -1,7 +1,9 @@
 name: twitter_login_platform_interface
-description: A new Flutter project.
+description: A common platform interface for the twitter_login plugin.
+homepage: https://github.com/0maru/twitter_login/packages/twitter_login_platform_interface
+repository: https://github.com/0maru/twitter_login/packages/twitter_login_platform_interface
 
-version: 1.0.0+1
+version: 1.0.0
 
 environment:
   sdk: ">=2.15.1 <3.0.0"
@@ -10,6 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
   quiver: ^3.0.0
+  plugin_platform_interface: ^2.0.0
 
 dev_dependencies:
   flutter_test:
