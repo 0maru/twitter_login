@@ -11,6 +11,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  twitter_login_platform_interface:
+    path: ../twitter_login_platform_interface
   crypto: ^3.0.1
   http: ^0.13.3
 
