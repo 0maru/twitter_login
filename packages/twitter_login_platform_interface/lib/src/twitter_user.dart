@@ -28,6 +28,16 @@ class TwitterUser {
   /// user name
   final String screenName;
 
+  factory TwitterUser.fromJson(Map<String, dynamic> params) {
+    return TwitterUser(
+      id: params['id'] ?? '',
+      email: params['email'] ?? '',
+      thumbnailImage: params['profile_image_url_https'] ?? '',
+      name: params['name'] ?? '',
+      screenName: params['screen_name'] ?? '',
+    );
+  }
+
   @override
   int get hashCode =>
       hashObjects(<String?>[id.toString(), email, thumbnailImage, name, screenName]);
