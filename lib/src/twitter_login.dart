@@ -8,6 +8,7 @@ import 'package:twitter_login/schemes/access_token.dart';
 import 'package:twitter_login/schemes/request_token.dart';
 import 'package:twitter_login/src/auth_browser.dart';
 import 'package:twitter_login/src/exception.dart';
+import 'package:twitter_login/src/oauth_2.dart';
 
 /// The status after a Twitter login flow has completed.
 enum TwitterLoginStatus {
@@ -34,7 +35,8 @@ class TwitterLogin {
 
   static const _channel = const MethodChannel('twitter_login');
   static final _eventChannel = EventChannel('twitter_login/event');
-  static final Stream<dynamic> _eventStream = _eventChannel.receiveBroadcastStream();
+  static final Stream<dynamic> _eventStream =
+      _eventChannel.receiveBroadcastStream();
 
   /// constructor
   TwitterLogin({
@@ -91,14 +93,17 @@ class TwitterLogin {
     try {
       if (Platform.isIOS) {
         /// Login to Twitter account with SFAuthenticationSession or ASWebAuthenticationSession.
-        resultURI = await authBrowser.doAuth(requestToken.authorizeURI, uri.scheme);
+        resultURI =
+            await authBrowser.doAuth(requestToken.authorizeURI, uri.scheme);
       } else if (Platform.isAndroid) {
         // Login to Twitter account with chrome_custom_tabs.
-        final success = await authBrowser.open(requestToken.authorizeURI, uri.scheme);
+        final success =
+            await authBrowser.open(requestToken.authorizeURI, uri.scheme);
         if (!success) {
           throw PlatformException(
             code: '200',
-            message: 'Could not open browser, probably caused by unavailable custom tabs.',
+            message:
+                'Could not open browser, probably caused by unavailable custom tabs.',
           );
         }
         resultURI = await completer.future;
@@ -131,7 +136,8 @@ class TwitterLogin {
         queries,
       );
 
-      if ((token.authToken?.isEmpty ?? true) || (token.authTokenSecret?.isEmpty ?? true)) {
+      if ((token.authToken?.isEmpty ?? true) ||
+          (token.authTokenSecret?.isEmpty ?? true)) {
         return AuthResult(
           authToken: token.authToken,
           authTokenSecret: token.authTokenSecret,
@@ -218,14 +224,17 @@ class TwitterLogin {
     try {
       if (Platform.isIOS) {
         /// Login to Twitter account with SFAuthenticationSession or ASWebAuthenticationSession.
-        resultURI = await authBrowser.doAuth(requestToken.authorizeURI, uri.scheme);
+        resultURI =
+            await authBrowser.doAuth(requestToken.authorizeURI, uri.scheme);
       } else if (Platform.isAndroid) {
         // Login to Twitter account with chrome_custom_tabs.
-        final success = await authBrowser.open(requestToken.authorizeURI, uri.scheme);
+        final success =
+            await authBrowser.open(requestToken.authorizeURI, uri.scheme);
         if (!success) {
           throw PlatformException(
             code: '200',
-            message: 'Could not open browser, probably caused by unavailable custom tabs.',
+            message:
+                'Could not open browser, probably caused by unavailable custom tabs.',
           );
         }
         resultURI = await completer.future;
@@ -258,7 +267,8 @@ class TwitterLogin {
         queries,
       );
 
-      if ((token.authToken?.isEmpty ?? true) || (token.authTokenSecret?.isEmpty ?? true)) {
+      if ((token.authToken?.isEmpty ?? true) ||
+          (token.authTokenSecret?.isEmpty ?? true)) {
         return AuthResult(
           authToken: token.authToken,
           authTokenSecret: token.authTokenSecret,
@@ -276,7 +286,15 @@ class TwitterLogin {
         token.userId!,
       );
 
+      final bearerToken = await Oauth2.getBearerToken(
+          apiKey: apiKey, apiSecretKey: apiSecretKey);
+
+      if (bearerToken?.isEmpty ?? true) {
+        throw Exception();
+      }
+
       return AuthResult(
+        bearerToken: bearerToken,
         authToken: token.authToken,
         authTokenSecret: token.authTokenSecret,
         status: TwitterLoginStatus.loggedIn,

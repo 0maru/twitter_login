@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:twitter_login/twitter_login.dart';
-import 'package:twitter_login_example/env.dart';
 
 void main() {
   runApp(MyApp());
@@ -39,8 +38,10 @@ class _MyAppState extends State<MyApp> {
                 child: TextButton(
                   child: Text('use Twitter API v1.1'),
                   style: ButtonStyle(
-                    foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                    backgroundColor: MaterialStateProperty.all<Color>(Colors.blueAccent),
+                    foregroundColor:
+                        MaterialStateProperty.all<Color>(Colors.white),
+                    backgroundColor:
+                        MaterialStateProperty.all<Color>(Colors.blueAccent),
                     minimumSize: MaterialStateProperty.all<Size>(Size(160, 48)),
                   ),
                   onPressed: () async {
@@ -53,8 +54,10 @@ class _MyAppState extends State<MyApp> {
                 child: TextButton(
                   child: Text('use Twitter API v2.0'),
                   style: ButtonStyle(
-                    foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                    backgroundColor: MaterialStateProperty.all<Color>(Colors.blueAccent),
+                    foregroundColor:
+                        MaterialStateProperty.all<Color>(Colors.white),
+                    backgroundColor:
+                        MaterialStateProperty.all<Color>(Colors.blueAccent),
                     minimumSize: MaterialStateProperty.all<Size>(Size(160, 48)),
                   ),
                   onPressed: () async {
@@ -73,15 +76,15 @@ class _MyAppState extends State<MyApp> {
   Future login() async {
     final twitterLogin = TwitterLogin(
       /// Consumer API keys
-      apiKey: API_KEY,
+      apiKey: 'QsO2ZLJ0UIxsYcEm6J5OIDm6Y',
 
       /// Consumer API Secret keys
-      apiSecretKey: API_SECRET_KEY,
+      apiSecretKey: 'K52OivM1Zpm2mKPDR2bW7NuXYij0s1j4dGwnTCxTqUXN9LOBbB',
 
       /// Registered Callback URLs in TwitterApp
       /// Android is a deeplink
       /// iOS is a URLScheme
-      redirectURI: 'example://',
+      redirectURI: 'mio://',
     );
 
     /// Forces the user to enter their credentials
@@ -110,15 +113,15 @@ class _MyAppState extends State<MyApp> {
   Future loginV2() async {
     final twitterLogin = TwitterLogin(
       /// Consumer API keys
-      apiKey: API_KEY,
+      apiKey: 'QsO2ZLJ0UIxsYcEm6J5OIDm6Y',
 
       /// Consumer API Secret keys
-      apiSecretKey: API_SECRET_KEY,
+      apiSecretKey: 'K52OivM1Zpm2mKPDR2bW7NuXYij0s1j4dGwnTCxTqUXN9LOBbB',
 
       /// Registered Callback URLs in TwitterApp
       /// Android is a deeplink
       /// iOS is a URLScheme
-      redirectURI: 'example://',
+      redirectURI: 'mio://',
     );
 
     /// Forces the user to enter their credentials

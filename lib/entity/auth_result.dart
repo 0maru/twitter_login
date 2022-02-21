@@ -9,6 +9,9 @@ class AuthResult {
   /// The access token for using the Twitter APIs
   final String? _authToken;
 
+  /// The bearer token for using the Twitter APIs
+  final String? _bearerToken;
+
   //// The access token secret for using the Twitter APIs
   final String? _authTokenSecret;
 
@@ -22,6 +25,7 @@ class AuthResult {
   final User? _user;
 
   String? get authToken => _authToken;
+  String? get bearerToken => _bearerToken;
   String? get authTokenSecret => _authTokenSecret;
   TwitterLoginStatus? get status => _status;
   String? get errorMessage => _errorMessage;
@@ -30,11 +34,13 @@ class AuthResult {
   /// constructor
   AuthResult({
     String? authToken,
+    String? bearerToken,
     String? authTokenSecret,
     TwitterLoginStatus? status,
     String? errorMessage,
     User? user,
   })  : this._authToken = authToken,
+        this._bearerToken = bearerToken,
         this._authTokenSecret = authTokenSecret,
         this._status = status,
         this._errorMessage = errorMessage,
