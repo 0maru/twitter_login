@@ -1,8 +1,8 @@
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
-import 'package:twitter_login_platform_interface/twitter_login_platform_interface.dart';
 
 import 'access_token.dart';
 import 'auth_result.dart';
+import 'twitter_user.dart';
 
 /// The interface that implementations of twitter_login must implement.
 abstract class TwitterLoginPlatform extends PlatformInterface {

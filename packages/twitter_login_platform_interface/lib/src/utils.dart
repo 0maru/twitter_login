@@ -1,3 +1,5 @@
+import 'dart:math';
+
 /// The status after a Twitter login flow has completed.
 enum TwitterLoginStatus {
   /// The login was successful and the user is now logged in.
@@ -21,3 +23,11 @@ const authorizePath = 'oauth/authorize';
 
 /// Allows a Consumer application to use an OAuth request_token to request user authorization.
 const accessTokenPath = 'oauth/access_token';
+
+/// Generate a cryptographically secure random nonce
+String generateNonce([int length = 32]) {
+  const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz';
+  final random = Random.secure();
+
+  return List.generate(length, (_) => chars[random.nextInt(chars.length)]).join();
+}
