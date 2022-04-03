@@ -18,6 +18,8 @@ const ACCESS_TOKEN_URI = 'https://api.twitter.com/oauth/access_token';
 const ACCOUNT_VERIFY_URI =
     'https://api.twitter.com/1.1/account/verify_credentials.json?include_email=true';
 
+const USER_LOCKUP_URI = 'https://api.twitter.com/2/users';
+
 ///
 String? generateAuthHeader(Map<String, dynamic> params) {
   return 'OAuth ' +
@@ -53,38 +55,60 @@ Future<Map<String, dynamic>>? httpPost(
     }
 
     return Uri.splitQueryString(res.body);
-  } on Exception catch (error) {
-    throw Exception(error);
+  } on Exception {
+    rethrow;
   }
 }
 
 Future<Map<String, dynamic>> httpGet(
-  String url,
-  Map<String, dynamic> params,
-  String apiKey,
-  String apiSecretKey,
-  String tokenSecret,
-) async {
+  String url, {
+  Map<String, dynamic>? query,
+  required Map<String, dynamic> authHeader,
+  required String apiKey,
+  required String apiSecretKey,
+  required String tokenSecret,
+}) async {
   try {
     final _signature = Signature(
       url: url,
       method: 'GET',
-      params: params,
+      params: authHeader,
       apiKey: apiKey,
       apiSecretKey: apiSecretKey,
       tokenSecretKey: tokenSecret,
     );
-    params['oauth_signature'] = _signature.signatureHmacSha1();
-    final header = generateAuthHeader(params);
+    authHeader['oauth_signature'] = _signature.signatureHmacSha1();
+    final header = generateAuthHeader(authHeader);
     final http.Client _httpClient = http.Client();
+    final _url = Uri.parse(url).replace(queryParameters: query);
     final http.Response res = await _httpClient.get(
-      Uri.parse(url),
+      _url,
       headers: <String, String>{'Authorization': header!},
     );
     if (res.statusCode != 200) {
       throw HttpException("Failed ${res.reasonPhrase}");
     }
 
+    return jsonDecode(res.body);
+  } on Exception {
+    rethrow;
+  }
+}
+
+Future<Map<String, dynamic>> httpGetFromBearerToken(
+  String url, {
+  Map<String, dynamic>? query,
+  required String bearerToken,
+}) async {
+  try {
+    final http.Client _httpClient = http.Client();
+    final http.Response res = await _httpClient.get(
+      Uri.parse(url).replace(queryParameters: query),
+      headers: <String, String>{'Authorization': 'Bearer $bearerToken'},
+    );
+    if (res.statusCode != 200) {
+      throw HttpException("Failed ${res.reasonPhrase}");
+    }
     return jsonDecode(res.body);
   } on Exception catch (error) {
     throw Exception(error);
@@ -119,4 +143,8 @@ String createCryptoRandomString([int length = 32]) {
   var values = List<int>.generate(length, (i) => Random.secure().nextInt(256));
 
   return base64Url.encode(values);
+}
+
+extension MapExt on Map {
+  T? get<T>(String key) => this.containsKey(key) ? this[key] as T : null;
 }

@@ -16,10 +16,10 @@ class TwitterLogin extends TwitterLoginPlatform {
     required String apiSecretKey,
     required String redirectURI,
   }) : super(
-          apiKey: apiKey,
-          apiSecretKey: apiSecretKey,
-          redirectURI: redirectURI,
-        );
+    apiKey: apiKey,
+    apiSecretKey: apiSecretKey,
+    redirectURI: redirectURI,
+  );
 
   /// constructor
 
@@ -44,7 +44,7 @@ class TwitterLogin extends TwitterLoginPlatform {
     }
 
     final uri = Uri.parse(redirectURI);
-    final completer = Completer<String>();
+    final completer = Completer<String?>();
     late StreamSubscription subscribe;
 
     if (Platform.isAndroid) {
@@ -63,7 +63,7 @@ class TwitterLogin extends TwitterLoginPlatform {
     final authBrowser = AuthBrowser(
       onClose: () {
         if (!completer.isCompleted) {
-          completer.complete('');
+          completer.complete(null);
         }
       },
     );
@@ -74,19 +74,30 @@ class TwitterLogin extends TwitterLoginPlatform {
         resultURI = await authBrowser.doAuth(requestToken.authorizeURI, uri.scheme);
       } else if (Platform.isAndroid) {
         // Login to Twitter account with chrome_custom_tabs.
-        await authBrowser.open(requestToken.authorizeURI, uri.scheme);
+        final success = await authBrowser.open(requestToken.authorizeURI, uri.scheme);
+        if (!success) {
+          throw PlatformException(
+            code: '200',
+            message: 'Could not open browser, probably caused by unavailable custom tabs.',
+          );
+        }
         resultURI = await completer.future;
         subscribe.cancel();
       } else {
-        throw UnsupportedError('Not supported by this os.');
+        throw PlatformException(
+          code: '100',
+          message: 'Not supported by this os.',
+        );
       }
 
       // The user closed the browser.
-      if (resultURI!.isEmpty) {
+      if (resultURI?.isEmpty ?? true) {
         throw CanceledByUserException();
       }
 
-      final queries = Uri.splitQueryString(Uri.parse(resultURI).query);
+      final queries = Uri.splitQueryString(Uri
+          .parse(resultURI!)
+          .query);
       if (queries['error'] != null) {
         throw Exception('Error Response: ${queries['error']}');
       }
@@ -102,18 +113,154 @@ class TwitterLogin extends TwitterLoginPlatform {
         queries,
       );
 
+      if ((token.authToken?.isEmpty ?? true) || (token.authTokenSecret?.isEmpty ?? true)) {
+        return AuthResult(
+          authToken: token.authToken,
+          authTokenSecret: token.authTokenSecret,
+          status: TwitterLoginStatus.error,
+          errorMessage: 'Failed',
+          user: null,
+        );
+      }
+
       return AuthResult(
         authToken: token.authToken,
         authTokenSecret: token.authTokenSecret,
         status: TwitterLoginStatus.loggedIn,
         errorMessage: '',
         user: null,
-        // user: await TwitterUser.getUserData(
-        //   apiKey,
-        //   apiSecretKey,
-        //   token.authToken,
-        //   token.authTokenSecret,
-        // ),
+      );
+    } on CanceledByUserException {
+      return AuthResult(
+        authToken: null,
+        authTokenSecret: null,
+        status: TwitterLoginStatus.cancelledByUser,
+        errorMessage: 'The user cancelled the login flow.',
+        user: null,
+      );
+    } catch (error) {
+      return AuthResult(
+        authToken: null,
+        authTokenSecret: null,
+        status: TwitterLoginStatus.error,
+        errorMessage: error.toString(),
+        user: null,
+      );
+    }
+  }
+
+  Future<AuthResult> loginV2({bool forceLogin = false}) async {
+    String? resultURI;
+    RequestToken requestToken;
+    try {
+      requestToken = await RequestToken.getRequestToken(
+        apiKey,
+        apiSecretKey,
+        redirectURI,
+        forceLogin,
+      );
+    } on Exception {
+      throw PlatformException(
+        code: "400",
+        message: "Failed to generate request token.",
+        details: "Please check your APIKey or APISecret.",
+      );
+    }
+
+    final uri = Uri.parse(redirectURI);
+    final completer = Completer<String?>();
+    late StreamSubscription subscribe;
+
+    if (Platform.isAndroid) {
+      await _channel.invokeMethod('setScheme', uri.scheme);
+      subscribe = _eventStream.listen((data) async {
+        if (data['type'] == 'url') {
+          if (!completer.isCompleted) {
+            completer.complete(data['url']?.toString());
+          } else {
+            throw CanceledByUserException();
+          }
+        }
+      });
+    }
+
+    final authBrowser = AuthBrowser(
+      onClose: () {
+        if (!completer.isCompleted) {
+          completer.complete(null);
+        }
+      },
+    );
+
+    try {
+      if (Platform.isIOS) {
+        /// Login to Twitter account with SFAuthenticationSession or ASWebAuthenticationSession.
+        resultURI = await authBrowser.doAuth(requestToken.authorizeURI, uri.scheme);
+      } else if (Platform.isAndroid) {
+        // Login to Twitter account with chrome_custom_tabs.
+        final success = await authBrowser.open(requestToken.authorizeURI, uri.scheme);
+        if (!success) {
+          throw PlatformException(
+            code: '200',
+            message: 'Could not open browser, probably caused by unavailable custom tabs.',
+          );
+        }
+        resultURI = await completer.future;
+        subscribe.cancel();
+      } else {
+        throw PlatformException(
+          code: '100',
+          message: 'Not supported by this os.',
+        );
+      }
+
+      // The user closed the browser.
+      if (resultURI?.isEmpty ?? true) {
+        throw CanceledByUserException();
+      }
+
+      final queries = Uri.splitQueryString(Uri
+          .parse(resultURI!)
+          .query);
+      if (queries['error'] != null) {
+        throw Exception('Error Response: ${queries['error']}');
+      }
+
+      // The user cancelled the login flow.
+      if (queries['denied'] != null) {
+        throw CanceledByUserException();
+      }
+
+      final token = await AccessToken.getAccessToken(
+        apiKey,
+        apiSecretKey,
+        queries,
+      );
+
+      if ((token.authToken?.isEmpty ?? true) || (token.authTokenSecret?.isEmpty ?? true)) {
+        return AuthResult(
+          authToken: token.authToken,
+          authTokenSecret: token.authTokenSecret,
+          status: TwitterLoginStatus.error,
+          errorMessage: 'Failed',
+          user: null,
+        );
+      }
+
+      final user = await User.getUserDataV2(
+        apiKey,
+        apiSecretKey,
+        token.authToken!,
+        token.authTokenSecret!,
+        token.userId!,
+      );
+
+      return AuthResult(
+        authToken: token.authToken,
+        authTokenSecret: token.authTokenSecret,
+        status: TwitterLoginStatus.loggedIn,
+        errorMessage: null,
+        user: user,
       );
     } on CanceledByUserException {
       return AuthResult(
