@@ -39,7 +39,7 @@ class User {
   /// If your Twitter account does not have an email address,
   /// or if the API is not configured to retrieve email addresses,
   /// you may not be able to retrieve email addresses.
-  @Deprecated('')
+  @Deprecated('Discontinue if Twitter api v2 does not provide a way to get an email.')
   String get email => _email;
 
   /// thumbnailImage
@@ -53,11 +53,11 @@ class User {
 
   /// constructor
   User(Map<String, dynamic> params)
-      : this._id = int.parse(params.get('id')),
-        this._email = params.get('email') ?? '',
-        this._thumbnailImage = params.get('profile_image_url_https'),
-        this._name = params.get('name'),
-        this._screenName = params.get('screen_name');
+      : this._id = params.get<int>('id')!,
+        this._email = params.get<String>('email') ?? '',
+        this._thumbnailImage = params.get<String>('profile_image_url_https') ?? '',
+        this._name = params.get<String>('name') ?? '',
+        this._screenName = params.get<String>('screen_name') ?? '';
 
   /// get user info
   static Future<User> getUserData(
