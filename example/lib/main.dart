@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:twitter_login/twitter_login.dart';
-import 'package:twitter_login_example/env.dart';
+// import 'package:twitter_login_example/env.dart';
 
 void main() {
   runApp(MyApp());
@@ -73,10 +73,10 @@ class _MyAppState extends State<MyApp> {
   Future login() async {
     final twitterLogin = TwitterLogin(
       /// Consumer API keys
-      apiKey: API_KEY,
+      apiKey: 'API_KEY',
 
       /// Consumer API Secret keys
-      apiSecretKey: API_SECRET_KEY,
+      apiSecretKey: 'API_SECRET_KEY',
 
       /// Registered Callback URLs in TwitterApp
       /// Android is a deeplink
@@ -110,10 +110,10 @@ class _MyAppState extends State<MyApp> {
   Future loginV2() async {
     final twitterLogin = TwitterLogin(
       /// Consumer API keys
-      apiKey: API_KEY,
+      apiKey: 'API_KEY',
 
       /// Consumer API Secret keys
-      apiSecretKey: API_SECRET_KEY,
+      apiSecretKey: 'API_SECRET_KEY',
 
       /// Registered Callback URLs in TwitterApp
       /// Android is a deeplink
