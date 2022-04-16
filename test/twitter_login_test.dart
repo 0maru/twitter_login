@@ -17,6 +17,7 @@ void main() {
       };
 
       final user = User(json);
+      // ignore: unnecessary_type_check
       expect(user is User, isTrue);
     });
 
@@ -29,6 +30,7 @@ void main() {
       };
 
       final user = User(json);
+      // ignore: unnecessary_type_check
       expect(user is User, isTrue);
     });
   });
