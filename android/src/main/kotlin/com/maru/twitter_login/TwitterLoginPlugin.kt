@@ -2,6 +2,7 @@ package com.maru.twitter_login
 
 import android.app.Activity
 import android.content.Intent
+import androidx.annotation.NonNull
 import com.maru.twitter_login.chrome_custom_tabs.ChromeSafariBrowserManager
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
@@ -36,7 +37,7 @@ public class TwitterLoginPlugin : FlutterPlugin, MethodCallHandler, ActivityAwar
     private var chromeCustomTabManager: ChromeSafariBrowserManager? = null
     var messenger: BinaryMessenger? = null
     var pluginActivity: Activity? = null
-    
+
     override fun onMethodCall(call: MethodCall, result: Result) {
         when (call.method) {
             "setScheme" -> {
@@ -68,12 +69,13 @@ public class TwitterLoginPlugin : FlutterPlugin, MethodCallHandler, ActivityAwar
         })
     }
 
-    override fun onNewIntent(intent: Intent) {
-        if (scheme == intent!!.data?.scheme) {
+    override fun onNewIntent(@NonNull intent: Intent): Boolean {
+        if (scheme == intent.data?.scheme) {
             eventSink?.success(mapOf("type" to "url", "url" to intent.data?.toString()))
+            return true
         }
 
-        return
+        return false
     }
 
     override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
