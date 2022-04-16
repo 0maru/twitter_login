@@ -11,6 +11,9 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  final String apiKey = '';
+  final String apiSecretKey = '';
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -72,10 +75,10 @@ class _MyAppState extends State<MyApp> {
   Future login() async {
     final twitterLogin = TwitterLogin(
       /// Consumer API keys
-      apiKey: 'API_KEY',
+      apiKey: apiKey,
 
       /// Consumer API Secret keys
-      apiSecretKey: 'API_SECRET_KEY',
+      apiSecretKey: apiSecretKey,
 
       /// Registered Callback URLs in TwitterApp
       /// Android is a deeplink
@@ -92,6 +95,8 @@ class _MyAppState extends State<MyApp> {
       case TwitterLoginStatus.loggedIn:
         // success
         print('====== Login success ======');
+        print(authResult.authToken);
+        print(authResult.authTokenSecret);
         break;
       case TwitterLoginStatus.cancelledByUser:
         // cancel
@@ -109,10 +114,10 @@ class _MyAppState extends State<MyApp> {
   Future loginV2() async {
     final twitterLogin = TwitterLogin(
       /// Consumer API keys
-      apiKey: 'API_KEY',
+      apiKey: apiKey,
 
       /// Consumer API Secret keys
-      apiSecretKey: 'API_SECRET_KEY',
+      apiSecretKey: apiSecretKey,
 
       /// Registered Callback URLs in TwitterApp
       /// Android is a deeplink
