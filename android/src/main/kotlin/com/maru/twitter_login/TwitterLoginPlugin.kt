@@ -73,11 +73,12 @@ public class TwitterLoginPlugin : FlutterActivity(), FlutterPlugin, MethodCallHa
         })
     }
 
-    override fun onNewIntent(intent: Intent?): Boolean {
+    override fun onNewIntent(intent: Intent) {
         if (scheme == intent!!.data?.scheme) {
             eventSink?.success(mapOf("type" to "url", "url" to intent.data?.toString()))
         }
-        return true
+
+        return
     }
 
     override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
