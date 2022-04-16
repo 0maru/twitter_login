@@ -116,3 +116,7 @@
 ## 4.2.0
 
 * Fixed conflict between FlutterActivity and NewIntentListener [#92](https://github.com/0maru/twitter_login/issues/92)
+
+## 4.2.1
+
+* refactor
