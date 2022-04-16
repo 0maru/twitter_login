@@ -54,6 +54,7 @@ class User {
   /// constructor
   User(Map<String, dynamic> params)
       : this._id = params.get<int>('id')!,
+        // ignore: deprecated_member_use_from_same_package
         this._email = params.get<String>('email') ?? '',
         this._thumbnailImage = params.get<String>('profile_image_url_https') ?? '',
         this._name = params.get<String>('name') ?? '',

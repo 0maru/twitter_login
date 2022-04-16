@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:twitter_login/twitter_login.dart';
-// import 'package:twitter_login_example/env.dart';
 
 void main() {
   runApp(MyApp());
