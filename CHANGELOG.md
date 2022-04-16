@@ -120,3 +120,7 @@
 ## 4.2.1
 
 * refactor
+
+## 4.2.2
+
+* change Kotlin version 1.6.10 to 1.4.32
