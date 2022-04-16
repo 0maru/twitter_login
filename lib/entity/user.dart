@@ -110,6 +110,7 @@ class User {
 
       // migrate v2 user model to v1.0a user model.
       final data = params['data'] as Map<String, dynamic>;
+      data['id'] = int.parse(data['id']);
       final userDict = {
         ...data,
         'profile_image_url_https': data['profile_image_url'],
