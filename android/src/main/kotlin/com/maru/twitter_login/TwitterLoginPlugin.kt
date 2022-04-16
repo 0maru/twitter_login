@@ -18,7 +18,7 @@ import io.flutter.plugin.common.EventChannel.StreamHandler
 import io.flutter.plugin.common.PluginRegistry.NewIntentListener
 
 /** TwitterLoginPlugin */
-public class TwitterLoginPlugin : FlutterActivity(), FlutterPlugin, MethodCallHandler, ActivityAware, NewIntentListener {
+public class TwitterLoginPlugin : FlutterPlugin, MethodCallHandler, ActivityAware, NewIntentListener {
     companion object {
         private const val CHANNEL = "twitter_login"
         private const val EVENT_CHANNEL = "twitter_login/event"
@@ -36,12 +36,7 @@ public class TwitterLoginPlugin : FlutterActivity(), FlutterPlugin, MethodCallHa
     private var chromeCustomTabManager: ChromeSafariBrowserManager? = null
     var messenger: BinaryMessenger? = null
     var pluginActivity: Activity? = null
-
-    override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
-        super.configureFlutterEngine(flutterEngine)
-        GeneratedPluginRegister.registerGeneratedPlugins(flutterEngine)
-    }
-
+    
     override fun onMethodCall(call: MethodCall, result: Result) {
         when (call.method) {
             "setScheme" -> {
