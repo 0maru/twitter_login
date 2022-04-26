@@ -8,10 +8,10 @@ class AccessToken {
   final String? screenName;
 
   AccessToken(Map<String, dynamic> params)
-      : this.authToken = params.get<String>('oauth_token'),
-        this.authTokenSecret = params.get<String>('oauth_token_secret'),
-        this.userId = params.get<String>('user_id'),
-        this.screenName = params.get<String>('screen_name');
+      : this.authToken = params.get<String?>('oauth_token'),
+        this.authTokenSecret = params.get<String?>('oauth_token_secret'),
+        this.userId = params.get<String?>('user_id'),
+        this.screenName = params.get<String?>('screen_name');
 
   static Future<AccessToken> getAccessToken(
     String apiKey,

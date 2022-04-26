@@ -55,10 +55,11 @@ class User {
   User(Map<String, dynamic> params)
       : this._id = params.get<int>('id')!,
         // ignore: deprecated_member_use_from_same_package
-        this._email = params.get<String>('email') ?? '',
-        this._thumbnailImage = params.get<String>('profile_image_url_https') ?? '',
-        this._name = params.get<String>('name') ?? '',
-        this._screenName = params.get<String>('screen_name') ?? '';
+        this._email = params.get<String?>('email') ?? '',
+        this._thumbnailImage =
+            params.get<String?>('profile_image_url_https') ?? '',
+        this._name = params.get<String?>('name') ?? '',
+        this._screenName = params.get<String?>('screen_name') ?? '';
 
   /// get user info
   static Future<User> getUserData(
@@ -98,7 +99,8 @@ class User {
     String userId,
   ) async {
     try {
-      final token = await Oauth2.getBearerToken(apiKey: apiKey, apiSecretKey: apiSecretKey);
+      final token = await Oauth2.getBearerToken(
+          apiKey: apiKey, apiSecretKey: apiSecretKey);
       if (token?.isEmpty ?? true) {
         throw Exception();
       }
