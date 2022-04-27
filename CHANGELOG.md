@@ -124,3 +124,7 @@
 ## 4.2.2
 
 * change Kotlin version 1.6.10 to 1.4.32
+
+## 4.2.3
+
+* fix parse json as nullable value [#99](https://github.com/0maru/twitter_login/pull/99)
