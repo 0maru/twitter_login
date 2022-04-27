@@ -10,6 +10,7 @@ void main() {
   group('user response json parse test', () {
     test('parse', () {
       final json = {
+        'id': 1,
         'email': 'test_email@test.com',
         'profile_image_url_https': 'https://test.com/',
         'name': 'test_name',
@@ -23,6 +24,7 @@ void main() {
 
     test('email is null', () {
       final json = {
+        'id': 1,
         'email': null,
         'profile_image_url_https': 'https://test.com/',
         'name': 'test_name',
