@@ -64,6 +64,17 @@ class _MyAppState extends State<MyApp> {
                   },
                 ),
               ),
+              SizedBox(height: 24),
+              FutureBuilder(
+                future: TwitterLogin.isAvailable(),
+                builder: (_, AsyncSnapshot<bool> snapshot) {
+                  if (snapshot.hasData && snapshot.data!) {
+                    return Center(child: Text('this device is supported.'));
+                  } else {
+                    return Center(child: Text('this device is not supported.'));
+                  }
+                },
+              ),
             ],
           ),
         ),

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.maru.twitter_login.TwitterLoginPlugin;
@@ -12,23 +13,22 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 
 public class ChromeSafariBrowserManager implements MethodChannel.MethodCallHandler {
-
     public MethodChannel channel;
-    @Nullable
     public TwitterLoginPlugin plugin;
     public String id;
     public static final Map<String, ChromeSafariBrowserManager> shared = new HashMap<>();
 
-    public ChromeSafariBrowserManager(final TwitterLoginPlugin plugin) {
+    public ChromeSafariBrowserManager(@NonNull final TwitterLoginPlugin plugin) {
         this.id = UUID.randomUUID().toString();
         this.plugin = plugin;
-        channel = new MethodChannel(plugin.getMessenger(), "twitter_login/auth_browser");
+        channel = new MethodChannel(Objects.requireNonNull(plugin.getMessenger()), "twitter_login/auth_browser");
         channel.setMethodCallHandler(this);
         shared.put(this.id, this);
     }
@@ -48,7 +48,10 @@ public class ChromeSafariBrowserManager implements MethodChannel.MethodCallHandl
 
     public void open(Activity activity, String id, String url, MethodChannel.Result result) {
         if (!CustomTabActivityHelper.isAvailable(activity)) {
-            result.success(false);
+            result.error(
+                    "CAN_NOT_LUNCH",
+                    "Not installed a browser that supports custom tabs.",
+                    "");
             return;
         }
 

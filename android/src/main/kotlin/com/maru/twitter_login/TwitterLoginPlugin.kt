@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import androidx.annotation.NonNull
 import com.maru.twitter_login.chrome_custom_tabs.ChromeSafariBrowserManager
+import com.maru.twitter_login.chrome_custom_tabs.CustomTabActivityHelper
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 
@@ -43,6 +44,9 @@ public class TwitterLoginPlugin : FlutterPlugin, MethodCallHandler, ActivityAwar
             "setScheme" -> {
                 scheme = call.arguments as String
                 result.success(null)
+            }
+            "isAvailable" -> {
+                result.success(CustomTabActivityHelper.isAvailable(pluginActivity!!))
             }
             else -> {
                 result.notImplemented()
