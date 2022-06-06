@@ -28,3 +28,6 @@ flutter:
         pluginClass: TwitterLoginPlugin
       ios:
         pluginClass: TwitterLoginPlugin
+      macos:
+        pluginClass: TwitterLoginPlugin
+

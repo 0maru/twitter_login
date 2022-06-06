@@ -58,7 +58,7 @@ class AuthBrowser {
 
   ///　Open a web browser and log in to your Twitter account.
   Future<bool> open(String url, String scheme) async {
-    if (Platform.isIOS) {
+    if (Platform.isIOS || Platform.isMacOS) {
       return false;
     }
     if (_isOpen) {
