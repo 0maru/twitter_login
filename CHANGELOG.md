@@ -128,3 +128,7 @@
 ## 4.2.3
 
 * fix parse json as nullable value [#99](https://github.com/0maru/twitter_login/pull/99)
+
+## 4.3.0
+
+* Add MacOs support [#102](https://github.com/0maru/twitter_login/issues/102)
