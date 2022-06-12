@@ -64,6 +64,10 @@ class AuthBrowser {
     if (_isOpen) {
       throw PlatformException(code: 'AuthBrowser is opened.');
     }
+    final isAvailable = await _channel.invokeMethod('isAvailable');
+    if (Platform.isAndroid && isAvailable != null && isAvailable is bool && !isAvailable) {
+      throw PlatformException(code: 'INVALID_AUTHORIZATION', message: 'can not open custom tabs.');
+    }
 
     final available = await _channel.invokeMethod('open', {
       'url': url,
