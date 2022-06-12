@@ -36,8 +36,8 @@ public class ChromeSafariBrowserManager implements MethodChannel.MethodCallHandl
     @Override
     public void onMethodCall(final MethodCall call, @NotNull final MethodChannel.Result result) {
         if ("open".equals(call.method)) {
-            final String id = (String) call.argument("id");
-            String url = (String) call.argument("url");
+            final String id = call.argument("id");
+            String url = call.argument("url");
             open(plugin.getPluginActivity(), id, url, result);
         } else if ("isAvailable".equals(call.method)) {
             result.success(CustomTabActivityHelper.isAvailable(plugin.getPluginActivity()));

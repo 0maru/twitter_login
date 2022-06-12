@@ -4,13 +4,10 @@ import android.app.Activity
 import android.content.Intent
 import androidx.annotation.NonNull
 import com.maru.twitter_login.chrome_custom_tabs.ChromeSafariBrowserManager
-import io.flutter.embedding.android.FlutterActivity
-import io.flutter.embedding.engine.FlutterEngine
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
-import io.flutter.embedding.engine.plugins.util.GeneratedPluginRegister
 import io.flutter.plugin.common.*
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
@@ -19,7 +16,7 @@ import io.flutter.plugin.common.EventChannel.StreamHandler
 import io.flutter.plugin.common.PluginRegistry.NewIntentListener
 
 /** TwitterLoginPlugin */
-public class TwitterLoginPlugin : FlutterPlugin, MethodCallHandler, ActivityAware, NewIntentListener {
+class TwitterLoginPlugin : FlutterPlugin, MethodCallHandler, ActivityAware, NewIntentListener {
     companion object {
         private const val CHANNEL = "twitter_login"
         private const val EVENT_CHANNEL = "twitter_login/event"
