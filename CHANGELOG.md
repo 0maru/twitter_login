@@ -132,3 +132,7 @@
 ## 4.3.0
 
 * Add MacOs support [#102](https://github.com/0maru/twitter_login/issues/102)
+
+## 4.3.1
+
+* change Kotlin version 1.4.32 to 1.6.10
