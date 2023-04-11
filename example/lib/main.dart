@@ -11,8 +11,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final String apiKey = 'ufnRq7uKHnxi2Mhece74Hhlgj';
-  final String apiSecretKey = 'nN4DiSEtMldas9DZitCmVU0S1jz7ofT5FHbIzlQMyVimKlaHNj';
+  final String apiKey = 'S9GzajUq5r5V4VIvT0V0M1HrP';
+  final String apiSecretKey = 'U6NhHZxqRahi2StQYLz6mVhMZEow1HsaZ6igkNgJa47dfQ4fhI';
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +45,7 @@ class _MyAppState extends State<MyApp> {
                     backgroundColor: MaterialStateProperty.all<Color>(Colors.blueAccent),
                     minimumSize: MaterialStateProperty.all<Size>(Size(160, 48)),
                   ),
-                  onPressed: () async {
+                  onPressed: () async  {
                     await login();
                   },
                 ),
@@ -83,7 +83,7 @@ class _MyAppState extends State<MyApp> {
       /// Registered Callback URLs in TwitterApp
       /// Android is a deeplink
       /// iOS is a URLScheme
-      redirectURI: 'example://',
+      redirectURI: 'https://flutter-twitter-login-sa-a76ad.firebaseapp.com/__/auth/handler',
     );
 
     /// Forces the user to enter their credentials
@@ -122,7 +122,7 @@ class _MyAppState extends State<MyApp> {
       /// Registered Callback URLs in TwitterApp
       /// Android is a deeplink
       /// iOS is a URLScheme
-      redirectURI: 'example://',
+      redirectURI: 'https://flutter-twitter-login-sa-a76ad.firebaseapp.com/__/auth/handler',
     );
 
     /// Forces the user to enter their credentials
