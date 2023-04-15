@@ -29,11 +29,11 @@ class AuthResult {
 
   /// constructor
   AuthResult({
-    String? authToken,
-    String? authTokenSecret,
-    TwitterLoginStatus? status,
-    String? errorMessage,
-    User? user,
+    String? authToken = null,
+    String? authTokenSecret = null,
+    required TwitterLoginStatus status,
+    String? errorMessage = null,
+    User? user = null,
   })  : this._authToken = authToken,
         this._authTokenSecret = authTokenSecret,
         this._status = status,
