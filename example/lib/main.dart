@@ -64,34 +64,6 @@ class _MyAppState extends State<MyApp> {
                   },
                 ),
               ),
-              SizedBox(height: 24),
-              Center(
-                child: TextButton(
-                  child: Text('use Twitter API v1.1 with Enterprise.'),
-                  style: ButtonStyle(
-                    foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                    backgroundColor: MaterialStateProperty.all<Color>(Colors.blueAccent),
-                    minimumSize: MaterialStateProperty.all<Size>(Size(160, 48)),
-                  ),
-                  onPressed: () async {
-                    await login();
-                  },
-                ),
-              ),
-              SizedBox(height: 24),
-              Center(
-                child: TextButton(
-                  child: Text('use Twitter API v2.0 with Enterprise.'),
-                  style: ButtonStyle(
-                    foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                    backgroundColor: MaterialStateProperty.all<Color>(Colors.blueAccent),
-                    minimumSize: MaterialStateProperty.all<Size>(Size(160, 48)),
-                  ),
-                  onPressed: () async {
-                    await loginV2();
-                  },
-                ),
-              ),
             ],
           ),
         ),
