@@ -33,10 +33,10 @@ class TwitterLogin {
   /// Callback URL
   final String redirectURI;
 
-  /// request user email address
+  /// request user data
   ///
-  /// To obtain an email address, an Enterprise plan is required.
-  final bool requestEmail;
+  /// To obtain an user data, an Enterprise plan is required.
+  final bool requestUserData;
 
   static const _channel = const MethodChannel('twitter_login');
   static final _eventChannel = EventChannel('twitter_login/event');
@@ -47,7 +47,7 @@ class TwitterLogin {
     required this.apiKey,
     required this.apiSecretKey,
     required this.redirectURI,
-    this.requestEmail = false,
+    this.requestUserData = false,
   });
 
   /// Logs the user
@@ -148,7 +148,7 @@ class TwitterLogin {
       }
 
       User? user = null;
-      if (requestEmail) {
+      if (requestUserData) {
         try {
           user = await User.getUserData(
             apiKey,
@@ -277,7 +277,7 @@ class TwitterLogin {
       }
 
       User? user = null;
-      if (requestEmail) {
+      if (requestUserData) {
         try {
           user = await User.getUserDataV2(
             apiKey,
