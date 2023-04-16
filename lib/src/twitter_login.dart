@@ -29,7 +29,6 @@ class TwitterLogin {
     required this.apiKey,
     required this.apiSecretKey,
     required this.redirectURI,
-    this.requestUserData = false,
   });
 
   /// Consumer API key
@@ -40,11 +39,6 @@ class TwitterLogin {
 
   /// Callback URL
   final String redirectURI;
-
-  /// request user data
-  ///
-  /// To obtain an user data, an Enterprise plan is required.
-  final bool requestUserData;
 
   static const _channel = MethodChannel('twitter_login');
   static const _eventChannel = EventChannel('twitter_login/event');
@@ -148,20 +142,18 @@ class TwitterLogin {
       }
 
       User? user;
-      if (requestUserData) {
-        try {
-          user = await User.getUserData(
-            apiKey,
-            apiSecretKey,
-            token.authToken!,
-            token.authTokenSecret!,
-          );
-        } on Exception {
-          debugPrint(
-            'User data could not be retrieved. An Enterprise plan is required to obtain user data.',
-          );
-        }
+
+      try {
+        user = await User.getUserData(
+          apiKey,
+          apiSecretKey,
+          token.authToken!,
+          token.authTokenSecret!,
+        );
+      } on Exception {
+        debugPrint('The rate limit may have been reached or the API may be restricted.');
       }
+
       return AuthResult(
         authToken: token.authToken,
         authTokenSecret: token.authTokenSecret,
@@ -277,20 +269,16 @@ class TwitterLogin {
       }
 
       User? user;
-      if (requestUserData) {
-        try {
-          user = await User.getUserDataV2(
-            apiKey,
-            apiSecretKey,
-            token.authToken!,
-            token.authTokenSecret!,
-            token.userId!,
-          );
-        } on Exception {
-          debugPrint(
-            'User data could not be retrieved. An Enterprise plan is required to obtain user data.',
-          );
-        }
+      try {
+        user = await User.getUserDataV2(
+          apiKey,
+          apiSecretKey,
+          token.authToken!,
+          token.authTokenSecret!,
+          token.userId!,
+        );
+      } on Exception {
+        debugPrint('The rate limit may have been reached or the API may be restricted.');
       }
 
       return AuthResult(

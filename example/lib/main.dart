@@ -74,7 +74,7 @@ class _MyAppState extends State<MyApp> {
                     minimumSize: MaterialStateProperty.all<Size>(Size(160, 48)),
                   ),
                   onPressed: () async {
-                    await login(requestUserData: true);
+                    await login();
                   },
                 ),
               ),
@@ -88,7 +88,7 @@ class _MyAppState extends State<MyApp> {
                     minimumSize: MaterialStateProperty.all<Size>(Size(160, 48)),
                   ),
                   onPressed: () async {
-                    await loginV2(requestUserData: true);
+                    await loginV2();
                   },
                 ),
               ),
@@ -100,7 +100,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   /// Use Twitter API v1.1
-  Future login({bool requestUserData = false}) async {
+  Future login() async {
     final twitterLogin = TwitterLogin(
       /// Consumer API keys
       apiKey: apiKey,
@@ -112,8 +112,6 @@ class _MyAppState extends State<MyApp> {
       /// Android is a deeplink
       /// iOS is a URLScheme
       redirectURI: 'example://',
-
-      requestUserData: requestUserData,
     );
 
     /// Forces the user to enter their credentials
@@ -141,7 +139,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   /// Use Twitter API v2.
-  Future loginV2({bool requestUserData = false}) async {
+  Future loginV2() async {
     final twitterLogin = TwitterLogin(
       /// Consumer API keys
       apiKey: apiKey,
@@ -153,8 +151,6 @@ class _MyAppState extends State<MyApp> {
       /// Android is a deeplink
       /// iOS is a URLScheme
       redirectURI: 'example://',
-
-      requestUserData: requestUserData,
     );
 
     /// Forces the user to enter their credentials
