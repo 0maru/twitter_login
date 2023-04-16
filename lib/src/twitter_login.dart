@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:twitter_login/entity/auth_result.dart';
 import 'package:twitter_login/entity/user.dart';
@@ -32,6 +33,11 @@ class TwitterLogin {
   /// Callback URL
   final String redirectURI;
 
+  /// request user email address
+  ///
+  /// To obtain an email address, an Enterprise plan is required.
+  final bool requestEmail;
+
   static const _channel = const MethodChannel('twitter_login');
   static final _eventChannel = EventChannel('twitter_login/event');
   static final Stream<dynamic> _eventStream = _eventChannel.receiveBroadcastStream();
@@ -41,6 +47,7 @@ class TwitterLogin {
     required this.apiKey,
     required this.apiSecretKey,
     required this.redirectURI,
+    this.requestEmail = false,
   });
 
   /// Logs the user
@@ -140,16 +147,26 @@ class TwitterLogin {
         );
       }
 
+      User? user = null;
+      if (requestEmail) {
+        try {
+          user = await User.getUserData(
+            apiKey,
+            apiSecretKey,
+            token.authToken!,
+            token.authTokenSecret!,
+          );
+        } on Exception {
+          debugPrint(
+            'User data could not be retrieved. An Enterprise plan is required to obtain user data.',
+          );
+        }
+      }
       return AuthResult(
         authToken: token.authToken,
         authTokenSecret: token.authTokenSecret,
         status: TwitterLoginStatus.loggedIn,
-        user: await User.getUserData(
-          apiKey,
-          apiSecretKey,
-          token.authToken!,
-          token.authTokenSecret!,
-        ),
+        user: user,
       );
     } on CanceledByUserException {
       return AuthResult(
@@ -259,13 +276,22 @@ class TwitterLogin {
         );
       }
 
-      final user = await User.getUserDataV2(
-        apiKey,
-        apiSecretKey,
-        token.authToken!,
-        token.authTokenSecret!,
-        token.userId!,
-      );
+      User? user = null;
+      if (requestEmail) {
+        try {
+          user = await User.getUserDataV2(
+            apiKey,
+            apiSecretKey,
+            token.authToken!,
+            token.authTokenSecret!,
+            token.userId!,
+          );
+        } on Exception {
+          debugPrint(
+            'User data could not be retrieved. An Enterprise plan is required to obtain user data.',
+          );
+        }
+      }
 
       return AuthResult(
         authToken: token.authToken,
