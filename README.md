@@ -1,10 +1,10 @@
 # twitter_login
 
+*WARNING: The free and basic plans of Twitter API no longer allow retrieval of user data. If user data such as email address is necessary, please use the enterprise plan.*
+
 ![Pub Version](https://img.shields.io/pub/v/twitter_login?color=blue)
 
 Flutter Twitter Login Plugin
-
-*WARNING: The free and basic plans of Twitter API no longer allow retrieval of user data. If user data such as email address is necessary, please use the enterprise plan.*
 
 # Requirements
 
