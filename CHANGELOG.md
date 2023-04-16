@@ -137,6 +137,6 @@
 
 * change Kotlin version 1.4.32 to 1.6.10
 
-## 5.0.0
+## 4.3.2
 
-* Added flag to retrieve user data or not.
+* The login process will no longer fail when the API limits or rate limits are reached.
