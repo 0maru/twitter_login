@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
-  <meta name="description" content="API docs for the getUserData method from the User class, for the Dart programming language.">
-  <title>getUserData method - User class - user library - Dart API</title>
+  <meta name="description" content="API docs for the getUserDataV2 method from the User class, for the Dart programming language.">
+  <title>getUserDataV2 method - User class - user library - Dart API</title>
 
 
   
@@ -31,9 +31,9 @@
     <li><a href="../../index.html">twitter_login</a></li>
     <li><a href="../../entity_user/entity_user-library.html">user</a></li>
     <li><a href="../../entity_user/User-class.html">User</a></li>
-    <li class="self-crumb">getUserData static method</li>
+    <li class="self-crumb">getUserDataV2 static method</li>
   </ol>
-  <div class="self-name">getUserData</div>
+  <div class="self-name">getUserDataV2</div>
   <form class="search navbar-right" role="search">
     <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
   </form>
@@ -50,7 +50,7 @@
 
   <div id="dartdoc-main-content" class="main-content">
       <div>
-<h1><span class="kind-method">getUserData</span> static method 
+<h1><span class="kind-method">getUserDataV2</span> static method 
     <a href="https://dart.dev/null-safety" class="feature feature-null-safety" title="Supports the null safety language feature.">Null safety</a>
 </h1></div>
 
@@ -58,10 +58,11 @@
       
 
 <span class="returntype"><a href="https://api.flutter.dev/flutter/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../entity_user/User-class.html">User</a></span>&gt;</span></span>
-<span class="name ">getUserData</span>(<wbr><ol class="parameter-list"><li><span class="parameter" id="getUserData-param-apiKey"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">apiKey</span>, </span></li>
-<li><span class="parameter" id="getUserData-param-apiSecretKey"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">apiSecretKey</span>, </span></li>
-<li><span class="parameter" id="getUserData-param-accessToken"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">accessToken</span>, </span></li>
-<li><span class="parameter" id="getUserData-param-accessTokenSecret"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">accessTokenSecret</span></span></li>
+<span class="name ">getUserDataV2</span>(<wbr><ol class="parameter-list"><li><span class="parameter" id="getUserDataV2-param-apiKey"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">apiKey</span>, </span></li>
+<li><span class="parameter" id="getUserDataV2-param-apiSecretKey"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">apiSecretKey</span>, </span></li>
+<li><span class="parameter" id="getUserDataV2-param-accessToken"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">accessToken</span>, </span></li>
+<li><span class="parameter" id="getUserDataV2-param-accessTokenSecret"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">accessTokenSecret</span>, </span></li>
+<li><span class="parameter" id="getUserDataV2-param-userId"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">userId</span></span></li>
 </ol>)
 
       
@@ -69,32 +70,45 @@
     </section>
     
 <section class="desc markdown">
-  <p>get user info</p>
+  <p>get user info.</p>
+<p>use Twitter API v2.</p>
+<p><a href="https://api.twitter.com/2/users">https://api.twitter.com/2/users</a></p>
 </section>
 
 
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">static Future&lt;User&gt; getUserData(
+  <pre class="language-dart"><code class="language-dart">static Future&lt;User&gt; getUserDataV2(
   String apiKey,
   String apiSecretKey,
   String accessToken,
   String accessTokenSecret,
+  String userId,
 ) async {
   try {
-    final authParams = requestHeader(
-      apiKey: apiKey,
-      oauthToken: accessToken,
+    final token = await Oauth2.getBearerToken(
+        apiKey: apiKey, apiSecretKey: apiSecretKey);
+    if (token?.isEmpty ?? true) {
+      throw Exception();
+    }
+
+    final params = await httpGetFromBearerToken(
+      &#39;$USER_LOCKUP_URI&#47;$userId&#39;,
+      query: {&#39;user.fields&#39;: &#39;id,name,username,profile_image_url&#39;},
+      bearerToken: token!,
     );
-    final params = await httpGet(
-      ACCOUNT_VERIFY_URI,
-      authHeader: authParams,
-      apiKey: apiKey,
-      apiSecretKey: apiSecretKey,
-      tokenSecret: accessTokenSecret,
-    );
-    return User(params);
+
+    &#47;&#47; migrate v2 user model to v1.0a user model.
+    final data = params[&#39;data&#39;] as Map&lt;String, dynamic&gt;;
+    data[&#39;id&#39;] = int.parse(data[&#39;id&#39;]);
+    final userDict = {
+      ...data,
+      &#39;profile_image_url_https&#39;: data[&#39;profile_image_url&#39;],
+      &#39;screen_name&#39;: data[&#39;username&#39;],
+    };
+
+    return User(userDict);
   } on Exception {
     rethrow;
   }
@@ -115,7 +129,7 @@
   <li><a href="../../index.html">twitter_login</a></li>
   <li><a href="../../entity_user/entity_user-library.html">user</a></li>
   <li><a href="../../entity_user/User-class.html">User</a></li>
-  <li class="self-crumb">getUserData static method</li>
+  <li class="self-crumb">getUserDataV2 static method</li>
 </ol>
 
 

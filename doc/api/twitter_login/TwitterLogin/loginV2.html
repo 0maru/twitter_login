@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
-  <meta name="description" content="API docs for the redirectURI property from the TwitterLogin class, for the Dart programming language.">
-  <title>redirectURI property - TwitterLogin class - twitter_login library - Dart API</title>
+  <meta name="description" content="API docs for the loginV2 method from the TwitterLogin class, for the Dart programming language.">
+  <title>loginV2 method - TwitterLogin class - twitter_login library - Dart API</title>
 
 
   
@@ -31,9 +31,9 @@
     <li><a href="../../index.html">twitter_login</a></li>
     <li><a href="../../twitter_login/twitter_login-library.html">twitter_login</a></li>
     <li><a href="../../twitter_login/TwitterLogin-class.html">TwitterLogin</a></li>
-    <li class="self-crumb">redirectURI property</li>
+    <li class="self-crumb">loginV2 method</li>
   </ol>
-  <div class="self-name">redirectURI</div>
+  <div class="self-name">loginV2</div>
   <form class="search navbar-right" role="search">
     <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
   </form>
@@ -50,26 +50,156 @@
 
   <div id="dartdoc-main-content" class="main-content">
       <div>
-<h1><span class="kind-property">redirectURI</span> property 
+<h1><span class="kind-method">loginV2</span> method 
     <a href="https://dart.dev/null-safety" class="feature feature-null-safety" title="Supports the null safety language feature.">Null safety</a>
 </h1></div>
 
-        <section class="multi-line-signature">
-          
-          <a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>
-          <span class="name ">redirectURI</span>
-          <div class="features"><span class="feature">final</span></div>
+    <section class="multi-line-signature">
+      
 
-        </section>
-        
-<section class="desc markdown">
-  <p>Callback URL</p>
-</section>
+<span class="returntype"><a href="https://api.flutter.dev/flutter/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../entity_auth_result/AuthResult-class.html">AuthResult</a></span>&gt;</span></span>
+<span class="name ">loginV2</span>(<wbr><ol class="parameter-list"><li><span class="parameter" id="loginV2-param-forceLogin">{<span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span> <span class="parameter-name">forceLogin</span> = <span class="default-value">false</span>}</span></li>
+</ol>)
 
-        
+      
+
+    </section>
+    
+
+
+    
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">final String redirectURI;</code></pre>
+  <pre class="language-dart"><code class="language-dart">Future&lt;AuthResult&gt; loginV2({bool forceLogin = false}) async {
+  String? resultURI;
+  RequestToken requestToken;
+  try {
+    requestToken = await RequestToken.getRequestToken(
+      apiKey,
+      apiSecretKey,
+      redirectURI,
+      forceLogin,
+    );
+  } on Exception {
+    throw PlatformException(
+      code: &quot;400&quot;,
+      message: &quot;Failed to generate request token.&quot;,
+      details: &quot;Please check your APIKey or APISecret.&quot;,
+    );
+  }
+
+  final uri = Uri.parse(redirectURI);
+  final completer = Completer&lt;String?&gt;();
+  late StreamSubscription subscribe;
+
+  if (Platform.isAndroid) {
+    await _channel.invokeMethod(&#39;setScheme&#39;, uri.scheme);
+    subscribe = _eventStream.listen((data) async {
+      if (data[&#39;type&#39;] == &#39;url&#39;) {
+        if (!completer.isCompleted) {
+          completer.complete(data[&#39;url&#39;]?.toString());
+        } else {
+          throw CanceledByUserException();
+        }
+      }
+    });
+  }
+
+  final authBrowser = AuthBrowser(
+    onClose: () {
+      if (!completer.isCompleted) {
+        completer.complete(null);
+      }
+    },
+  );
+
+  try {
+    if (Platform.isIOS || Platform.isMacOS) {
+      &#47;&#47;&#47; Login to Twitter account with SFAuthenticationSession or ASWebAuthenticationSession.
+      resultURI = await authBrowser.doAuth(requestToken.authorizeURI, uri.scheme);
+    } else if (Platform.isAndroid) {
+      &#47;&#47; Login to Twitter account with chrome_custom_tabs.
+      final success = await authBrowser.open(requestToken.authorizeURI, uri.scheme);
+      if (!success) {
+        throw PlatformException(
+          code: &#39;200&#39;,
+          message: &#39;Could not open browser, probably caused by unavailable custom tabs.&#39;,
+        );
+      }
+      resultURI = await completer.future;
+      subscribe.cancel();
+    } else {
+      throw PlatformException(
+        code: &#39;100&#39;,
+        message: &#39;Not supported by this os.&#39;,
+      );
+    }
+
+    &#47;&#47; The user closed the browser.
+    if (resultURI?.isEmpty ?? true) {
+      throw CanceledByUserException();
+    }
+
+    final queries = Uri.splitQueryString(Uri.parse(resultURI!).query);
+    if (queries[&#39;error&#39;] != null) {
+      throw Exception(&#39;Error Response: ${queries[&#39;error&#39;]}&#39;);
+    }
+
+    &#47;&#47; The user cancelled the login flow.
+    if (queries[&#39;denied&#39;] != null) {
+      throw CanceledByUserException();
+    }
+
+    final token = await AccessToken.getAccessToken(
+      apiKey,
+      apiSecretKey,
+      queries,
+    );
+
+    if ((token.authToken?.isEmpty ?? true) || (token.authTokenSecret?.isEmpty ?? true)) {
+      return AuthResult(
+        authToken: token.authToken,
+        authTokenSecret: token.authTokenSecret,
+        status: TwitterLoginStatus.error,
+        errorMessage: &#39;Failed&#39;,
+      );
+    }
+
+    User? user = null;
+    if (requestUserData) {
+      try {
+        user = await User.getUserDataV2(
+          apiKey,
+          apiSecretKey,
+          token.authToken!,
+          token.authTokenSecret!,
+          token.userId!,
+        );
+      } on Exception {
+        debugPrint(
+          &#39;User data could not be retrieved. An Enterprise plan is required to obtain user data.&#39;,
+        );
+      }
+    }
+
+    return AuthResult(
+      authToken: token.authToken,
+      authTokenSecret: token.authTokenSecret,
+      status: TwitterLoginStatus.loggedIn,
+      user: user,
+    );
+  } on CanceledByUserException {
+    return AuthResult(
+      status: TwitterLoginStatus.cancelledByUser,
+      errorMessage: &#39;The user cancelled the login flow.&#39;,
+    );
+  } catch (error) {
+    return AuthResult(
+      status: TwitterLoginStatus.error,
+      errorMessage: error.toString(),
+    );
+  }
+}</code></pre>
 </section>
 
 
@@ -86,7 +216,7 @@
   <li><a href="../../index.html">twitter_login</a></li>
   <li><a href="../../twitter_login/twitter_login-library.html">twitter_login</a></li>
   <li><a href="../../twitter_login/TwitterLogin-class.html">TwitterLogin</a></li>
-  <li class="self-crumb">redirectURI property</li>
+  <li class="self-crumb">loginV2 method</li>
 </ol>
 
 
