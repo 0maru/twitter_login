@@ -11,8 +11,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final String apiKey = 'ufnRq7uKHnxi2Mhece74Hhlgj';
-  final String apiSecretKey = 'nN4DiSEtMldas9DZitCmVU0S1jz7ofT5FHbIzlQMyVimKlaHNj';
+  final String apiKey = 'S9GzajUq5r5V4VIvT0V0M1HrP';
+  final String apiSecretKey = 'U6NhHZxqRahi2StQYLz6mVhMZEow1HsaZ6igkNgJa47dfQ4fhI';
 
   @override
   Widget build(BuildContext context) {
@@ -64,6 +64,34 @@ class _MyAppState extends State<MyApp> {
                   },
                 ),
               ),
+              SizedBox(height: 24),
+              Center(
+                child: TextButton(
+                  child: Text('use Twitter API v1.1 with Enterprise.'),
+                  style: ButtonStyle(
+                    foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                    backgroundColor: MaterialStateProperty.all<Color>(Colors.blueAccent),
+                    minimumSize: MaterialStateProperty.all<Size>(Size(160, 48)),
+                  ),
+                  onPressed: () async {
+                    await login(requestUserData: true);
+                  },
+                ),
+              ),
+              SizedBox(height: 24),
+              Center(
+                child: TextButton(
+                  child: Text('use Twitter API v2.0 with Enterprise.'),
+                  style: ButtonStyle(
+                    foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                    backgroundColor: MaterialStateProperty.all<Color>(Colors.blueAccent),
+                    minimumSize: MaterialStateProperty.all<Size>(Size(160, 48)),
+                  ),
+                  onPressed: () async {
+                    await loginV2(requestUserData: true);
+                  },
+                ),
+              ),
             ],
           ),
         ),
@@ -72,7 +100,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   /// Use Twitter API v1.1
-  Future login() async {
+  Future login({bool requestUserData = false}) async {
     final twitterLogin = TwitterLogin(
       /// Consumer API keys
       apiKey: apiKey,
@@ -84,6 +112,8 @@ class _MyAppState extends State<MyApp> {
       /// Android is a deeplink
       /// iOS is a URLScheme
       redirectURI: 'example://',
+
+      requestUserData: requestUserData,
     );
 
     /// Forces the user to enter their credentials
@@ -111,7 +141,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   /// Use Twitter API v2.
-  Future loginV2() async {
+  Future loginV2({bool requestUserData = false}) async {
     final twitterLogin = TwitterLogin(
       /// Consumer API keys
       apiKey: apiKey,
@@ -123,6 +153,8 @@ class _MyAppState extends State<MyApp> {
       /// Android is a deeplink
       /// iOS is a URLScheme
       redirectURI: 'example://',
+
+      requestUserData: requestUserData,
     );
 
     /// Forces the user to enter their credentials

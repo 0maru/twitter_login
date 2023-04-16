@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:twitter_login/src/utils.dart';
 
+// ignore: avoid_classes_with_only_static_members
 class Oauth2 {
   /// get applicatoin Bearer Token.
   ///
@@ -11,8 +12,8 @@ class Oauth2 {
     required String apiKey,
     required String apiSecretKey,
   }) async {
-    final http.Client _httpClient = http.Client();
-    final http.Response res = await _httpClient.post(
+    final _httpClient = http.Client();
+    final res = await _httpClient.post(
       Uri.parse('https://api.twitter.com/oauth2/token').replace(
         queryParameters: {'grant_type': 'client_credentials'},
       ),

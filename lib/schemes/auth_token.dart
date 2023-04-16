@@ -1,5 +1,10 @@
 ///The access token for using Twitter API.
 class AuthToken {
+
+  AuthToken(
+    Map<String, dynamic> params,
+  )   : _authToken = params['oauth_token'] as String,
+        _authTokenSecret = params['oauth_token_secret'] as String;
   /// Oauth token
   final String _authToken;
 
@@ -8,9 +13,4 @@ class AuthToken {
 
   String get authToken => _authToken;
   String get authTokenSecret => _authTokenSecret;
-
-  AuthToken(
-    Map<String, dynamic> params,
-  )   : this._authToken = params['oauth_token'],
-        this._authTokenSecret = params['oauth_token_secret'];
 }

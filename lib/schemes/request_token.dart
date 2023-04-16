@@ -2,6 +2,15 @@ import 'package:twitter_login/src/utils.dart';
 
 /// The Request token for Twitter API.
 class RequestToken {
+  /// constructor
+  RequestToken(
+    Map<String, dynamic> params,
+    String authorizeURI,
+  )   : _token = params['oauth_token'] as String,
+        _tokenSecret = params['oauth_token_secret'] as String,
+        _callbackConfirmed = params['oauth_callback_confirmed'] as String,
+        _authorizeURI = authorizeURI;
+
   /// Oauth token
   final String _token;
 
@@ -25,15 +34,6 @@ class RequestToken {
 
   /// authorize url
   String get authorizeURI => _authorizeURI;
-
-  /// constructor
-  RequestToken(
-    Map<String, dynamic> params,
-    String authorizeURI,
-  )   : this._token = params['oauth_token'],
-        this._tokenSecret = params['oauth_token_secret'],
-        this._callbackConfirmed = params['oauth_callback_confirmed'],
-        this._authorizeURI = authorizeURI;
 
   /// Request user authorization token
   static Future<RequestToken> getRequestToken(

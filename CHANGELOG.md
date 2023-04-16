@@ -136,3 +136,7 @@
 ## 4.3.1
 
 * change Kotlin version 1.4.32 to 1.6.10
+
+## 5.0.0
+
+* Added flag to retrieve user data or not.

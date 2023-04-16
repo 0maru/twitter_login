@@ -6,6 +6,19 @@ import 'package:twitter_login/src/twitter_login.dart';
 /// The result when the Twitter login flow has completed.
 /// The login methods always return an instance of this class.
 class AuthResult {
+
+  /// constructor
+  AuthResult({
+    String? authToken,
+    String? authTokenSecret,
+    required TwitterLoginStatus status,
+    String? errorMessage,
+    User? user,
+  })  : _authToken = authToken,
+        _authTokenSecret = authTokenSecret,
+        _status = status,
+        _errorMessage = errorMessage,
+        _user = user;
   /// The access token for using the Twitter APIs
   final String? _authToken;
 
@@ -26,17 +39,4 @@ class AuthResult {
   TwitterLoginStatus? get status => _status;
   String? get errorMessage => _errorMessage;
   User? get user => _user;
-
-  /// constructor
-  AuthResult({
-    String? authToken,
-    String? authTokenSecret,
-    TwitterLoginStatus? status,
-    String? errorMessage,
-    User? user,
-  })  : this._authToken = authToken,
-        this._authTokenSecret = authTokenSecret,
-        this._status = status,
-        this._errorMessage = errorMessage,
-        this._user = user;
 }
