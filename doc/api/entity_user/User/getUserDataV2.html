@@ -87,8 +87,7 @@
   String userId,
 ) async {
   try {
-    final token = await Oauth2.getBearerToken(
-        apiKey: apiKey, apiSecretKey: apiSecretKey);
+    final token = await Oauth2.getBearerToken(apiKey: apiKey, apiSecretKey: apiSecretKey);
     if (token?.isEmpty ?? true) {
       throw Exception();
     }
@@ -101,7 +100,7 @@
 
     &#47;&#47; migrate v2 user model to v1.0a user model.
     final data = params[&#39;data&#39;] as Map&lt;String, dynamic&gt;;
-    data[&#39;id&#39;] = int.parse(data[&#39;id&#39;]);
+    data[&#39;id&#39;] = int.parse(data[&#39;id&#39;] as String);
     final userDict = {
       ...data,
       &#39;profile_image_url_https&#39;: data[&#39;profile_image_url&#39;],

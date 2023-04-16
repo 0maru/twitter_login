@@ -73,10 +73,10 @@
   <pre class="language-dart"><code class="language-dart">RequestToken(
   Map&lt;String, dynamic&gt; params,
   String authorizeURI,
-)   : this._token = params[&#39;oauth_token&#39;],
-      this._tokenSecret = params[&#39;oauth_token_secret&#39;],
-      this._callbackConfirmed = params[&#39;oauth_callback_confirmed&#39;],
-      this._authorizeURI = authorizeURI;</code></pre>
+)   : _token = params[&#39;oauth_token&#39;] as String,
+      _tokenSecret = params[&#39;oauth_token_secret&#39;] as String,
+      _callbackConfirmed = params[&#39;oauth_callback_confirmed&#39;] as String,
+      _authorizeURI = authorizeURI;</code></pre>
 </section>
 
 

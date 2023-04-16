@@ -56,11 +56,11 @@
 
     <section class="multi-line-signature">
       
-      <span class="name ">AuthResult</span>(<wbr><ol class="parameter-list"><li><span class="parameter" id="-param-authToken">{<span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">authToken</span> = <span class="default-value">null</span>, </span></li>
-<li><span class="parameter" id="-param-authTokenSecret"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">authTokenSecret</span> = <span class="default-value">null</span>, </span></li>
+      <span class="name ">AuthResult</span>(<wbr><ol class="parameter-list"><li><span class="parameter" id="-param-authToken">{<span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">authToken</span>, </span></li>
+<li><span class="parameter" id="-param-authTokenSecret"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">authTokenSecret</span>, </span></li>
 <li><span class="parameter" id="-param-status"><span>required</span> <span class="type-annotation"><a href="../../twitter_login/TwitterLoginStatus.html">TwitterLoginStatus</a></span> <span class="parameter-name">status</span>, </span></li>
-<li><span class="parameter" id="-param-errorMessage"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">errorMessage</span> = <span class="default-value">null</span>, </span></li>
-<li><span class="parameter" id="-param-user"><span class="type-annotation"><a href="../../entity_user/User-class.html">User</a>?</span> <span class="parameter-name">user</span> = <span class="default-value">null</span>}</span></li>
+<li><span class="parameter" id="-param-errorMessage"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">errorMessage</span>, </span></li>
+<li><span class="parameter" id="-param-user"><span class="type-annotation"><a href="../../entity_user/User-class.html">User</a>?</span> <span class="parameter-name">user</span>}</span></li>
 </ol>)
     </section>
 
@@ -74,16 +74,16 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">AuthResult({
-  String? authToken = null,
-  String? authTokenSecret = null,
+  String? authToken,
+  String? authTokenSecret,
   required TwitterLoginStatus status,
-  String? errorMessage = null,
-  User? user = null,
-})  : this._authToken = authToken,
-      this._authTokenSecret = authTokenSecret,
-      this._status = status,
-      this._errorMessage = errorMessage,
-      this._user = user;</code></pre>
+  String? errorMessage,
+  User? user,
+})  : _authToken = authToken,
+      _authTokenSecret = authTokenSecret,
+      _status = status,
+      _errorMessage = errorMessage,
+      _user = user;</code></pre>
 </section>
 
 

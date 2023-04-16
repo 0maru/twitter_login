@@ -86,9 +86,9 @@ Forces the user to enter their credentials to ensure the correct users account i
     );
   } on Exception {
     throw PlatformException(
-      code: &quot;400&quot;,
-      message: &quot;Failed to generate request token.&quot;,
-      details: &quot;Please check your APIKey or APISecret.&quot;,
+      code: &#39;400&#39;,
+      message: &#39;Failed to generate request token.&#39;,
+      details: &#39;Please check your APIKey or APISecret.&#39;,
     );
   }
 
@@ -103,7 +103,7 @@ Forces the user to enter their credentials to ensure the correct users account i
         if (!completer.isCompleted) {
           completer.complete(data[&#39;url&#39;]?.toString());
         } else {
-          throw CanceledByUserException();
+          throw const CanceledByUserException();
         }
       }
     });
@@ -131,7 +131,7 @@ Forces the user to enter their credentials to ensure the correct users account i
         );
       }
       resultURI = await completer.future;
-      subscribe.cancel();
+      await subscribe.cancel();
     } else {
       throw PlatformException(
         code: &#39;100&#39;,
@@ -141,7 +141,7 @@ Forces the user to enter their credentials to ensure the correct users account i
 
     &#47;&#47; The user closed the browser.
     if (resultURI?.isEmpty ?? true) {
-      throw CanceledByUserException();
+      throw const CanceledByUserException();
     }
 
     final queries = Uri.splitQueryString(Uri.parse(resultURI!).query);
@@ -151,7 +151,7 @@ Forces the user to enter their credentials to ensure the correct users account i
 
     &#47;&#47; The user cancelled the login flow.
     if (queries[&#39;denied&#39;] != null) {
-      throw CanceledByUserException();
+      throw const CanceledByUserException();
     }
 
     final token = await AccessToken.getAccessToken(
@@ -169,21 +169,19 @@ Forces the user to enter their credentials to ensure the correct users account i
       );
     }
 
-    User? user = null;
-    if (requestUserData) {
-      try {
-        user = await User.getUserData(
-          apiKey,
-          apiSecretKey,
-          token.authToken!,
-          token.authTokenSecret!,
-        );
-      } on Exception {
-        debugPrint(
-          &#39;User data could not be retrieved. An Enterprise plan is required to obtain user data.&#39;,
-        );
-      }
+    User? user;
+
+    try {
+      user = await User.getUserData(
+        apiKey,
+        apiSecretKey,
+        token.authToken!,
+        token.authTokenSecret!,
+      );
+    } on Exception {
+      debugPrint(&#39;The rate limit may have been reached or the API may be restricted.&#39;);
     }
+
     return AuthResult(
       authToken: token.authToken,
       authTokenSecret: token.authTokenSecret,
@@ -236,7 +234,6 @@ Forces the user to enter their credentials to ensure the correct users account i
           <li><a href="../../twitter_login/TwitterLogin/apiSecretKey.html">apiSecretKey</a></li>
           <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/hashCode.html">hashCode</a></li>
           <li><a href="../../twitter_login/TwitterLogin/redirectURI.html">redirectURI</a></li>
-          <li><a href="../../twitter_login/TwitterLogin/requestUserData.html">requestUserData</a></li>
           <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/runtimeType.html">runtimeType</a></li>
 
         <li class="section-title"><a href="../../twitter_login/TwitterLogin-class.html#instance-methods">Methods</a></li>
