@@ -7,22 +7,21 @@ import 'package:twitter_login/src/utils.dart';
 const String methodName = 'twitter_login/auth_browser';
 
 class AuthBrowser {
-  late final String id;
-  static const _channel = const MethodChannel(methodName);
-  late MethodChannel _methodCallHandlerChannel;
-  bool _isOpen = false;
-  VoidCallback onClose;
-
   AuthBrowser({required this.onClose}) {
     id = createCryptoRandomString();
     _methodCallHandlerChannel = MethodChannel('${methodName}_$id');
     _methodCallHandlerChannel.setMethodCallHandler(methodCallHandler);
     _isOpen = false;
   }
+  late final String id;
+  static const _channel = MethodChannel(methodName);
+  late MethodChannel _methodCallHandlerChannel;
+  bool _isOpen = false;
+  VoidCallback onClose;
 
   Future methodCallHandler(MethodCall call) async {
     switch (call.method) {
-      case "onClose":
+      case 'onClose':
         onClose();
         _isOpen = false;
         break;
@@ -48,7 +47,7 @@ class AuthBrowser {
     });
 
     if (token == null) {
-      throw CanceledByUserException();
+      throw const CanceledByUserException();
     }
 
     _isOpen = false;
@@ -68,11 +67,12 @@ class AuthBrowser {
       throw PlatformException(code: 'INVALID_AUTHORIZATION', message: 'can not open custom tabs.');
     }
 
-    final available = await _channel.invokeMethod('open', {
-      'url': url,
-      'redirectURL': scheme,
-      'id': id,
-    });
+    final available = await _channel.invokeMethod<bool?>('open', {
+          'url': url,
+          'redirectURL': scheme,
+          'id': id,
+        }) ??
+        false;
     if (available) {
       _isOpen = true;
     }

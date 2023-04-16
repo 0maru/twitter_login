@@ -4,6 +4,16 @@ import 'package:crypto/crypto.dart';
 
 /// OAuth 1.0a HMAC-SHA1 signature for an HTTP request
 class Signature {
+  /// constructor
+  Signature({
+    this.url,
+    this.method = 'POST',
+    this.params,
+    this.apiKey,
+    this.apiSecretKey,
+    this.tokenSecretKey,
+  });
+
   /// EndpointURL
   final String? url;
 
@@ -22,16 +32,6 @@ class Signature {
   /// Oauth Consumer Secret Key
   final String? tokenSecretKey;
 
-  /// constructor
-  Signature({
-    this.url,
-    this.method = 'POST',
-    this.params,
-    this.apiKey,
-    this.apiSecretKey,
-    this.tokenSecretKey,
-  });
-
   ///
   String? signatureHmacSha1() {
     final key = getSignatureKey();
@@ -45,9 +45,7 @@ class Signature {
     final uri = Uri.parse(url!);
     final encodedParams = encodeParams(uri, params!);
     final sortedEncodedKeys = encodedParams!.keys.toList()..sort();
-    final baseParams = sortedEncodedKeys.map((String k) {
-      return '$k=${encodedParams[k]}';
-    }).join('&');
+    final baseParams = sortedEncodedKeys.map((String k) => '$k=${encodedParams[k]}').join('&');
     final base = appendParams(method!, uri, baseParams);
     return base;
   }
@@ -71,12 +69,12 @@ class Signature {
     Uri uri,
     String baseParams,
   ) {
-    final base = StringBuffer();
-    base.write(method.toUpperCase());
-    base.write('&');
-    base.write(Uri.encodeComponent(uri.origin + uri.path));
-    base.write('&');
-    base.write(Uri.encodeComponent(baseParams));
+    final base = StringBuffer()
+      ..write(method.toUpperCase())
+      ..write('&')
+      ..write(Uri.encodeComponent(uri.origin + uri.path))
+      ..write('&')
+      ..write(Uri.encodeComponent(baseParams));
     return base.toString();
   }
 

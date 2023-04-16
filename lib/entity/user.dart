@@ -3,6 +3,15 @@ import 'package:twitter_login/src/utils.dart';
 
 /// https://developer.twitter.com/en/docs/twitter-api/data-dictionary/object-model/user
 class User {
+  /// constructor
+  User(Map<String, dynamic> params)
+      : _id = params.get<int>('id')!,
+        // ignore: deprecated_member_use_from_same_package
+        _email = params.get<String?>('email') ?? '',
+        _thumbnailImage = params.get<String?>('profile_image_url_https') ?? '',
+        _name = params.get<String?>('name') ?? '',
+        _screenName = params.get<String?>('screen_name') ?? '';
+
   /// The unique identifier of this user.
   ///
   /// Use this to programmatically retrieve information about a specific Twitter user.
@@ -51,16 +60,6 @@ class User {
   /// Twitter account id
   String get screenName => _screenName;
 
-  /// constructor
-  User(Map<String, dynamic> params)
-      : this._id = params.get<int>('id')!,
-        // ignore: deprecated_member_use_from_same_package
-        this._email = params.get<String?>('email') ?? '',
-        this._thumbnailImage =
-            params.get<String?>('profile_image_url_https') ?? '',
-        this._name = params.get<String?>('name') ?? '',
-        this._screenName = params.get<String?>('screen_name') ?? '';
-
   /// get user info
   static Future<User> getUserData(
     String apiKey,
@@ -99,8 +98,7 @@ class User {
     String userId,
   ) async {
     try {
-      final token = await Oauth2.getBearerToken(
-          apiKey: apiKey, apiSecretKey: apiSecretKey);
+      final token = await Oauth2.getBearerToken(apiKey: apiKey, apiSecretKey: apiSecretKey);
       if (token?.isEmpty ?? true) {
         throw Exception();
       }
@@ -113,7 +111,7 @@ class User {
 
       // migrate v2 user model to v1.0a user model.
       final data = params['data'] as Map<String, dynamic>;
-      data['id'] = int.parse(data['id']);
+      data['id'] = int.parse(data['id'] as String);
       final userDict = {
         ...data,
         'profile_image_url_https': data['profile_image_url'],

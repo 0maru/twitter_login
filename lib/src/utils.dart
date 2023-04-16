@@ -21,12 +21,8 @@ const ACCOUNT_VERIFY_URI =
 const USER_LOCKUP_URI = 'https://api.twitter.com/2/users';
 
 ///
-String? generateAuthHeader(Map<String, dynamic> params) {
-  return 'OAuth ' +
-      params.keys.map((k) {
-        return '$k="${Uri.encodeComponent(params[k])}"';
-      }).join(', ');
-}
+String? generateAuthHeader(Map<String, dynamic> params) =>
+    'OAuth ${params.keys.map((k) => '$k="${Uri.encodeComponent(params[k] as String)}"').join(', ')}';
 
 /// send http request
 Future<Map<String, dynamic>>? httpPost(
@@ -45,13 +41,13 @@ Future<Map<String, dynamic>>? httpPost(
     );
     params['oauth_signature'] = _signature.signatureHmacSha1();
     final header = generateAuthHeader(params);
-    final http.Client _httpClient = http.Client();
-    final http.Response res = await _httpClient.post(
+    final _httpClient = http.Client();
+    final res = await _httpClient.post(
       Uri.parse(url),
       headers: <String, String>{'Authorization': header!},
     );
     if (res.statusCode != 200) {
-      throw HttpException("Failed ${res.reasonPhrase}");
+      throw HttpException('Failed ${res.reasonPhrase}');
     }
 
     return Uri.splitQueryString(res.body);
@@ -79,17 +75,17 @@ Future<Map<String, dynamic>> httpGet(
     );
     authHeader['oauth_signature'] = _signature.signatureHmacSha1();
     final header = generateAuthHeader(authHeader);
-    final http.Client _httpClient = http.Client();
+    final _httpClient = http.Client();
     final _url = Uri.parse(url).replace(queryParameters: query);
-    final http.Response res = await _httpClient.get(
+    final res = await _httpClient.get(
       _url,
       headers: <String, String>{'Authorization': header!},
     );
     if (res.statusCode != 200) {
-      throw HttpException("Failed ${res.reasonPhrase}");
+      throw HttpException('Failed ${res.reasonPhrase}');
     }
 
-    return jsonDecode(res.body);
+    return jsonDecode(res.body) as Map<String, dynamic>;
   } on Exception {
     rethrow;
   }
@@ -101,15 +97,15 @@ Future<Map<String, dynamic>> httpGetFromBearerToken(
   required String bearerToken,
 }) async {
   try {
-    final http.Client _httpClient = http.Client();
-    final http.Response res = await _httpClient.get(
+    final _httpClient = http.Client();
+    final res = await _httpClient.get(
       Uri.parse(url).replace(queryParameters: query),
       headers: <String, String>{'Authorization': 'Bearer $bearerToken'},
     );
     if (res.statusCode != 200) {
-      throw HttpException("Failed ${res.reasonPhrase}");
+      throw HttpException('Failed ${res.reasonPhrase}');
     }
-    return jsonDecode(res.body);
+    return jsonDecode(res.body) as Map<String, dynamic>;
   } on Exception catch (error) {
     throw Exception(error);
   }
@@ -140,11 +136,11 @@ Map<String, String?> requestHeader({
 }
 
 String createCryptoRandomString([int length = 32]) {
-  var values = List<int>.generate(length, (i) => Random.secure().nextInt(256));
+  final values = List<int>.generate(length, (i) => Random.secure().nextInt(256));
 
   return base64Url.encode(values);
 }
 
 extension MapExt on Map {
-  T? get<T>(String key) => this.containsKey(key) ? this[key] as T : null;
+  T? get<T>(String key) => containsKey(key) ? this[key] as T : null;
 }

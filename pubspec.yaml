@@ -11,9 +11,9 @@ environment:
   flutter: ">=1.25.0-8.1.pre"
 
 dependencies:
+  crypto: ^3.0.1
   flutter:
     sdk: flutter
-  crypto: ^3.0.1
   http: ^0.13.3
 
 dev_dependencies:
