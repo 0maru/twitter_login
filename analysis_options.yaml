@@ -1,7 +1,8 @@
 analyzer:
-  strong-mode:
-    implicit-casts: false
-    implicit-dynamic: true
+  language:
+    strict-casts: true
+    strict-inference: true
+    strict-raw-types: false
 linter:
   rules:
     - always_declare_return_types
@@ -48,7 +49,6 @@ linter:
     - flutter_style_todos
     - hash_and_equals
     - implementation_imports
-    - invariant_booleans
     - iterable_contains_unrelated_type
     - join_return_with_assignment
     - library_names
