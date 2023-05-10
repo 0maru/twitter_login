@@ -66,7 +66,7 @@ class TwitterLogin {
 
     final uri = Uri.parse(redirectURI);
     final completer = Completer<String?>();
-    late StreamSubscription subscribe;
+    late StreamSubscription<void> subscribe;
 
     if (Platform.isAndroid) {
       await _channel.invokeMethod('setScheme', uri.scheme);
@@ -193,7 +193,7 @@ class TwitterLogin {
 
     final uri = Uri.parse(redirectURI);
     final completer = Completer<String?>();
-    late StreamSubscription subscribe;
+    late StreamSubscription<void> subscribe;
 
     if (Platform.isAndroid) {
       await _channel.invokeMethod('setScheme', uri.scheme);

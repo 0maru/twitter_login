@@ -9,10 +9,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
   twitter_login:
     path: ../
-  cupertino_icons: ^0.1.3
 
 dev_dependencies:
   flutter_test:
