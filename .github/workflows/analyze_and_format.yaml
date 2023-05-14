@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v2.3.4
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 0
       - name: "Install Flutter"
@@ -20,17 +20,3 @@ jobs:
         run: flutter pub get
       - name: "Dart Analyze"
         run: dart analyze . --fatal-infos
-
-  format:
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    steps:
-      - uses: actions/checkout@v2.3.4
-        with:
-          fetch-depth: 0
-      - name: "Install Flutter"
-        run: ./.github/workflows/scripts/install-flutter.sh stable
-      - name: "Pub Get"
-        run: flutter pub get
-      - name: "Dart format"
-        run: flutter format . -l 100

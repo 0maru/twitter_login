@@ -19,7 +19,7 @@ class AuthBrowser {
   bool _isOpen = false;
   VoidCallback onClose;
 
-  Future methodCallHandler(MethodCall call) async {
+  Future<void> methodCallHandler(MethodCall call) async {
     switch (call.method) {
       case 'onClose':
         onClose();
