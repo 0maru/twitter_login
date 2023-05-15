@@ -140,3 +140,7 @@
 ## 4.3.2
 
 * The login process will no longer fail when the API limits or rate limits are reached.
+
+## 4.4.0
+
+* Update dependency constraints to sdk: '>=2.14.0 <4.0.0' [#122](https://github.com/0maru/twitter_login/issues/122)
