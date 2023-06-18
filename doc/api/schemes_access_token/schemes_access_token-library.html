@@ -38,19 +38,25 @@
   <div class="toggle" id="theme-button">
     <label for="theme">
       <input type="checkbox" id="theme" value="light-theme">
-      <span class="material-symbols-outlined">
+      <span id="dark-theme-button" class="material-symbols-outlined">
         brightness_4
+      </span>
+      <span id="light-theme-button" class="material-symbols-outlined">
+        brightness_5
       </span>
     </label>
   </div>
 </header>
 <main>
 
-  <div id="dartdoc-main-content" class="main-content">
-    
+  <div
+      id="dartdoc-main-content"
+      class="main-content"
+      data-above-sidebar=""
+      data-below-sidebar="schemes_access_token&#47;schemes_access_token-library-sidebar.html">
+      
       <div>
 <h1><span class="kind-library">access_token</span> library 
-    <a href="https://dart.dev/null-safety" class="feature feature-null-safety" title="Supports the null safety language feature.">Null safety</a>
  
 </h1></div>
 
@@ -83,15 +89,16 @@
   </div> <!-- /.main-content -->
 
   <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
-    <header id="header-search-sidebar" class="hidden-l">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
   <form class="search-sidebar" role="search">
     <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
   </form>
 </header>
 
 <ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
-  <li><a href="../index.html">twitter_login</a></li>
-  <li class="self-crumb">access_token library</li>
+    <li><a href="../index.html">twitter_login</a></li>
+    <li class="self-crumb">access_token library</li>
 </ol>
 
 
@@ -110,19 +117,6 @@
 
   <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
     <h5>access_token library</h5>
-    <ol>
-      <li class="section-title"><a href="../schemes_access_token/schemes_access_token-library.html#classes">Classes</a></li>
-        <li><a href="../schemes_access_token/AccessToken-class.html">AccessToken</a></li>
-
-
-
-
-
-
-
-
-</ol>
-
   </div><!--/sidebar-offcanvas-right-->
 
 </main>
@@ -130,7 +124,7 @@
 <footer>
   <span class="no-break">
     twitter_login
-      5.0.0
+      4.4.1
   </span>
 
   
