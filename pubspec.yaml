@@ -8,7 +8,6 @@ repository: https://github.com/0maru/twitter_login
 
 environment:
   sdk: '>=2.14.0 <4.0.0'
-  flutter: ">=1.25.0-8.1.pre"
 
 dependencies:
   crypto: ^3.0.1
