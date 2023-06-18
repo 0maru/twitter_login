@@ -144,3 +144,7 @@
 ## 4.4.0
 
 * Update dependency constraints to sdk: '>=2.14.0 <4.0.0' [#122](https://github.com/0maru/twitter_login/issues/122)
+
+## 4.4.1
+
+* change http version 0.13.3 to 1.0.0
