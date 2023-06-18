@@ -147,4 +147,5 @@
 
 ## 4.4.1
 
-* change http version 0.13.3 to 1.0.0
+* Change http version 0.13.3 to 1.0.0
+* Change flutter version 1.25.0-8.1.pre to 3.3.0
