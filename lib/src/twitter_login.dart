@@ -125,7 +125,6 @@ class TwitterLogin {
       if (queries['denied'] != null) {
         throw const CanceledByUserException();
       }
-
       final token = await AccessToken.getAccessToken(
         apiKey,
         apiSecretKey,
@@ -244,6 +243,7 @@ class TwitterLogin {
       }
 
       final queries = Uri.splitQueryString(Uri.parse(resultURI!).query);
+
       if (queries['error'] != null) {
         throw Exception('Error Response: ${queries['error']}');
       }

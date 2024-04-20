@@ -5,7 +5,7 @@ import 'package:twitter_login/src/utils.dart';
 
 // ignore: avoid_classes_with_only_static_members
 class Oauth2 {
-  /// get applicatoin Bearer Token.
+  /// get application Bearer Token.
   ///
   /// https://developer.twitter.com/en/docs/authentication/oauth-2-0/application-only
   static Future<String?> getBearerToken({

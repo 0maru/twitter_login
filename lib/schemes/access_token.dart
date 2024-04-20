@@ -31,6 +31,7 @@ class AccessToken {
     if (params == null) {
       throw Exception();
     }
+
     return AccessToken(params);
   }
 }

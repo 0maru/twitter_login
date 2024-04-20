@@ -72,13 +72,16 @@ class User {
         apiKey: apiKey,
         oauthToken: accessToken,
       );
+
       final params = await httpGet(
         ACCOUNT_VERIFY_URI,
+        // '$USER_LOCKUP_URI/me',
         authHeader: authParams,
         apiKey: apiKey,
         apiSecretKey: apiSecretKey,
         tokenSecret: accessTokenSecret,
       );
+
       return User(params);
     } on Exception {
       rethrow;
@@ -98,13 +101,14 @@ class User {
     String userId,
   ) async {
     try {
-      final token = await Oauth2.getBearerToken(apiKey: apiKey, apiSecretKey: apiSecretKey);
+      final token = await Oauth2.getBearerToken(apiKey: accessToken, apiSecretKey: accessTokenSecret);
       if (token?.isEmpty ?? true) {
         throw Exception();
       }
 
+
       final params = await httpGetFromBearerToken(
-        '$USER_LOCKUP_URI/$userId',
+        '$USER_LOCKUP_URI/ids:$userId,',
         query: {'user.fields': 'id,name,username,profile_image_url'},
         bearerToken: token!,
       );

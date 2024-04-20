@@ -7,14 +7,14 @@ homepage: https://twitter.com/0maru_dev
 repository: https://github.com/0maru/twitter_login
 
 environment:
-  sdk: '>=2.14.0 <4.0.0'
-  flutter: '>=3.3.0'
+  sdk: '>=3.2.4 <4.0.0'
+  flutter: '>=3.19.5'
 
 dependencies:
-  crypto: ^3.0.1
+  crypto: ^3.0.3
   flutter:
     sdk: flutter
-  http: ^1.0.0
+  http: ^1.2.1
 
 dev_dependencies:
   flutter_test:
