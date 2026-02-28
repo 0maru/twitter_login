@@ -5,6 +5,7 @@ import AuthenticationServices
 
 public class SwiftTwitterLoginPlugin: NSObject, FlutterPlugin, ASWebAuthenticationPresentationContextProviding  {
     var session: Any? = nil
+    private weak var registrar: FlutterPluginRegistrar?
 
     public static func register(with registrar: FlutterPluginRegistrar) {
         let channel = FlutterMethodChannel(
@@ -12,6 +13,7 @@ public class SwiftTwitterLoginPlugin: NSObject, FlutterPlugin, ASWebAuthenticati
             binaryMessenger: registrar.messenger()
         )
         let instance = SwiftTwitterLoginPlugin()
+        instance.registrar = registrar
         registrar.addMethodCallDelegate(instance, channel: channel)
     }
 
@@ -72,6 +74,30 @@ public class SwiftTwitterLoginPlugin: NSObject, FlutterPlugin, ASWebAuthenticati
     
     @available(iOS 12.0, *)
     public func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
+        if let viewController = registrar?.viewController {
+            if let window = viewController.view.window {
+                return window
+            }
+        }
+
+        // iOS 13+: Use UIScene-based window retrieval for UISceneDelegate lifecycle support.
+        // AppDelegate.window is no longer available when UIScene lifecycle is adopted.
+        if #available(iOS 13.0, *) {
+            for scene in UIApplication.shared.connectedScenes {
+                if let windowScene = scene as? UIWindowScene,
+                   scene.activationState == .foregroundActive {
+                    if #available(iOS 15.0, *) {
+                        if let keyWindow = windowScene.keyWindow {
+                            return keyWindow
+                        }
+                    }
+                    if let keyWindow = windowScene.windows.first(where: { $0.isKeyWindow }) {
+                        return keyWindow
+                    }
+                }
+            }
+        }
+
         return UIApplication.shared.delegate!.window!!
     }
 }
