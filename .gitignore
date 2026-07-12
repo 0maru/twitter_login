@@ -6,6 +6,8 @@
 .packages
 .pub/
 .dart_tool/
+.build/
+.swiftpm/
 pubspec.lock
 
 Podfile

@@ -27,6 +27,6 @@ flutter:
         package: com.maru.twitter_login
         pluginClass: TwitterLoginPlugin
       ios:
-        pluginClass: TwitterLoginPlugin
+        pluginClass: SwiftTwitterLoginPlugin
       macos:
         pluginClass: TwitterLoginPlugin
