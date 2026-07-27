@@ -153,3 +153,7 @@
 # 4.4.2
 
 * Change VoidCallback to void Function()
+
+# 4.4.3
+
+* Add Swift Package Manager support
